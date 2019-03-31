@@ -88,19 +88,11 @@ export class StartupService {
     // }
     // mock
     const app: any = {
-      name: `ng-alain`,
-      description: `Ng-zorro admin panel front-end framework`
-    };
-    const user: any = {
-      name: 'Admin',
-      avatar: './assets/tmp/img/avatar.jpg',
-      email: 'cipchk@qq.com',
-      token: '123456789'
+      name: `Ukulele`,
+      description: `Ukulele是一个多语言跨平台的中台框架，旨在打造企业级的微服务快速开发框架`
     };
     // 应用信息：包括站点名、描述、年份
     this.settingService.setApp(app);
-    // 用户信息：包括姓名、头像、邮箱地址
-    this.settingService.setUser(user);
     // ACL：设置权限为全量
     this.aclService.setFull(true);
     // 初始化菜单

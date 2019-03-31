@@ -472,10 +472,10 @@
   dependencies:
     tslib "^1.9.0"
 
-"@delon/auth@^7.0.0-rc.10":
-  version "7.0.0-rc.10"
-  resolved "http://registry.npm.taobao.org/@delon/auth/download/@delon/auth-7.0.0-rc.10.tgz#4bf8adc303093db6a357ae1ca64a7bcd88b8eaa6"
-  integrity sha1-S/itwwMJPbajV64cpkp7zYi46qY=
+"@delon/auth@^7.0.3":
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/@delon/auth/-/auth-7.0.3.tgz#32d9ef85624e004852d101a8ef3bb87684a58afd"
+  integrity sha512-xt9pMAFEs9khElKEg4AGkPWnFBApLQYro0RS6JWsrcggYQOfWn9usYmQcLL3TpVmxKTiCqnh6QRfst4uugX1OQ==
   dependencies:
     tslib "^1.9.0"
 

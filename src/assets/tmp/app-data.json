@@ -1,12 +1,7 @@
 {
   "app": {
-    "name": "Alain",
-    "description": "Ng-zorro admin panel front-end framework"
-  },
-  "user": {
-    "name": "Admin",
-    "avatar": "./assets/tmp/img/avatar.jpg",
-    "email": "cipchk@qq.com"
+    "name": "Ukulele",
+    "description": "Ukulele是一个多语言跨平台的中台框架，旨在打造企业级的微服务快速开发框架"
   },
   "menu": [
     {

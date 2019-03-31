@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, SettingsService } from '@delon/theme';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,10 +8,19 @@ import { _HttpClient } from '@delon/theme';
 export class DashboardComponent implements OnInit {
 
   constructor(
+    private settingsService: SettingsService,
     private http: _HttpClient
   ) { }
 
   ngOnInit() {
+    this.getMenu();
   }
 
+  getMenu(){
+    this.http.get('api/system-service/menu/' + this.settingsService.user.id)
+    .subscribe((res: any) => {
+      console.log(res);
+      });
+  }
+  
 }

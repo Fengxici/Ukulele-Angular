@@ -24,6 +24,9 @@ export class UserLoginComponent implements OnDestroy {
   error = '';
   type = 0;
 
+  count = 0;
+  interval$: any;
+
   constructor(
     fb: FormBuilder,
     modalSrv: NzModalService,
@@ -71,9 +74,6 @@ export class UserLoginComponent implements OnDestroy {
 
   // #region get captcha
 
-  count = 0;
-  interval$: any;
-
   getCaptcha() {
     if (this.mobile.invalid) {
       this.mobile.markAsDirty({ onlySelf: true });
@@ -107,21 +107,26 @@ export class UserLoginComponent implements OnDestroy {
 
     // 默认配置中对所有HTTP请求都会强制 [校验](https://ng-alain.com/auth/getting-started) 用户 Token
     // 然一般来说登录请求不需要校验，因此可以在请求URL加上：`/login?_allow_anonymous=true` 表示不触发用户 Token 校验
+    // this.http
+    //   .post('http://localhost:9090/auth/oauth/token', {
+    //     type: this.type,
+    //     userName: this.userName.value,
+    //     password: this.password.value,
+    //   })
+    let loginUrl = 'http://localhost:4200/auth/oauth/token?_allow_anonymous=true';
+    loginUrl += '&grant_type=password&username=' + this.userName.value + '&password=' + this.password.value;
     this.http
-      .post('/login/account?_allow_anonymous=true', {
-        type: this.type,
-        userName: this.userName.value,
-        password: this.password.value,
-      })
+      .post(loginUrl, {}, {}, { headers: {'Content-Type': 'application/json',
+        Authorization: 'Basic dGVzdDp0ZXN0'}})
       .subscribe((res: any) => {
-        if (res.msg !== 'ok') {
-          this.error = res.msg;
+        if (!res.access_token){
           return;
         }
         // 清空路由复用信息
         this.reuseTabService.clear();
         // 设置用户Token信息
-        this.tokenService.set(res.user);
+        this.tokenService.set({key : 'user-token', token : res.access_token});
+        this.settingsService.setUser(res.user_info);
         // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响
         this.startupSrv.load().then(() => {
           let url = this.tokenService.referrer.url || '/';
