@@ -17,10 +17,10 @@ export class DashboardComponent implements OnInit {
   }
 
   getMenu(){
-    this.http.get('api/system-service/menu/' + this.settingsService.user.id)
+    // this.http.get('api/portal-service/menu/user/' + this.settingsService.user.id)
+    this.http.get('api/portal-service/menu/user')
     .subscribe((res: any) => {
       console.log(res);
       });
   }
-  
 }
