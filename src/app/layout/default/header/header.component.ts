@@ -8,18 +8,17 @@ import { ResponseCode } from '@shared/response.code';
   templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent implements OnInit{
-  
+export class HeaderComponent implements OnInit {
   searchToggleStatus: boolean;
 
   constructor(public settings: SettingsService,
-    private menuService: MenuService,
-    private http: HttpClient) { }
+              private menuService: MenuService,
+              private http: HttpClient) { }
 
   ngOnInit(): void {
     this.getMenu();
   }
-    
+
   toggleCollapsedSidebar() {
     this.settings.setLayout('collapsed', !this.settings.layout.collapsed);
   }
@@ -31,20 +30,20 @@ export class HeaderComponent implements OnInit{
   getMenu(){
     this.http.get('api/portal-service/menu/user')
     .subscribe((res: any) => {
-      var menus=[];
-      if(res&&res.code==ResponseCode.SUCCESS){
-        if(res.data)
+      const menus = [];
+      if (res && res.code === ResponseCode.SUCCESS){
+        if (res.data)
         res.data.forEach(menu => {
-          var tmpRoot={
-            text:menu.name,
-            group:true,
-            children:[]
+          const tmpRoot = {
+            text: menu.name,
+            group: true,
+            children: []
           };
-          menu.children.forEach(child=>{
-            var tmpChild={
-              text:child.name,
-              link:child.component,
-              icon:{value:child.icon}
+          menu.children.forEach(child => {
+            const tmpChild = {
+              text: child.name,
+              link: child.component,
+              icon: {value: child.icon}
             }
             tmpRoot.children.push(tmpChild);
           });
