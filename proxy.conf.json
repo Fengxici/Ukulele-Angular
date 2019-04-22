@@ -1,10 +1,10 @@
 {
   "/auth": {
-    "target": "http://192.168.0.109:9090",
+    "target": "http://192.168.6.125:9090",
     "secure": false
   },
   "/api/**":{
-    "target": "http://192.168.0.109:7070",
+    "target": "http://192.168.6.125:7070",
     "secure": false
   }
 }

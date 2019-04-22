@@ -7,20 +7,8 @@ import { _HttpClient, SettingsService } from '@delon/theme';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(
-    private settingsService: SettingsService,
-    private http: _HttpClient
-  ) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.getMenu();
-  }
+  ngOnInit() {  }
 
-  getMenu(){
-    // this.http.get('api/portal-service/menu/user/' + this.settingsService.user.id)
-    this.http.get('api/portal-service/menu/user')
-    .subscribe((res: any) => {
-      console.log(res);
-      });
-  }
 }
