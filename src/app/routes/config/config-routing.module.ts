@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ConfigIconComponent } from './icon/icon.component';
+import { IconComponent } from './icon/icon.component';
 
 const routes: Routes = [
 
-  { path: 'icon', component: ConfigIconComponent }];
+  { path: 'icon', component: IconComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
