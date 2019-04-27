@@ -25,16 +25,19 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘' } },
       { path: 'exception', loadChildren: './exception/exception.module#ExceptionModule' },
-      { path: 'config', loadChildren: './config/config.module#ConfigModule' }
+      // 系统配置
+      { path: 'config', loadChildren: './config/config.module#ConfigModule' },
+      // 系统监控
+      {path: 'monitor', loadChildren: './monitor/monitor.module#MonitorModule'}
     ]
   },
   // 全屏布局
-  // {
-  //     path: 'fullscreen',
-  //     component: LayoutFullScreenComponent,
-  //     children: [
-  //     ]
-  // },
+  {
+      path: 'fullscreen',
+      component: LayoutFullScreenComponent,
+      children: [
+      ]
+  },
   // passport
   {
     path: 'passport',

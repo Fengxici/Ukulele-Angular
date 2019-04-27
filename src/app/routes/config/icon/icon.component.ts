@@ -12,21 +12,21 @@ import { IconEditComponent } from './icon-edit.component';
 })
 export class IconComponent implements OnInit {
   constructor(private http: _HttpClient, private modal: ModalHelper,
-      private modalService: NzModalService, private msg: NzMessageService) { }
+              private modalService: NzModalService, private msg: NzMessageService) { }
   params: any = {};
-  page: any={
-    records:[],
-    current:1,
-    total:0,
-    size:10
+  page: any = {
+    records: [],
+    current: 1,
+    total: 0,
+    size: 10
   };
-  pagination: STPage={
-    front:false,
-    pageSizes:[10, 20, 30, 40, 50],
+  pagination: STPage = {
+    front: false,
+    pageSizes: [10, 20, 30, 40, 50],
     total: true,
-    showSize:true,
-    showQuickJumper:true
-  }
+    showSize: true,
+    showQuickJumper: true
+  };
   searchSchema: SFSchema = {
     properties: {
       type: {
@@ -50,7 +50,7 @@ export class IconComponent implements OnInit {
             { label: 'twotone', value: 'twotone' },
             { label: 'fill', value: 'fill' }
         ],
-        default:null,
+        default: null,
         ui: {
             widget: 'select',
             width: 160
@@ -64,7 +64,6 @@ export class IconComponent implements OnInit {
   };
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
-    { title: '编号', index: 'id' , width: '50px'},
     { title: '类型', index: 'type' },
     { title: '值',  width: '150px', index: 'value' },
     { title: '主题风格',  index: 'theme' },
@@ -80,12 +79,12 @@ export class IconComponent implements OnInit {
           modal: {
             component: IconEditComponent,
           },
-          click: () =>{
+          click: () => {
             this.query(null);
           }},
           { text: '删除',
           icon: 'delete',
-          click: (record: any) =>{
+          click: (record: any) => {
             this.delete(record);
           }
         }
@@ -97,30 +96,30 @@ export class IconComponent implements OnInit {
     this.query(null);
    }
 
-   change(e: STChange){
-      console.log(e);
-      this.params.size=e.ps;
-      this.params.current=e.pi;
+   change(e: STChange) {
+    if (e.type === 'pi' || e.type === 'ps') {
+      this.params.size = e.ps;
+      this.params.current = e.pi;
       this.query(null);
+    }
    }
   query(event: any) {
-    
+    const current: number = this.params.current || 1;
+    const size: number = this.params.size || 10;
+    this.params = {};
     if (event) {
-      if (event.theme) {
-        this.params.theme_ = event.theme;
-      }
-      if (event.type) {
-        this.params.type_ = event.type;
-      }
-      if (event.value) {
-        this.params.value_ = event.value;
-      }
+      if (event.theme)
+        this.params.theme = event.theme;
+      if (event.type)
+        this.params.type = event.type;
+      if (event.value)
+        this.params.value = event.value;
     }
-     this.http.get('api/portal-service/ant-icon/page', this.params)
+    this.http.get('api/portal-service/ant-icon/page/' + current + '/' + size, this.params)
     .subscribe((res: any) => {
       if (res && res.code === ResponseCode.SUCCESS) {
         if (res.data)
-          this.page= res.data;
+          this.page = res.data;
       }
      });
   }
@@ -131,23 +130,23 @@ export class IconComponent implements OnInit {
       .subscribe(() => this.st.reload());
   }
 
-  delete(record:any){
+  delete(record: any) {
    console.log(record);
    this.modalService.confirm({
     nzTitle: '确定删除吗?',
     nzContent: '<b style="color: red;">如果您确定要删除请点击确定按钮，否则点取消</b>',
     nzOkText: '确定',
     nzOkType: 'danger',
-    nzOnOk: () => this.http.delete("api/portal-service/ant-icon/"+record.id).subscribe((res:any)=>{
-      if(res){
-        if(res.code===ResponseCode.SUCCESS){
+    nzOnOk: () => this.http.delete('api/portal-service/ant-icon/' + record.id).subscribe((res: any) => {
+      if (res) {
+        if (res.code === ResponseCode.SUCCESS) {
           this.st.reload();
-          this.msg.success("删除成功");
-        }else{
+          this.msg.success('删除成功');
+        } else {
           this.msg.warning(res.msg);
         }
-      }else{
-        this.msg.error("删除失败，未知错误");
+      } else {
+        this.msg.error('删除失败，未知错误');
       }
     }),
     nzCancelText: '取消',
