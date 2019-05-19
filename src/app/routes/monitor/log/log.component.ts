@@ -130,7 +130,6 @@ export class MonitorLogComponent implements OnInit {
   ngOnInit() {
     this.query(null);
   }
-
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;

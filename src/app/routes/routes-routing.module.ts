@@ -28,7 +28,9 @@ const routes: Routes = [
       // 系统配置
       { path: 'config', loadChildren: './config/config.module#ConfigModule' },
       // 系统监控
-      {path: 'monitor', loadChildren: './monitor/monitor.module#MonitorModule'}
+      {path: 'monitor', loadChildren: './monitor/monitor.module#MonitorModule'},
+      // 系统管理
+      {path: 'system', loadChildren: './system/system.module#SystemModule'}
     ]
   },
   // 全屏布局
