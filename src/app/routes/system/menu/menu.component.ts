@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
-import { STColumn, STComponent, STPage } from '@delon/abc';
+import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
+import { ResponseCode } from '@shared/response.code';
+import { Api } from '@shared/api';
+import { MenuEditComponent } from './menu-edit.component';
 
 @Component({
   selector: 'app-system-menu',
@@ -22,38 +26,108 @@ export class SystemMenuComponent implements OnInit {
     showSize: true,
     showQuickJumper: true
   };
-  url = `/user`;
   searchSchema: SFSchema = {
     properties: {
-      no: {
+      text: {
         type: 'string',
-        title: '编号'
+        title: '名称'
       }
     }
   };
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
-    { title: '编号', index: 'no' },
-    { title: '调用次数', type: 'number', index: 'callNo' },
-    { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '时间', type: 'date', index: 'updatedAt' },
+    { title: '名称', index: 'text' },
+    { title: '编码', index: 'key' },
+    { title: 'i18n', index: 'i18n' },
+    { title: '组',  index: 'group' },
+    { title: '地址',  index: 'link' },
+    { title: '外链',  index: 'linkExact' },
+    { title: '外部连接',  index: 'externalLink' },
+    { title: '打开方式',  index: 'target' },
+    { title: '图标',  index: 'icon' },
+    { title: '是否注销',  index: 'disabled' },
+    { title: '是否隐藏',  index: 'hide' },
+    { title: '面包屑中是否隐藏',  index: 'hideInBreadcrumb' },
+    { title: 'acl',  index: 'acl' },
+    { title: '快捷方式',  index: 'shortcut' },
+    { title: '根快捷方式',  index: 'shortcutRoot' },
+    { title: '重用', index: 'reuse' },
+    { title: '打开',  index: 'open' },
     {
       title: '',
       buttons: [
-        // { text: '查看', click: (item: any) => `/form/${item.id}` },
+        // { textn '查看', click: (item: any) => `/form/${item.id}` },
         // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
       ]
     }
   ];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) { }
+  constructor(
+    private http: _HttpClient,
+    private modal: ModalHelper,
+    private modalService: NzModalService,
+    private msg: NzMessageService,
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.query(null);
+  }
+
+  change(e: STChange) {
+    if (e.type === 'pi' || e.type === 'ps') {
+      this.params.size = e.ps;
+      this.params.current = e.pi;
+      this.query(null);
+    }
+  }
+
+  query(event: any) {
+    const current: number = this.params.current || 1;
+    const size: number = this.params.size || 10;
+    this.params = {};
+    if (event) {
+      if (event.roleName) this.params.roleName = event.roleName;
+      if (event.roleCode) this.params.roleCode = event.roleCode;
+    }
+    this.http
+      .get(Api.BaseAntMenuApi + 'page/' + current + '/' + size, this.params)
+      .subscribe((res: any) => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) this.page = res.data;
+        }
+      });
+  }
 
   add() {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+    this.modal
+      .createStatic(MenuEditComponent)
+      .subscribe(() => this.st.reload());
+  }
+
+  delete(record: any) {
+    console.log(record);
+    this.modalService.confirm({
+      nzTitle: '确定删除吗?',
+      nzContent:
+        '<b style="color: red;">如果您确定要删除请点击确定按钮，否则点取消</b>',
+      nzOkText: '确定',
+      nzOkType: 'danger',
+      nzOnOk: () =>
+        this.http.delete(Api.BaseAntMenuApi + record.id).subscribe((res: any) => {
+          if (res) {
+            if (res.code === ResponseCode.SUCCESS) {
+              this.st.reload();
+              this.msg.success('删除成功');
+            } else {
+              this.msg.warning(res.msg);
+            }
+          } else {
+            this.msg.error('删除失败，未知错误');
+          }
+        }),
+      nzCancelText: '取消',
+      nzOnCancel: () => console.log('Cancel'),
+    });
   }
 
 }
