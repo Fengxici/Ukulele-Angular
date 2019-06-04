@@ -13,53 +13,44 @@ import { MenuEditComponent } from './menu-edit.component';
 })
 export class SystemMenuComponent implements OnInit {
   params: any = {};
-  page: any = {
-    records: [],
-    current: 1,
-    total: 0,
-    size: 10
-  };
+  record: any = [];
   pagination: STPage = {
-    front: false,
-    pageSizes: [10, 20, 30, 40, 50],
-    total: true,
-    showSize: true,
-    showQuickJumper: true
+    show: false
   };
   searchSchema: SFSchema = {
     properties: {
       text: {
         type: 'string',
-        title: '名称'
-      }
-    }
+        title: '名称',
+      },
+    },
   };
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
     { title: '名称', index: 'text' },
     { title: '编码', index: 'key' },
     { title: 'i18n', index: 'i18n' },
-    { title: '组',  index: 'group' },
-    { title: '地址',  index: 'link' },
-    { title: '外链',  index: 'linkExact' },
-    { title: '外部连接',  index: 'externalLink' },
-    { title: '打开方式',  index: 'target' },
-    { title: '图标',  index: 'icon' },
-    { title: '是否注销',  index: 'disabled' },
-    { title: '是否隐藏',  index: 'hide' },
-    { title: '面包屑中是否隐藏',  index: 'hideInBreadcrumb' },
-    { title: 'acl',  index: 'acl' },
-    { title: '快捷方式',  index: 'shortcut' },
-    { title: '根快捷方式',  index: 'shortcutRoot' },
+    { title: '组', index: 'group' },
+    { title: '地址', index: 'link' },
+    { title: '外链', index: 'linkExact' },
+    { title: '外部连接', index: 'externalLink' },
+    { title: '打开方式', index: 'target' },
+    { title: '图标', index: 'icon' },
+    { title: '是否注销', index: 'disabled' },
+    { title: '是否隐藏', index: 'hide' },
+    { title: '面包屑中是否隐藏', index: 'hideInBreadcrumb' },
+    { title: 'acl', index: 'acl' },
+    { title: '快捷方式', index: 'shortcut' },
+    { title: '根快捷方式', index: 'shortcutRoot' },
     { title: '重用', index: 'reuse' },
-    { title: '打开',  index: 'open' },
+    { title: '打开', index: 'open' },
     {
       title: '',
       buttons: [
         // { textn '查看', click: (item: any) => `/form/${item.id}` },
         // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
-      ]
-    }
+      ],
+    },
   ];
 
   constructor(
@@ -73,27 +64,17 @@ export class SystemMenuComponent implements OnInit {
     this.query(null);
   }
 
-  change(e: STChange) {
-    if (e.type === 'pi' || e.type === 'ps') {
-      this.params.size = e.ps;
-      this.params.current = e.pi;
-      this.query(null);
-    }
-  }
-
   query(event: any) {
-    const current: number = this.params.current || 1;
-    const size: number = this.params.size || 10;
     this.params = {};
     if (event) {
       if (event.roleName) this.params.roleName = event.roleName;
       if (event.roleCode) this.params.roleCode = event.roleCode;
     }
     this.http
-      .get(Api.BaseAntMenuApi + 'page/' + current + '/' + size, this.params)
+      .get(Api.BaseAntMenuApi + 'tree', this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
-          if (res.data) this.page = res.data;
+          if (res.data) this.record = res.data;
         }
       });
   }
@@ -113,21 +94,22 @@ export class SystemMenuComponent implements OnInit {
       nzOkText: '确定',
       nzOkType: 'danger',
       nzOnOk: () =>
-        this.http.delete(Api.BaseAntMenuApi + record.id).subscribe((res: any) => {
-          if (res) {
-            if (res.code === ResponseCode.SUCCESS) {
-              this.st.reload();
-              this.msg.success('删除成功');
+        this.http
+          .delete(Api.BaseAntMenuApi + record.id)
+          .subscribe((res: any) => {
+            if (res) {
+              if (res.code === ResponseCode.SUCCESS) {
+                this.st.reload();
+                this.msg.success('删除成功');
+              } else {
+                this.msg.warning(res.msg);
+              }
             } else {
-              this.msg.warning(res.msg);
+              this.msg.error('删除失败，未知错误');
             }
-          } else {
-            this.msg.error('删除失败，未知错误');
-          }
-        }),
+          }),
       nzCancelText: '取消',
       nzOnCancel: () => console.log('Cancel'),
     });
   }
-
 }
