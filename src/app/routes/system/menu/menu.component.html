@@ -5,11 +5,11 @@
 </page-header>
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)"></sf>
-  <st #st [data]="record" [columns]="columns" [expand]="expand" expandRowByClick [page]="pagination">
+  <st #st [data]="record" [columns]="stColumn" [expand]="expand" expandRowByClick [page]="pagination">
     <ng-template #expand let-item let-index="index" let-column="column">
-      <st #stItem [data]="item.children" [columns]="columns" [expand]="expand" [page]="pagination" expandRowByClick>
+      <st #stItem [data]="item.children" [columns]="stItemColumns" [expand]="expand" [page]="pagination" expandRowByClick>
         <ng-template #expand let-item let-index="index" let-column="column">
-          <st #stItem [data]="item.children" [columns]="columns" [page]="pagination"></st>
+          <st #stItemChild [data]="item.children" [columns]="columns" [page]="pagination"></st>
         </ng-template>
       </st>
     </ng-template>

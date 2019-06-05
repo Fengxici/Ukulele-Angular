@@ -6,6 +6,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 import { MenuEditComponent } from './menu-edit.component';
+import { IconComponent } from 'app/routes/config/icon/icon.component';
 
 @Component({
   selector: 'app-system-menu',
@@ -15,7 +16,7 @@ export class SystemMenuComponent implements OnInit {
   params: any = {};
   record: any = [];
   pagination: STPage = {
-    show: false
+    show: false,
   };
   searchSchema: SFSchema = {
     properties: {
@@ -26,6 +27,93 @@ export class SystemMenuComponent implements OnInit {
     },
   };
   @ViewChild('st') st: STComponent;
+  @ViewChild('stItem') stItem: STComponent;
+  @ViewChild('stItemChild') stItemChild: STComponent;
+  stColumn: STColumn[] = [
+    { title: '名称', index: 'text' },
+    { title: '编码', index: 'key' },
+    { title: 'i18n', index: 'i18n' },
+    {
+      title: '',
+      buttons: [
+        {
+          text: '新增子菜单',
+          icon: 'profile',
+          type: 'modal',
+          click: (record: any) => {
+            this.add();
+          },
+        },
+        {
+          text: '',
+          icon: 'edit',
+          type: 'modal',
+          modal: {
+            component: MenuEditComponent,
+          },
+          click: () => {
+            this.query(null);
+          },
+        },
+        {
+          text: '',
+          icon: 'delete',
+          click: (record: any) => {
+            this.delete(record);
+          },
+        },
+      ],
+    },
+  ];
+  stItemColumns: STColumn[] = [
+    { title: '名称', index: 'text' },
+    { title: '编码', index: 'key' },
+    { title: 'i18n', index: 'i18n' },
+    { title: '地址', index: 'link' },
+    { title: '外链', index: 'linkExact' },
+    { title: '外部连接', index: 'externalLink' },
+    { title: '打开方式', index: 'target' },
+    { title: '图标', index: 'icon.value' },
+    { title: '是否注销', index: 'disabled' },
+    { title: '是否隐藏', index: 'hide' },
+    { title: '面包屑中是否隐藏', index: 'hideInBreadcrumb' },
+    { title: 'acl', index: 'acl' },
+    { title: '快捷方式', index: 'shortcut' },
+    { title: '根快捷方式', index: 'shortcutRoot' },
+    { title: '重用', index: 'reuse' },
+    { title: '打开', index: 'open' },
+    {
+      title: '',
+      buttons: [
+        {
+          text: '新增子菜单',
+          icon: 'profile',
+          type: 'modal',
+          click: (record: any) => {
+            this.add();
+          },
+        },
+        {
+          text: '',
+          icon: 'edit',
+          type: 'modal',
+          modal: {
+            component: MenuEditComponent,
+          },
+          click: () => {
+            this.query(null);
+          },
+        },
+        {
+          text: '',
+          icon: 'delete',
+          click: (record: any) => {
+            this.delete(record);
+          },
+        },
+      ],
+    },
+  ];
   columns: STColumn[] = [
     { title: '名称', index: 'text' },
     { title: '编码', index: 'key' },
@@ -47,8 +135,24 @@ export class SystemMenuComponent implements OnInit {
     {
       title: '',
       buttons: [
-        // { textn '查看', click: (item: any) => `/form/${item.id}` },
-        // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
+        {
+          text: '',
+          icon: 'edit',
+          type: 'modal',
+          modal: {
+            component: MenuEditComponent,
+          },
+          click: () => {
+            this.query(null);
+          },
+        },
+        {
+          text: '',
+          icon: 'delete',
+          click: (record: any) => {
+            this.delete(record);
+          },
+        },
       ],
     },
   ];
