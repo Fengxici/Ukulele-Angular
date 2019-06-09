@@ -7,11 +7,12 @@ import {
   SocialService,
   SocialOpenType,
   ITokenService,
-  DA_SERVICE_TOKEN
+  DA_SERVICE_TOKEN,
 } from '@delon/auth';
 import { ReuseTabService } from '@delon/abc';
 import { environment } from '@env/environment';
 import { StartupService } from '@core';
+import { Api } from '@shared/api';
 
 @Component({
   selector: 'passport-login',
@@ -113,20 +114,34 @@ export class UserLoginComponent implements OnDestroy {
     //     userName: this.userName.value,
     //     password: this.password.value,
     //   })
-    let loginUrl = 'http://localhost:4200/auth/oauth/token?_allow_anonymous=true';
-    loginUrl += '&grant_type=password&username=' + this.userName.value + '&password=' + this.password.value;
+    // let loginUrl = 'http://localhost:4200/auth/oauth/token?_allow_anonymous=true';
+    const loginUrl =
+      Api.BaseAuthApi +
+      '&grant_type=password&username=' +
+      this.userName.value +
+      '&password=' +
+      this.password.value;
     this.http
-      .post(loginUrl, {}, {}, { headers: {'Content-Type': 'application/json',
-        Authorization: 'Basic dGVzdDp0ZXN0'}})
+      .post(
+        loginUrl,
+        {},
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic dGVzdDp0ZXN0',
+          },
+        },
+      )
       .subscribe((res: any) => {
-        if (!res.access_token){
+        if (!res.access_token) {
           return;
         }
         // 清空路由复用信息
         this.reuseTabService.clear();
         // 设置用户Token信息
         let token = this.tokenService.get();
-        token.token=res.access_token;
+        token.token = res.access_token;
         this.tokenService.set(token);
         this.settingsService.setUser(res.user_info);
         // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响

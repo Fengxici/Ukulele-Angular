@@ -1,30 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { SFSchema, SFUISchema } from '@delon/form';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
-import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
+import { ResponseCode } from '@shared/response.code';
 
 @Component({
-  selector: 'app-system-role-edit',
-  templateUrl: './role-edit.component.html',
+  selector: 'app-system-dept',
+  templateUrl: './dept-edit.component.html',
 })
-export class RoleEditComponent {
+export class DeptEditComponent{
   record: any = {};
-  i: any;
+  parentId: any;
   schema: SFSchema = {
     properties: {
-      roleName: {
-        type: 'string',
-        title: '角色名称',
-      },
-      roleCode: { type: 'string', title: '角色代码', maxLength: 15 },
-      roleDesc: {
-        type: 'string',
-        title: '角色描述',
-      },
+      name: { type: 'string', title: '名称' },
+      orderNum: { type: 'number', title: '排序' }
     },
-    required: ['roleName', 'roleCode', 'roleDesc'],
+    required: ['name'],
   };
   ui: SFUISchema = {
     '*': {
@@ -38,12 +31,13 @@ export class RoleEditComponent {
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
-  ) {}
+  ) {
+    this.parentId = this.modal.getInstance().nzComponentParams;
+  }
 
   save(value: any) {
-    console.log(value);
     if (this.record.id) {
-      this.http.put(Api.BaseRoleApi, value).subscribe((res: any) => {
+      this.http.put(Api.BaseDeptApi, value).subscribe((res: any) => {
         if (res) {
           if (res.code === ResponseCode.SUCCESS) {
             this.msgSrv.success('修改成功');
@@ -56,7 +50,8 @@ export class RoleEditComponent {
         }
       });
     } else {
-      this.http.post(Api.BaseRoleApi, value).subscribe((res: any) => {
+      value.parentId = this.parentId;
+      this.http.post(Api.BaseDeptApi, value).subscribe((res: any) => {
         if (res) {
           if (res.code === ResponseCode.SUCCESS) {
             this.msgSrv.success('保存成功');

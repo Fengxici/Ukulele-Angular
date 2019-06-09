@@ -48,7 +48,7 @@ export class DictIndexEditComponent {
             this.msgSrv.success('修改成功');
             this.modal.close(true);
           } else {
-            this.msgSrv.warning(res.msg);
+            this.msgSrv.warning(res.message);
           }
         } else {
           this.msgSrv.error('修改失败，未知错误');
@@ -61,7 +61,7 @@ export class DictIndexEditComponent {
             this.msgSrv.success('保存成功');
             this.modal.close(true);
           } else {
-            this.msgSrv.warning(res.msg);
+            this.msgSrv.warning(res.message);
           }
         } else {
           this.msgSrv.error('保存失败，未知错误');

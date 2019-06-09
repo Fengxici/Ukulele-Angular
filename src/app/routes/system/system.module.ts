@@ -11,6 +11,7 @@ import { RoleEditComponent } from './role/role-edit.component';
 import { DictEditComponent } from './dict/dict-edit.component';
 import { MenuEditComponent } from './menu/menu-edit.component';
 import { DictIndexEditComponent } from './dict/dict-index-edit.component';
+import { DeptEditComponent } from './dept/dept-edit.component';
 
 const COMPONENTS = [
   SystemDeptComponent,
@@ -24,7 +25,8 @@ const COMPONENTS_NOROUNT = [
   RoleEditComponent,
   DictEditComponent,
   DictIndexEditComponent,
-  MenuEditComponent
+  MenuEditComponent,
+  DeptEditComponent
 ];
 
 @NgModule({

@@ -118,13 +118,7 @@ export class MonitorLogComponent implements OnInit {
       { title: '执行时间',  index: 'time' },
       { title: '异常信息',  index: 'exception' },
       { title: '操作人',  index: 'createBy' },
-      { title: '操作时间',  index: 'createTime' },
-      {
-        title: '',
-        buttons: [
-          { text: '删除', icon: 'delete' }
-        ]
-      }
+      { title: '操作时间',  index: 'createTime' }
     ];
 
   ngOnInit() {

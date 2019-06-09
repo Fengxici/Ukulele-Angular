@@ -6,7 +6,6 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 import { MenuEditComponent } from './menu-edit.component';
-import { IconComponent } from 'app/routes/config/icon/icon.component';
 
 @Component({
   selector: 'app-system-menu',
@@ -37,11 +36,11 @@ export class SystemMenuComponent implements OnInit {
       title: '',
       buttons: [
         {
-          text: '新增子菜单',
+          text: '新增菜单组',
           icon: 'profile',
           type: 'modal',
           click: (record: any) => {
-            this.add();
+            this.add(record.id);
           },
         },
         {
@@ -70,18 +69,18 @@ export class SystemMenuComponent implements OnInit {
     { title: '编码', index: 'key' },
     { title: 'i18n', index: 'i18n' },
     { title: '地址', index: 'link' },
-    { title: '外链', index: 'linkExact' },
+    { title: '外链', index: 'linkExact', type: 'yn' },
     { title: '外部连接', index: 'externalLink' },
     { title: '打开方式', index: 'target' },
     { title: '图标', index: 'icon.value' },
-    { title: '是否注销', index: 'disabled' },
-    { title: '是否隐藏', index: 'hide' },
-    { title: '面包屑中是否隐藏', index: 'hideInBreadcrumb' },
+    { title: '是否注销', index: 'disabled', type: 'yn' },
+    { title: '是否隐藏', index: 'hide', type: 'yn' },
+    { title: '面包屑中是否隐藏', index: 'hideInBreadcrumb', type: 'yn' },
     { title: 'acl', index: 'acl' },
-    { title: '快捷方式', index: 'shortcut' },
-    { title: '根快捷方式', index: 'shortcutRoot' },
-    { title: '重用', index: 'reuse' },
-    { title: '打开', index: 'open' },
+    { title: '快捷方式', index: 'shortcut', type: 'yn' },
+    { title: '根快捷方式', index: 'shortcutRoot', type: 'yn' },
+    { title: '重用', index: 'reuse', type: 'yn' },
+    { title: '打开', index: 'open', type: 'yn' },
     {
       title: '',
       buttons: [
@@ -90,7 +89,7 @@ export class SystemMenuComponent implements OnInit {
           icon: 'profile',
           type: 'modal',
           click: (record: any) => {
-            this.add();
+            this.add(record.id);
           },
         },
         {
@@ -118,20 +117,20 @@ export class SystemMenuComponent implements OnInit {
     { title: '名称', index: 'text' },
     { title: '编码', index: 'key' },
     { title: 'i18n', index: 'i18n' },
-    { title: '组', index: 'group' },
+    { title: '组', index: 'group', type: 'yn' },
     { title: '地址', index: 'link' },
-    { title: '外链', index: 'linkExact' },
+    { title: '外链', index: 'linkExact', type: 'yn' },
     { title: '外部连接', index: 'externalLink' },
     { title: '打开方式', index: 'target' },
     { title: '图标', index: 'icon' },
-    { title: '是否注销', index: 'disabled' },
-    { title: '是否隐藏', index: 'hide' },
-    { title: '面包屑中是否隐藏', index: 'hideInBreadcrumb' },
+    { title: '是否注销', index: 'disabled', type: 'yn' },
+    { title: '是否隐藏', index: 'hide', type: 'yn' },
+    { title: '面包屑中是否隐藏', index: 'hideInBreadcrumb', type: 'yn' },
     { title: 'acl', index: 'acl' },
-    { title: '快捷方式', index: 'shortcut' },
-    { title: '根快捷方式', index: 'shortcutRoot' },
-    { title: '重用', index: 'reuse' },
-    { title: '打开', index: 'open' },
+    { title: '快捷方式', index: 'shortcut', type: 'yn' },
+    { title: '根快捷方式', index: 'shortcutRoot', type: 'yn' },
+    { title: '重用', index: 'reuse', type: 'yn' },
+    { title: '打开', index: 'open', type: 'yn' },
     {
       title: '',
       buttons: [
@@ -171,8 +170,7 @@ export class SystemMenuComponent implements OnInit {
   query(event: any) {
     this.params = {};
     if (event) {
-      if (event.roleName) this.params.roleName = event.roleName;
-      if (event.roleCode) this.params.roleCode = event.roleCode;
+      if (event.text) this.params.text = event.text;
     }
     this.http
       .get(Api.BaseAntMenuApi + 'tree', this.params)
@@ -183,10 +181,10 @@ export class SystemMenuComponent implements OnInit {
       });
   }
 
-  add() {
+  add(parentId: any) {
     this.modal
-      .createStatic(MenuEditComponent)
-      .subscribe(() => this.st.reload());
+      .createStatic(MenuEditComponent, parentId)
+      .subscribe(() => this.query(null));
   }
 
   delete(record: any) {
@@ -203,10 +201,10 @@ export class SystemMenuComponent implements OnInit {
           .subscribe((res: any) => {
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {
-                this.st.reload();
+                this.query(null);
                 this.msg.success('删除成功');
               } else {
-                this.msg.warning(res.msg);
+                this.msg.warning(res.message);
               }
             } else {
               this.msg.error('删除失败，未知错误');
