@@ -102,7 +102,7 @@ export class StartupService {
     // 应用信息：包括站点名、描述、年份
     this.settingService.setApp(app);
     // ACL：设置权限为全量
-    this.aclService.setFull(true);
+    this.aclService.setFull(false);
     // 初始化菜单
     this.menuService.add([
       {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient, ModalHelper, MenuService } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -71,7 +71,7 @@ export class SystemUserComponent implements OnInit {
     private http: _HttpClient,
     private modal: ModalHelper,
     private modalService: NzModalService,
-    private msg: NzMessageService,
+    private msg: NzMessageService
   ) {}
   ngOnInit() {
     this.query(null);

@@ -17,8 +17,8 @@ const bootstrap = () => {
   return platformBrowserDynamic().bootstrapModule(AppModule, {
     defaultEncapsulation: ViewEncapsulation.Emulated,
   }).then((res) => {
-    if ((<any>window).appBootstrap) {
-      (<any>window).appBootstrap();
+    if ((<any> window).appBootstrap) {
+      (<any> window).appBootstrap();
     }
     return res;
   });

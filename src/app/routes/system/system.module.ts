@@ -26,7 +26,7 @@ const COMPONENTS_NOROUNT = [
   DictEditComponent,
   DictIndexEditComponent,
   MenuEditComponent,
-  DeptEditComponent
+  DeptEditComponent,
 ];
 
 @NgModule({
