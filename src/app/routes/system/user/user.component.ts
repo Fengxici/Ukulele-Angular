@@ -1,6 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, ModalHelper, MenuService } from '@delon/theme';
-import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
+import {
+  STColumn,
+  STComponent,
+  STPage,
+  STChange,
+  STColumnTag,
+} from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ResponseCode } from '@shared/response.code';
@@ -37,6 +43,14 @@ export class SystemUserComponent implements OnInit {
         type: 'string',
         title: '电话号码',
       },
+      deptName: {
+        type: 'string',
+        title: '部门',
+      },
+      label: {
+        type: 'string',
+        title: '角色标签',
+      },
     },
   };
 
@@ -45,10 +59,13 @@ export class SystemUserComponent implements OnInit {
     { title: '头像', type: 'img', width: '50px', index: 'avatar' },
     { title: '用户名', index: 'username' },
     { title: '电话号码', index: 'phone' },
+    { title: '部门', index: 'deptName' },
+    { title: '角色标签', index: 'label' },
     {
       title: '操作',
       buttons: [
-        { text: '编辑',
+        {
+          text: '编辑',
           icon: 'edit',
           type: 'modal',
           modal: {
@@ -56,22 +73,24 @@ export class SystemUserComponent implements OnInit {
           },
           click: () => {
             this.query(null);
-          }},
-          { text: '删除',
+          },
+        },
+        {
+          text: '删除',
           icon: 'delete',
           click: (record: any) => {
             this.delete(record);
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   ];
 
   constructor(
     private http: _HttpClient,
     private modal: ModalHelper,
     private modalService: NzModalService,
-    private msg: NzMessageService
+    private msg: NzMessageService,
   ) {}
   ngOnInit() {
     this.query(null);
@@ -104,8 +123,8 @@ export class SystemUserComponent implements OnInit {
 
   add() {
     this.modal
-    .createStatic(UserEditComponent)
-    .subscribe(() => this.st.reload());
+      .createStatic(UserEditComponent)
+      .subscribe(() => this.st.reload());
   }
 
   delete(record: any) {

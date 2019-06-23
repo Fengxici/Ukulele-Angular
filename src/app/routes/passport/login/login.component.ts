@@ -42,7 +42,7 @@ export class UserLoginComponent implements OnDestroy {
     private startupSrv: StartupService,
     public http: _HttpClient,
     public msg: NzMessageService,
-    public aclService: ACLService,
+    public aclService: ACLService
   ) {
     this.form = fb.group({
       userName: [null, [Validators.required, Validators.minLength(4)]],
@@ -146,8 +146,7 @@ export class UserLoginComponent implements OnDestroy {
         token.token = res.access_token;
         this.tokenService.set(token);
         this.settingsService.setUser(res.user_info);
-        let roles = JSON.parse(res.user_info.label);
-        this.aclService.setRole(roles);
+        // this.aclService.setRole(res.user_info.label);
         // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响
         this.startupSrv.load().then(() => {
           let url = this.tokenService.referrer.url || '/';

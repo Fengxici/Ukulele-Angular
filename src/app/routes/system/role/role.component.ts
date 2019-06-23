@@ -6,6 +6,7 @@ import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { ResponseCode } from '@shared/response.code';
 import { RoleEditComponent } from './role-edit.component';
 import { Api } from '@shared/api';
+import { RoleMenuComponent } from './role-menu.component';
 
 @Component({
   selector: 'app-system-role',
@@ -47,6 +48,17 @@ export class SystemRoleComponent implements OnInit {
       title: '操作',
       buttons: [
         {
+          text: '菜单',
+          icon: 'profile',
+          type: 'modal',
+          modal: {
+            component: RoleMenuComponent,
+          },
+          click: () => {
+            this.query(null);
+          },
+        },
+        {
           text: '编辑',
           icon: 'edit',
           type: 'modal',
@@ -65,7 +77,7 @@ export class SystemRoleComponent implements OnInit {
           },
         },
       ],
-    }
+    },
   ];
 
   constructor(
