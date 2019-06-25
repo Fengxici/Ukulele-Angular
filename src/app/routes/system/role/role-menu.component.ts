@@ -6,7 +6,6 @@ import {
   NzTreeNode,
 } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 
@@ -48,12 +47,22 @@ export class RoleMenuComponent implements OnInit {
         this.updateNodes.push({
           roleId: this.record.id,
           menuId: item.key,
-          abliities: item.origin.permisson.abilities,
+          abilities: item.origin.permisson.abilities,
         });
       });
     // 所有选中的节点及其子节点
     if (checkedNodeList) this.getAllChidNode(checkedNodeList);
     console.log(this.updateNodes);
+    const data: any = {};
+    data.roleId = this.record.id;
+    data.menuList = this.updateNodes;
+    this.http
+      .post(Api.BaseAntMenuApi + 'role/menu/edit', data)
+      .subscribe((res: any) => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          console.log(res);
+        }
+      });
     this.updateNodes = [];
   }
 
@@ -64,7 +73,7 @@ export class RoleMenuComponent implements OnInit {
         this.updateNodes.push({
           roleId: this.record.id,
           menuId: item.key,
-          abliities: item.origin.permisson.abilities,
+          abilities: item.origin.permisson.abilities,
         });
         this.getAllChidNode(item.getChildren());
       });
@@ -73,59 +82,33 @@ export class RoleMenuComponent implements OnInit {
     this.modal.destroy();
   }
 
+  getTreeNode(node: any): any {
+    const item: any = {};
+    item.title = node.text;
+    item.key = node.id;
+    item.expanded = true;
+    item.checked = node.roleId ? true : false;
+    item.roleId = node.roleId;
+    item.children = [];
+    item.permisson = {
+      abilities: node.abilities ? node.abilities : [],
+      inputVisible: false,
+      inputValue: '',
+    };
+    item.isLeaf = node.children && node.children.length === 0;
+    if (node.children)
+      node.children.forEach(child => {
+        item.children.push(this.getTreeNode(child));
+      });
+    return item;
+  }
+
   createTree(tree: []) {
+    const tempNode: any = [];
     if (tree) {
-      const tempNode: any = [];
-      tree.forEach((rootMenu: any) => {
-        const item1: any = {};
-        item1.title = rootMenu.text;
-        item1.key = rootMenu.id;
-        item1.expanded = true;
-        item1.checked = rootMenu.roleId ? true : false;
-        item1.roleId = rootMenu.roleId;
-        item1.children = [];
-        item1.permisson = {
-          abilities: rootMenu.abilities ? rootMenu.abilities : [],
-          inputVisible: false,
-          inputValue: '',
-        };
-        item1.isLeaf = rootMenu.children && rootMenu.children.length === 0;
-        tempNode.push(item1);
-        if (rootMenu.children) {
-          rootMenu.children.forEach((menuItem1: any) => {
-            const item2: any = {};
-            item2.title = menuItem1.text;
-            item2.key = menuItem1.id;
-            item2.expanded = true;
-            item2.checked = menuItem1.roleId ? true : false;
-            item2.roleId = menuItem1.roleId;
-            item2.children = [];
-            item2.permisson = {
-              abilities: menuItem1.abilities ? menuItem1.abilities : [],
-              inputVisible: false,
-              inputValue: '',
-            };
-            item2.isLeaf =
-              menuItem1.children && menuItem1.children.length === 0;
-            item1.children.push(item2);
-            if (menuItem1.children) {
-              menuItem1.children.forEach((menuItem2: any) => {
-                const item3: any = {};
-                item3.title = menuItem2.text;
-                item3.key = menuItem2.id;
-                item3.isLeaf = true;
-                item3.checked = menuItem2.roleId ? true : false;
-                item3.roleId = menuItem2.roleId;
-                item3.permisson = {
-                  abilities: menuItem2.abilities ? menuItem2.abilities : [],
-                  inputVisible: false,
-                  inputValue: '',
-                };
-                item2.children.push(item3);
-              });
-            }
-          });
-        }
+      tree.forEach(item => {
+        const node = this.getTreeNode(item);
+        tempNode.push(node);
       });
       this.nodes = tempNode;
     }
