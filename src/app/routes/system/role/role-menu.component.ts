@@ -22,8 +22,9 @@ export class RoleMenuComponent implements OnInit {
   @ViewChild('treeElement') treeElement: NzTreeComponent;
   record: any = {};
   nodes: any = [];
+  addNodes: any = [];
   updateNodes: any = [];
-
+  deleteNodes: any = [];
   ngOnInit(): void {
     this.query();
   }
@@ -44,18 +45,21 @@ export class RoleMenuComponent implements OnInit {
     // 可能存在并未全选的父节点
     if (checkedParentNodeList)
       checkedParentNodeList.forEach(item => {
-        this.updateNodes.push({
-          roleId: this.record.id,
-          menuId: item.key,
-          abilities: item.origin.permisson.abilities,
-        });
+        if (!item.origin.roleId)
+          this.addNodes.push({
+            roleId: this.record.id,
+            menuId: item.key,
+            abilities: item.origin.permisson.abilities,
+          });
       });
     // 所有选中的节点及其子节点
     if (checkedNodeList) this.getAllChidNode(checkedNodeList);
-    console.log(this.updateNodes);
     const data: any = {};
     data.roleId = this.record.id;
-    data.menuList = this.updateNodes;
+    data.addList = this.addNodes;
+    data.deleteList = this.deleteNodes;
+    data.updateNodes = this.updateNodes;
+    console.log(data);
     this.http
       .post(Api.BaseAntMenuApi + 'role/menu/edit', data)
       .subscribe((res: any) => {
@@ -63,18 +67,19 @@ export class RoleMenuComponent implements OnInit {
           console.log(res);
         }
       });
-    this.updateNodes = [];
+    this.addNodes = [];
   }
 
   // 获取所有节点及其子节点
   getAllChidNode(node: NzTreeNode[]) {
     if (node)
       node.forEach(item => {
-        this.updateNodes.push({
-          roleId: this.record.id,
-          menuId: item.key,
-          abilities: item.origin.permisson.abilities,
-        });
+        if (!item.origin.roleId)
+          this.addNodes.push({
+            roleId: this.record.id,
+            menuId: item.key,
+            abilities: item.origin.permisson.abilities,
+          });
         this.getAllChidNode(item.getChildren());
       });
   }
@@ -87,7 +92,7 @@ export class RoleMenuComponent implements OnInit {
     item.title = node.text;
     item.key = node.id;
     item.expanded = true;
-    item.checked = node.roleId ? true : false;
+    item.checked = node.checked;
     item.roleId = node.roleId;
     item.children = [];
     item.permisson = {
@@ -124,6 +129,7 @@ export class RoleMenuComponent implements OnInit {
     node.origin.permisson.inputVisible = true;
   }
 
+  // 输如狂变更了
   handleInputConfirm(node: any): void {
     if (!node.origin.permisson.inputValue) return;
     if (
@@ -135,26 +141,41 @@ export class RoleMenuComponent implements OnInit {
         ...node.origin.permisson.abilities,
         node.origin.permisson.inputValue,
       ];
+      // 节点是选中状态并且有roleId，肯定是要更新
+      if (node.isChecked && node.origin.roleId)
+        this.updateNodes.push({
+          roleId: node.origin.roleId,
+          menuId: node.key,
+          abilities: node.origin.permisson.abilities,
+        });
     }
     node.origin.permisson.inputValue = '';
     node.origin.permisson.inputVisible = false;
   }
-
+  // 复选框变更了
   handleCheckBoxChange(event: any): void {
     console.log(event.node);
     const node = event.node;
-    if (!node.origin.roleId) return;
-    // 记录删除的节点
+    if (!node.origin.roleId)return;
     if (node.isChecked) {
-      this.updateNodes = this.updateNodes.filter(
-        item => item.menuId !== node.key,
-      );
-    } else {
+      // 可能是要更新
       this.updateNodes.push({
         roleId: node.origin.roleId,
         menuId: node.key,
-        delete: true,
+        abilities: node.origin.permisson.abilities,
       });
+      // 肯定不是删除
+      this.deleteNodes = this.addNodes.filter(item => item.menuId !== node.key);
+    } else {
+      // 肯定是要删除
+      this.deleteNodes.push({
+        roleId: node.origin.roleId,
+        menuId: node.key,
+      });
+      // 肯定不是更新
+      this.updateNodes = this.updateNodes.filter(
+        item => item.menuId !== node.key,
+      );
     }
   }
 }
