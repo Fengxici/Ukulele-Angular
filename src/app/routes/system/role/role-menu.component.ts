@@ -22,9 +22,7 @@ export class RoleMenuComponent implements OnInit {
   @ViewChild('treeElement') treeElement: NzTreeComponent;
   record: any = {};
   nodes: any = [];
-  addNodes: any = [];
-  updateNodes: any = [];
-  deleteNodes: any = [];
+  saveNodes: any = [];
   ngOnInit(): void {
     this.query();
   }
@@ -45,44 +43,47 @@ export class RoleMenuComponent implements OnInit {
     // 可能存在并未全选的父节点
     if (checkedParentNodeList)
       checkedParentNodeList.forEach(item => {
-        if (!item.origin.roleId)
-          this.addNodes.push({
-            roleId: this.record.id,
-            menuId: item.key,
-            abilities: item.origin.permisson.abilities,
-          });
+        this.saveNodes.push({
+          roleId: this.record.id,
+          menuId: item.key,
+          abilities: item.origin.permisson.abilities,
+        });
       });
     // 所有选中的节点及其子节点
     if (checkedNodeList) this.getAllChidNode(checkedNodeList);
     const data: any = {};
     data.roleId = this.record.id;
-    data.addList = this.addNodes;
-    data.deleteList = this.deleteNodes;
-    data.updateNodes = this.updateNodes;
+    data.menuList = this.saveNodes;
     console.log(data);
     this.http
       .post(Api.BaseAntMenuApi + 'role/menu/edit', data)
       .subscribe((res: any) => {
-        if (res && res.code === ResponseCode.SUCCESS) {
-          console.log(res);
+        if (res) {
+          if (res.code === ResponseCode.SUCCESS) {
+            this.msgSrv.success('保存成功');
+            this.modal.close(true);
+          } else {
+            this.msgSrv.warning(res.message);
+          }
+        } else {
+          this.msgSrv.error('保存失败，未知错误');
         }
       });
-    this.addNodes = [];
+    this.saveNodes = [];
   }
-
   // 获取所有节点及其子节点
   getAllChidNode(node: NzTreeNode[]) {
     if (node)
       node.forEach(item => {
-        if (!item.origin.roleId)
-          this.addNodes.push({
-            roleId: this.record.id,
-            menuId: item.key,
-            abilities: item.origin.permisson.abilities,
-          });
+        this.saveNodes.push({
+          roleId: this.record.id,
+          menuId: item.key,
+          abilities: item.origin.permisson.abilities,
+        });
         this.getAllChidNode(item.getChildren());
       });
   }
+
   close() {
     this.modal.destroy();
   }
@@ -125,11 +126,6 @@ export class RoleMenuComponent implements OnInit {
     );
   }
 
-  showInput(node: any): void {
-    node.origin.permisson.inputVisible = true;
-  }
-
-  // 输如狂变更了
   handleInputConfirm(node: any): void {
     if (!node.origin.permisson.inputValue) return;
     if (
@@ -141,41 +137,12 @@ export class RoleMenuComponent implements OnInit {
         ...node.origin.permisson.abilities,
         node.origin.permisson.inputValue,
       ];
-      // 节点是选中状态并且有roleId，肯定是要更新
-      if (node.isChecked && node.origin.roleId)
-        this.updateNodes.push({
-          roleId: node.origin.roleId,
-          menuId: node.key,
-          abilities: node.origin.permisson.abilities,
-        });
     }
     node.origin.permisson.inputValue = '';
     node.origin.permisson.inputVisible = false;
   }
-  // 复选框变更了
-  handleCheckBoxChange(event: any): void {
-    console.log(event.node);
-    const node = event.node;
-    if (!node.origin.roleId)return;
-    if (node.isChecked) {
-      // 可能是要更新
-      this.updateNodes.push({
-        roleId: node.origin.roleId,
-        menuId: node.key,
-        abilities: node.origin.permisson.abilities,
-      });
-      // 肯定不是删除
-      this.deleteNodes = this.addNodes.filter(item => item.menuId !== node.key);
-    } else {
-      // 肯定是要删除
-      this.deleteNodes.push({
-        roleId: node.origin.roleId,
-        menuId: node.key,
-      });
-      // 肯定不是更新
-      this.updateNodes = this.updateNodes.filter(
-        item => item.menuId !== node.key,
-      );
-    }
+
+  showInput(node: any): void {
+    node.origin.permisson.inputVisible = true;
   }
 }

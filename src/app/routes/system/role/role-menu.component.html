@@ -2,7 +2,7 @@
   <div class="modal-title">编辑 {{ record.roleName }} 菜单</div>
 </div>
 <nz-spin *ngIf="!record" class="modal-spin"></nz-spin>
-<nz-tree #treeElement [nzData]="nodes" nzCheckable nzMultiple (nzCheckBoxChange)="handleCheckBoxChange($event)">
+<nz-tree #treeElement [nzData]="nodes" nzCheckable nzMultiple>
   <ng-template #nzTreeTemplate let-node>
     <span>
       <span *ngIf="!node.isLeaf">
