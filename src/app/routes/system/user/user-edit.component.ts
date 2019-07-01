@@ -22,6 +22,22 @@ export class UserEditComponent {
         type: 'string',
         title: '电话',
       },
+      label: {
+        type: 'string',
+        title: '角色标签',
+        enum: [
+          { label: '管理员', value: 'admin' },
+          { label: '用户', value: 'user' },
+        ],
+      },
+      department: {
+        type: 'string',
+        title: '角色标签',
+        enum: [
+          { label: '管理员', value: 'admin' },
+          { label: '用户', value: 'user' },
+        ],
+      },
     },
     required: ['username', 'phone'],
   };
