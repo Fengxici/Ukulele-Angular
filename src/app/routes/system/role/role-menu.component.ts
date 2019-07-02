@@ -19,7 +19,7 @@ export class RoleMenuComponent implements OnInit {
     private msgSrv: NzMessageService,
     public http: _HttpClient,
   ) {}
-  @ViewChild('treeElement') treeElement: NzTreeComponent;
+  @ViewChild('treeElement', { static: true }) treeElement: NzTreeComponent;
   record: any = {};
   nodes: any = [];
   saveNodes: any = [];

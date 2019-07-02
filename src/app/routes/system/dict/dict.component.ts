@@ -45,7 +45,7 @@ export class SystemDictComponent implements OnInit {
       },
     },
   };
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '键', index: 'key' },
     { title: '名称', index: 'name' },
@@ -81,7 +81,7 @@ export class SystemDictComponent implements OnInit {
       ],
     },
   ];
-  @ViewChild('stItem') stItem: STComponent;
+  @ViewChild('stItem', { static: true }) stItem: STComponent;
   itemColumns: STColumn[] = [
     { title: '名称', index: 'label' },
     { title: '值', index: 'value' },

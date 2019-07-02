@@ -25,9 +25,9 @@ export class SystemDeptComponent implements OnInit {
       },
     },
   };
-  @ViewChild('st') st: STComponent;
-  @ViewChild('stItem') stItem: STComponent;
-  @ViewChild('stItemChild') stItemChild: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('stItem', { static: true }) stItem: STComponent;
+  @ViewChild('stItemChild', { static: true }) stItemChild: STComponent;
   columns: STColumn[] = [
     { title: '名称', index: 'name' },
     { title: '排序', index: 'orderNum' },

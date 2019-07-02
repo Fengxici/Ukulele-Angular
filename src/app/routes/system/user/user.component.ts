@@ -54,7 +54,7 @@ export class SystemUserComponent implements OnInit {
     },
   };
 
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '头像', type: 'img', width: '50px', index: 'avatar' },
     { title: '用户名', index: 'username' },

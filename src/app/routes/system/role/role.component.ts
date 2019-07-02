@@ -39,7 +39,7 @@ export class SystemRoleComponent implements OnInit {
       },
     },
   };
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '角色名称', index: 'roleName' },
     { title: '角色代码', index: 'roleCode' },

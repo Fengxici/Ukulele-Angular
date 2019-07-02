@@ -67,7 +67,7 @@ export class IconComponent implements OnInit {
       },
     },
   };
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '类型', index: 'type' },
     { title: '值', width: '150px', index: 'value' },

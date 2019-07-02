@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { Component, OnInit } from '@angular/core';
+import { SFSchema, SFUISchema, SFTreeSelectWidgetSchema } from '@delon/form';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { ResponseCode } from '@shared/response.code';
@@ -9,9 +9,9 @@ import { Api } from '@shared/api';
   selector: 'app-system-user-edit',
   templateUrl: './user-edit.component.html',
 })
-export class UserEditComponent {
+export class UserEditComponent implements OnInit {
   record: any = {};
-  i: any;
+  departmentList: any = [];
   schema: SFSchema = {
     properties: {
       username: {
@@ -32,11 +32,8 @@ export class UserEditComponent {
       },
       department: {
         type: 'string',
-        title: '角色标签',
-        enum: [
-          { label: '管理员', value: 'admin' },
-          { label: '用户', value: 'user' },
-        ],
+        title: '部门',
+        enum: this.departmentList,
       },
     },
     required: ['username', 'phone'],
@@ -54,6 +51,18 @@ export class UserEditComponent {
     private msgSrv: NzMessageService,
     public http: _HttpClient,
   ) {}
+
+  ngOnInit(): void {
+    this.queryDepartment();
+  }
+
+  queryDepartment() {
+    this.http.get(Api.BaseDeptApi + 'tree').subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+        if (res.data) this.departmentList = res.data;
+      }
+    });
+  }
 
   save(value: any) {
     console.log(value);

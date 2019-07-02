@@ -105,7 +105,7 @@ export class MonitorLogComponent implements OnInit {
       }
     }
   };
-  @ViewChild('st') st: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
       { title: '类型',  index: 'type' },
       { title: '标题',  index: 'title' },

@@ -25,9 +25,9 @@ export class SystemMenuComponent implements OnInit {
       },
     },
   };
-  @ViewChild('st') st: STComponent;
-  @ViewChild('stItem') stItem: STComponent;
-  @ViewChild('stItemChild') stItemChild: STComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('stItem', { static: true }) stItem: STComponent;
+  @ViewChild('stItemChild', { static: true }) stItemChild: STComponent;
   stColumn: STColumn[] = [
     { title: '名称', index: 'text' },
     { title: '编码', index: 'key' },

@@ -31,9 +31,10 @@ import { SettingDrawerComponent } from './setting-drawer/setting-drawer.componen
   selector: 'layout-default',
   templateUrl: './default.component.html',
 })
-export class LayoutDefaultComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LayoutDefaultComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
-  @ViewChild('settingHost', { read: ViewContainerRef })
+  @ViewChild('settingHost', { read: ViewContainerRef, static: true })
   private settingHost: ViewContainerRef;
   isFetching = false;
 
@@ -70,15 +71,11 @@ export class LayoutDefaultComponent implements OnInit, AfterViewInit, OnDestroy 
   private setClass() {
     const { el, doc, renderer, settings } = this;
     const layout = settings.layout;
-    updateHostClass(
-      el.nativeElement,
-      renderer,
-      {
-        ['alain-default']: true,
-        [`alain-default__fixed`]: layout.fixed,
-        [`alain-default__collapsed`]: layout.collapsed,
-      },
-    );
+    updateHostClass(el.nativeElement, renderer, {
+      ['alain-default']: true,
+      [`alain-default__fixed`]: layout.fixed,
+      [`alain-default__collapsed`]: layout.collapsed,
+    });
 
     doc.body.classList[layout.colorWeak ? 'add' : 'remove']('color-weak');
   }
@@ -87,7 +84,9 @@ export class LayoutDefaultComponent implements OnInit, AfterViewInit, OnDestroy 
     // Setting componet for only developer
     if (!environment.production) {
       setTimeout(() => {
-        const settingFactory = this.resolver.resolveComponentFactory(SettingDrawerComponent);
+        const settingFactory = this.resolver.resolveComponentFactory(
+          SettingDrawerComponent,
+        );
         this.settingHost.createComponent(settingFactory);
       }, 22);
     }
@@ -95,7 +94,9 @@ export class LayoutDefaultComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit() {
     const { settings, unsubscribe$ } = this;
-    settings.notify.pipe(takeUntil(unsubscribe$)).subscribe(() => this.setClass());
+    settings.notify
+      .pipe(takeUntil(unsubscribe$))
+      .subscribe(() => this.setClass());
     this.setClass();
   }
 
