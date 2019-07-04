@@ -6,6 +6,7 @@ import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core
 import { throwIfAlreadyLoaded } from '@core';
 
 import { AlainThemeModule } from '@delon/theme';
+import { DelonACLModule } from '@delon/acl';
 
 // #region mock
 import { DelonMockModule } from '@delon/mock';
@@ -43,27 +44,39 @@ const REUSETAB_PROVIDES = [
 
 import { PageHeaderConfig } from '@delon/abc';
 export function fnPageHeaderConfig(): PageHeaderConfig {
+  // return {
+  //   ...new PageHeaderConfig(),
+  //   ...{ homeI18n: 'home' } as PageHeaderConfig
+  // };
   return {
     ...new PageHeaderConfig(),
-    ...{ homeI18n: 'home' } as PageHeaderConfig
+    homeI18n: 'home',
   };
 }
 
 import { DelonAuthConfig } from '@delon/auth';
 export function fnDelonAuthConfig(): DelonAuthConfig {
+  // return {
+  //   ...new DelonAuthConfig(),
+  //   ...{ login_url: '/passport/login' } as DelonAuthConfig
+  // };
   return {
     ...new DelonAuthConfig(),
-    ...{ login_url: '/passport/login' } as DelonAuthConfig
+    login_url: '/passport/login',
   };
 }
 
 import { STConfig } from '@delon/abc';
 export function fnSTConfig(): STConfig {
+  // return {
+  //   ...new STConfig(),
+  //   ...{
+  //     modal: { size: 'lg' }
+  //   } as STConfig
+  // };
   return {
     ...new STConfig(),
-    ...{
-      modal: { size: 'lg' }
-    } as STConfig
+    modal: { size: 'lg' },
   };
 }
 
@@ -78,7 +91,7 @@ const GLOBAL_CONFIG_PROVIDES = [
 
 @NgModule({
   imports: [
-    AlainThemeModule.forRoot(),
+    AlainThemeModule.forRoot(),DelonACLModule.forRoot(),
     ...MOCK_MODULES,
   ],
 })

@@ -31,9 +31,7 @@ export class StartupService {
     private settingService: SettingsService,
     private aclService: ACLService,
     private titleService: TitleService,
-    @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
-    private httpClient: HttpClient,
-    private injector: Injector,
+    private httpClient: HttpClient
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
   }
