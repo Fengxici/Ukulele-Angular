@@ -142,7 +142,7 @@ export class UserLoginComponent implements OnDestroy {
         // 清空路由复用信息
         this.reuseTabService.clear();
         // 设置用户Token信息
-        let token = this.tokenService.get();
+        const token = this.tokenService.get();
         token.token = res.access_token;
         this.tokenService.set(token);
         this.settingsService.setUser(res.user_info);

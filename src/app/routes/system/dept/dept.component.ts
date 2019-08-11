@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
@@ -6,12 +6,16 @@ import { Api } from '@shared/api';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ResponseCode } from '@shared/response.code';
 import { DeptEditComponent } from './dept-edit.component';
+import { BaseAbilityComponent } from '@shared/base.ability.component';
+import { AbilityService } from '@shared/service/AbilityService';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-system-dept',
   templateUrl: './dept.component.html',
 })
-export class SystemDeptComponent implements OnInit {
+export class SystemDeptComponent extends BaseAbilityComponent
+  implements OnInit, OnDestroy {
   params: any = {};
   record: any = [];
   pagination: STPage = {
@@ -22,6 +26,9 @@ export class SystemDeptComponent implements OnInit {
       text: {
         type: 'string',
         title: '名称',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
     },
   };
@@ -41,6 +48,7 @@ export class SystemDeptComponent implements OnInit {
           click: (record: any) => {
             this.add(record.id);
           },
+          acl: { ability: ['add'] },
         },
         {
           text: '',
@@ -52,6 +60,7 @@ export class SystemDeptComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '',
@@ -59,6 +68,7 @@ export class SystemDeptComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -79,6 +89,7 @@ export class SystemDeptComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '',
@@ -86,6 +97,7 @@ export class SystemDeptComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -96,10 +108,18 @@ export class SystemDeptComponent implements OnInit {
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
-  ) {}
+    protected abilityService: AbilityService,
+    protected route: ActivatedRoute,
+  ) {
+    super(abilityService, route);
+  }
 
   ngOnInit() {
+    super.initAbilities();
     this.query(null);
+  }
+  ngOnDestroy(): void {
+    super.clearAbilities();
   }
 
   query(event: any) {
@@ -132,23 +152,20 @@ export class SystemDeptComponent implements OnInit {
       nzOkText: '确定',
       nzOkType: 'danger',
       nzOnOk: () =>
-        this.http
-          .delete(Api.BaseDeptApi + record.id)
-          .subscribe((res: any) => {
-            if (res) {
-              if (res.code === ResponseCode.SUCCESS) {
-                this.query(null);
-                this.msg.success('删除成功');
-              } else {
-                this.msg.warning(res.message);
-              }
+        this.http.delete(Api.BaseDeptApi + record.id).subscribe((res: any) => {
+          if (res) {
+            if (res.code === ResponseCode.SUCCESS) {
+              this.query(null);
+              this.msg.success('删除成功');
             } else {
-              this.msg.error('删除失败，未知错误');
+              this.msg.warning(res.message);
             }
-          }),
+          } else {
+            this.msg.error('删除失败，未知错误');
+          }
+        }),
       nzCancelText: '取消',
       nzOnCancel: () => console.log('Cancel'),
     });
   }
-
 }

@@ -13,8 +13,8 @@ export class HeaderComponent implements OnInit {
   searchToggleStatus: boolean;
 
   constructor(
-    public settings: SettingsService,
-    public aclService: ACLService,
+    private settings: SettingsService,
+    private aclService: ACLService,
     private menuService: MenuService,
     private http: _HttpClient,
   ) {}
@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
     this.http.get('api/portal-service/ant-menu/user').subscribe((res: any) => {
       if (res && res.code === ResponseCode.SUCCESS) {
         if (res.data) {
+          this.aclService.setRole(this.settings.user.label);
           this.menuService.add(res.data);
         }
       }

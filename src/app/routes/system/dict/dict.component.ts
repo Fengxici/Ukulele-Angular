@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
@@ -7,18 +7,26 @@ import { ResponseCode } from '@shared/response.code';
 import { DictEditComponent } from './dict-edit.component';
 import { Api } from '@shared/api';
 import { DictIndexEditComponent } from './dict-index-edit.component';
+import { AbilityService } from '@shared/service/AbilityService';
+import { ActivatedRoute } from '@angular/router';
+import { BaseAbilityComponent } from '@shared/base.ability.component';
 
 @Component({
   selector: 'app-system-dict',
   templateUrl: './dict.component.html',
 })
-export class SystemDictComponent implements OnInit {
+export class SystemDictComponent extends BaseAbilityComponent
+  implements OnInit, OnDestroy {
   constructor(
     private http: _HttpClient,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
-  ) {}
+    protected abilityService: AbilityService,
+    protected route: ActivatedRoute,
+  ) {
+    super(abilityService, route);
+  }
   params: any = {};
   page: any = {
     records: [],
@@ -38,10 +46,16 @@ export class SystemDictComponent implements OnInit {
       key: {
         type: 'string',
         title: '键',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
       name: {
         type: 'string',
         title: '名称',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
     },
   };
@@ -59,6 +73,7 @@ export class SystemDictComponent implements OnInit {
           click: (record: any) => {
             this.addItem(record.id);
           },
+          acl: { ability: ['add'] },
         },
         {
           text: '编辑',
@@ -70,6 +85,7 @@ export class SystemDictComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '删除',
@@ -77,6 +93,7 @@ export class SystemDictComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -99,6 +116,7 @@ export class SystemDictComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '删除',
@@ -106,12 +124,17 @@ export class SystemDictComponent implements OnInit {
           click: (record: any) => {
             this.deleteItem(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
   ];
   ngOnInit() {
+    super.initAbilities();
     this.query(null);
+  }
+  ngOnDestroy(): void {
+    super.clearAbilities();
   }
 
   change(e: STChange) {

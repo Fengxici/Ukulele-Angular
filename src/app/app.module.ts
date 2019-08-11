@@ -93,6 +93,7 @@ import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
 import { RoutesModule } from './routes/routes.module';
 import { LayoutModule } from './layout/layout.module';
+import { AbilityService } from '@shared/service/AbilityService';
 
 @NgModule({
   declarations: [AppComponent],
@@ -114,6 +115,7 @@ import { LayoutModule } from './layout/layout.module';
     ...INTERCEPTOR_PROVIDES,
     ...I18NSERVICE_PROVIDES,
     ...APPINIT_PROVIDES,
+    AbilityService
   ],
   bootstrap: [AppComponent],
 })

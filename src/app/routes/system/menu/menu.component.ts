@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
@@ -6,12 +6,16 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 import { MenuEditComponent } from './menu-edit.component';
+import { BaseAbilityComponent } from '@shared/base.ability.component';
+import { AbilityService } from '@shared/service/AbilityService';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-system-menu',
   templateUrl: './menu.component.html',
 })
-export class SystemMenuComponent implements OnInit {
+export class SystemMenuComponent extends BaseAbilityComponent
+  implements OnInit, OnDestroy {
   params: any = {};
   record: any = [];
   pagination: STPage = {
@@ -22,6 +26,9 @@ export class SystemMenuComponent implements OnInit {
       text: {
         type: 'string',
         title: '名称',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
     },
   };
@@ -42,6 +49,7 @@ export class SystemMenuComponent implements OnInit {
           click: (record: any) => {
             this.add(record.id);
           },
+          acl: { ability: ['add'] },
         },
         {
           text: '',
@@ -53,6 +61,7 @@ export class SystemMenuComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '',
@@ -60,6 +69,7 @@ export class SystemMenuComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -91,6 +101,7 @@ export class SystemMenuComponent implements OnInit {
           click: (record: any) => {
             this.add(record.id);
           },
+          acl: { ability: ['add'] },
         },
         {
           text: '',
@@ -102,6 +113,7 @@ export class SystemMenuComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '',
@@ -109,6 +121,7 @@ export class SystemMenuComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -144,6 +157,7 @@ export class SystemMenuComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '',
@@ -151,6 +165,7 @@ export class SystemMenuComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -161,10 +176,18 @@ export class SystemMenuComponent implements OnInit {
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
-  ) {}
+    protected abilityService: AbilityService,
+    protected route: ActivatedRoute,
+  ) {
+    super(abilityService, route);
+  }
 
   ngOnInit() {
+    super.initAbilities();
     this.query(null);
+  }
+  ngOnDestroy(): void {
+    super.clearAbilities();
   }
 
   query(event: any) {

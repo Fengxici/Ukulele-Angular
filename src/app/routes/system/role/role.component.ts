@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
@@ -7,12 +7,16 @@ import { ResponseCode } from '@shared/response.code';
 import { RoleEditComponent } from './role-edit.component';
 import { Api } from '@shared/api';
 import { RoleMenuComponent } from './role-menu.component';
+import { AbilityService } from '@shared/service/AbilityService';
+import { ActivatedRoute } from '@angular/router';
+import { BaseAbilityComponent } from '@shared/base.ability.component';
 
 @Component({
   selector: 'app-system-role',
   templateUrl: './role.component.html',
 })
-export class SystemRoleComponent implements OnInit {
+export class SystemRoleComponent extends BaseAbilityComponent
+  implements OnInit, OnDestroy {
   params: any = {};
   page: any = {
     records: [],
@@ -32,10 +36,16 @@ export class SystemRoleComponent implements OnInit {
       roleName: {
         type: 'string',
         title: '角色名称',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
       roleCode: {
         type: 'string',
         title: '角色代码',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
     },
   };
@@ -57,6 +67,7 @@ export class SystemRoleComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['add'] },
         },
         {
           text: '编辑',
@@ -68,6 +79,7 @@ export class SystemRoleComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '删除',
@@ -75,6 +87,7 @@ export class SystemRoleComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -85,10 +98,19 @@ export class SystemRoleComponent implements OnInit {
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
-  ) {}
+    protected abilityService: AbilityService,
+    protected route: ActivatedRoute,
+  ) {
+    super(abilityService, route);
+  }
 
   ngOnInit() {
+    super.initAbilities();
     this.query(null);
+  }
+
+  ngOnDestroy(): void {
+    super.clearAbilities();
   }
 
   change(e: STChange) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
@@ -6,18 +6,26 @@ import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { IconEditComponent } from './icon-edit.component';
 import { Api } from '@shared/api';
+import { BaseAbilityComponent } from '@shared/base.ability.component';
+import { AbilityService } from '@shared/service/AbilityService';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-config-icon',
   templateUrl: './icon.component.html',
 })
-export class IconComponent implements OnInit {
+export class IconComponent extends BaseAbilityComponent
+  implements OnInit, OnDestroy {
   constructor(
     private http: _HttpClient,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
-  ) {}
+    protected abilityService: AbilityService,
+    protected route: ActivatedRoute,
+  ) {
+    super(abilityService, route);
+  }
   params: any = {};
   page: any = {
     records: [],
@@ -45,6 +53,7 @@ export class IconComponent implements OnInit {
         ui: {
           widget: 'select',
           width: 120,
+          acl: { ability: ['query'] },
         },
       },
       theme: {
@@ -59,11 +68,15 @@ export class IconComponent implements OnInit {
         ui: {
           widget: 'select',
           width: 160,
+          acl: { ability: ['query'] },
         },
       },
       value: {
         type: 'string',
         title: '值',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
     },
   };
@@ -88,6 +101,7 @@ export class IconComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '删除',
@@ -95,13 +109,19 @@ export class IconComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
   ];
 
   ngOnInit() {
+    super.initAbilities();
     this.query(null);
+  }
+
+  ngOnDestroy(): void {
+    super.clearAbilities();
   }
 
   change(e: STChange) {

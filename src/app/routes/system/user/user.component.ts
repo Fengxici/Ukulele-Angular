@@ -1,23 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { _HttpClient, ModalHelper, MenuService } from '@delon/theme';
-import {
-  STColumn,
-  STComponent,
-  STPage,
-  STChange,
-  STColumnTag,
-} from '@delon/abc';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { _HttpClient, ModalHelper } from '@delon/theme';
+import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ResponseCode } from '@shared/response.code';
 import { UserEditComponent } from './user-edit.component';
 import { Api } from '@shared/api';
+import { BaseAbilityComponent } from '@shared/base.ability.component';
+import { AbilityService } from '@shared/service/AbilityService';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-system-user',
   templateUrl: './user.component.html',
 })
-export class SystemUserComponent implements OnInit {
+export class SystemUserComponent extends BaseAbilityComponent
+  implements OnInit, OnDestroy {
   params: any = {};
   page: any = {
     records: [],
@@ -38,18 +36,30 @@ export class SystemUserComponent implements OnInit {
       username: {
         type: 'string',
         title: '用户名',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
       phone: {
         type: 'string',
         title: '电话号码',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
       deptName: {
         type: 'string',
         title: '部门',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
       label: {
         type: 'string',
         title: '角色标签',
+        ui: {
+          acl: { ability: ['query'] },
+        },
       },
     },
   };
@@ -74,6 +84,7 @@ export class SystemUserComponent implements OnInit {
           click: () => {
             this.query(null);
           },
+          acl: { ability: ['modify'] },
         },
         {
           text: '删除',
@@ -81,6 +92,7 @@ export class SystemUserComponent implements OnInit {
           click: (record: any) => {
             this.delete(record);
           },
+          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -91,9 +103,18 @@ export class SystemUserComponent implements OnInit {
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
-  ) {}
+    protected abilityService: AbilityService,
+    protected route: ActivatedRoute,
+  ) {
+    super(abilityService, route);
+  }
+
   ngOnInit() {
+    super.initAbilities();
     this.query(null);
+  }
+  ngOnDestroy(): void {
+    super.clearAbilities();
   }
 
   change(e: STChange) {
