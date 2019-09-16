@@ -120,6 +120,7 @@
   "app.login.message-invalid-verification-code": "Doğrulama kodu geçersizdir",
   "app.login.tab-login-credentials": "Kimlik bilgileri",
   "app.login.tab-login-mobile": "Telefon numarası",
+  "app.login.tab-login-qrcode": "扫码登陆",
   "app.login.remember-me": "Beni hatırla",
   "app.login.forgot-password": "Parolanızı mı unuttunuz?",
   "app.login.sign-in-with": "Şununla giriş yapın",

@@ -120,6 +120,7 @@
   "app.login.message-invalid-verification-code": "Nieprawidłowy kod weryfikacyjny",
   "app.login.tab-login-credentials": "Uprawnienia",
   "app.login.tab-login-mobile": "Numer telefonu komórkowego",
+  "app.login.tab-login-qrcode": "扫码登陆",
   "app.login.remember-me": "Zapamiętaj mnie",
   "app.login.forgot-password": "Zapomniałeś hasła?",
   "app.login.sign-in-with": "Zaloguj się za pomocą",
