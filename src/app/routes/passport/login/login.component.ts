@@ -22,6 +22,7 @@ import { ACLService } from '@delon/acl';
   providers: [SocialService],
 })
 export class UserLoginComponent implements OnDestroy {
+  showLoginButton: true;
   form: FormGroup;
   error = '';
   type = 0;
@@ -92,6 +93,11 @@ export class UserLoginComponent implements OnDestroy {
 
   // #endregion
 
+  // #region get qrcode
+  getQrCode(){
+    return 'http://fengxici.github.io/';
+  }
+  // #endregion
   submit() {
     this.error = '';
     if (this.type === 0) {
