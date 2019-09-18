@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -7,8 +7,8 @@ import { ResponseCode } from '@shared/response.code';
 import { UserEditComponent } from './user-edit.component';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { AbilityService } from '@shared/service/AbilityService';
 import { ActivatedRoute } from '@angular/router';
+import { ACLService } from '@delon/acl';
 
 @Component({
   selector: 'app-system-user',
@@ -99,14 +99,15 @@ export class SystemUserComponent extends BaseAbilityComponent
   ];
 
   constructor(
-    private http: _HttpClient,
+    protected http: _HttpClient,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
-    protected abilityService: AbilityService,
     protected route: ActivatedRoute,
+    protected settingService: SettingsService,
+    protected aclService: ACLService,
   ) {
-    super(abilityService, route);
+    super(aclService, http, settingService, route);
   }
 
   ngOnInit() {

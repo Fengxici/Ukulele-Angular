@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { AbilityService } from '@shared/service/AbilityService';
 import { ActivatedRoute } from '@angular/router';
+import { ACLService } from '@delon/acl';
 
 @Component({
   selector: 'app-monitor-log',
@@ -14,12 +14,13 @@ import { ActivatedRoute } from '@angular/router';
 export class MonitorLogComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
-    private http: _HttpClient,
+    protected http: _HttpClient,
     private modal: ModalHelper,
-    protected abilityService: AbilityService,
+    protected aclService: ACLService,
+    protected settingService: SettingsService,
     protected route: ActivatedRoute,
   ) {
-    super(abilityService, route);
+    super(aclService, http, settingService, route);
   }
   params: any = {};
   page: any = {
