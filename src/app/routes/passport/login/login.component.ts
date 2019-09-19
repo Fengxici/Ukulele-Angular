@@ -22,8 +22,8 @@ import { ACLService } from '@delon/acl';
   providers: [SocialService],
 })
 export class UserLoginComponent implements OnDestroy {
-  showLoginButton: true;
   form: FormGroup;
+  showLoginButton =  true;
   error = '';
   type = 0;
 
@@ -94,7 +94,7 @@ export class UserLoginComponent implements OnDestroy {
   // #endregion
 
   // #region get qrcode
-  getQrCode(){
+  getQrCode() {
     return 'http://fengxici.github.io/';
   }
   // #endregion
