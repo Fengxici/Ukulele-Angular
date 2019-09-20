@@ -1,0 +1,11 @@
+<page-header [action]="phActionTpl">
+  <ng-template #phActionTpl>    
+  </ng-template>
+</page-header>
+<nz-card>
+  <st #st  [data]="records" [columns]="columns" [page]="pagination" [expand]="expand" expandRowByClick>
+    <ng-template #expand let-item let-index="index" let-column="column">
+      <st #stItem [data]="item.instance" [columns]="itemColumns" [page]="pagination"></st>
+    </ng-template>
+  </st>
+</nz-card>
