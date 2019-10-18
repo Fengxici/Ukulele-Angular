@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit {
   searchToggleStatus: boolean;
 
   constructor(
-    private settings: SettingsService,
+    public settings: SettingsService,
     private aclService: ACLService,
     private menuService: MenuService,
     private http: _HttpClient,
