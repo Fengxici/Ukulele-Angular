@@ -10,6 +10,7 @@ import { RoleMenuComponent } from './role-menu.component';
 import { ActivatedRoute } from '@angular/router';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ACLService } from '@delon/acl';
+import { AbilityService } from '@shared/service/AbilityService';
 
 @Component({
   selector: 'app-system-role',
@@ -99,10 +100,9 @@ export class SystemRoleComponent extends BaseAbilityComponent
     private modalService: NzModalService,
     private msg: NzMessageService,
     protected route: ActivatedRoute,
-    protected settingService: SettingsService,
-    protected aclService: ACLService,
+    protected ability: AbilityService
   ) {
-    super(aclService, http, settingService, route);
+    super(route, ability);
   }
 
   ngOnInit() {

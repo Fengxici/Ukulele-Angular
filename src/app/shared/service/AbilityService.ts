@@ -1,30 +1,48 @@
-// import { _HttpClient, SettingsService } from '@delon/theme';
-// import { ResponseCode } from '@shared/response.code';
-// import { ACLService } from '@delon/acl';
+import { _HttpClient, SettingsService } from '@delon/theme';
+import { ResponseCode } from '@shared/response.code';
+import { ACLService } from '@delon/acl';
+import { Api } from '@shared/api';
+import { Injectable } from '@angular/core';
+@Injectable({
+  providedIn: 'root'
+ })
+export class AbilityService {
+  constructor(
+    private aclService: ACLService,
+    private http: _HttpClient,
+  ) {}
+  allAbilities: any = {} ;
 
-// export class AbilityService {
-//   constructor(
-//     private aclService: ACLService,
-//     private http: _HttpClient,
-//     private settingService: SettingsService,
-//   ) {}
+  initAbilities() {
+    this.http.get(Api.BaseAntMenuApi + 'role/abilities').subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+        if (res.data) {
+          this.allAbilities = res.data;
+        }
+      }
+    });
+  }
 
-//   initAbilities(url: string): void {
-//     const path =
-//       'api/portal-service/ant-menu/user/abilities?router=' +
-//       url +
-//       '&userId=' +
-//       this.settingService.user.id;
-//     this.http.get(path).subscribe((res: any) => {
-//       if (res && res.code === ResponseCode.SUCCESS) {
-//         if (res.data) {
-//           this.aclService.setAbility(res.data);
-//         }
-//       }
-//     });
-//   }
+  filterAbility(router: string) {
+    if (this.allAbilities[router])
+      this.aclService.setAbility(this.allAbilities[router]);
+    else
+      this.http.get(Api.BaseAntMenuApi + 'role/abilities').subscribe((res: any) => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            this.allAbilities = res.data;
+            const rolePermission = res.data[router];
+            if (rolePermission)
+            this.aclService.setAbility(rolePermission);
+          }
+        }
+      });
+  }
+  initUserAbility() {
+    this.initAbilities();
+  }
 
-//   clear(): void {
-//     this.aclService.setAbility([]);
-//   }
-// }
+  clear(): void {
+    this.aclService.setAbility([]);
+  }
+}

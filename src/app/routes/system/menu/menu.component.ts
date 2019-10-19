@@ -9,6 +9,7 @@ import { MenuEditComponent } from './menu-edit.component';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { ACLService } from '@delon/acl';
+import { AbilityService } from '@shared/service/AbilityService';
 
 @Component({
   selector: 'app-system-menu',
@@ -177,10 +178,9 @@ export class SystemMenuComponent extends BaseAbilityComponent
     private modalService: NzModalService,
     private msg: NzMessageService,
     protected route: ActivatedRoute,
-    protected settingService: SettingsService,
-    protected aclService: ACLService,
+    protected ability: AbilityService
   ) {
-    super(aclService, http, settingService, route);
+    super(route, ability);
   }
 
   ngOnInit() {

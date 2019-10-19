@@ -26,6 +26,7 @@ import { SettingsService } from '@delon/theme';
 
 import { environment } from '@env/environment';
 import { SettingDrawerComponent } from './setting-drawer/setting-drawer.component';
+import { AbilityService } from '@shared/service/AbilityService';
 
 @Component({
   selector: 'layout-default',
@@ -40,11 +41,12 @@ export class LayoutDefaultComponent
 
   constructor(
     router: Router,
-    _message: NzMessageService,
+    message: NzMessageService,
     private resolver: ComponentFactoryResolver,
     private settings: SettingsService,
     private el: ElementRef,
     private renderer: Renderer2,
+    private abilityService: AbilityService,
     @Inject(DOCUMENT) private doc: any,
   ) {
     // scroll to top in change page
@@ -55,7 +57,7 @@ export class LayoutDefaultComponent
       if (evt instanceof NavigationError || evt instanceof NavigationCancel) {
         this.isFetching = false;
         if (evt instanceof NavigationError) {
-          _message.error(`无法加载${evt.url}路由`, { nzDuration: 1000 * 3 });
+          message.error(`无法加载${evt.url}路由`, { nzDuration: 1000 * 3 });
         }
         return;
       }
@@ -98,6 +100,7 @@ export class LayoutDefaultComponent
       .pipe(takeUntil(unsubscribe$))
       .subscribe(() => this.setClass());
     this.setClass();
+    this.abilityService.initUserAbility();
   }
 
   ngOnDestroy() {

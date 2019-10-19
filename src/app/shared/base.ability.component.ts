@@ -1,14 +1,12 @@
 import { ActivatedRoute } from '@angular/router';
-import { _HttpClient, SettingsService } from '@delon/theme';
+import { _HttpClient } from '@delon/theme';
 import { ACLService } from '@delon/acl';
-import { ResponseCode } from './response.code';
+import { AbilityService } from './service/AbilityService';
 
 export abstract class BaseAbilityComponent {
   constructor(
-    protected aclService: ACLService,
-    protected http: _HttpClient,
-    protected settingService: SettingsService,
     protected route: ActivatedRoute,
+    protected ability: AbilityService
   ) {}
   initAbilities(): void {
     const url =
@@ -18,21 +16,23 @@ export abstract class BaseAbilityComponent {
         .filter(f => !!f[0])
         .map(([f]) => f.path)
         .join('/');
-    const path =
-        'api/portal-service/ant-menu/user/abilities?router=' +
-        url +
-        '&userId=' +
-        this.settingService.user.id;
-    this.http.get(path).subscribe((res: any) => {
-        if (res && res.code === ResponseCode.SUCCESS) {
-          if (res.data) {
-            this.aclService.setAbility(res.data);
-          }
-        }
-      });
-    }
+    // const path =
+    //     'api/portal-service/ant-menu/user/abilities?router=' +
+    //     url +
+    //     '&userId=' +
+    //     this.settingService.user.id;
+    // this.http.get(path).subscribe((res: any) => {
+    //     if (res && res.code === ResponseCode.SUCCESS) {
+    //       if (res.data) {
+    //         this.aclService.setAbility(res.data);
+    //       }
+    //     }
+    //   });
+    this.ability.filterAbility(url);
+  }
 
   clearAbilities(): void {
-    this.aclService.setAbility([]);
+    // this.aclService.setAbility([]);
+    this.ability.clear();
   }
 }

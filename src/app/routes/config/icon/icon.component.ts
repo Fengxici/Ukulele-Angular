@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
+import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
@@ -8,7 +8,7 @@ import { IconEditComponent } from './icon-edit.component';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
-import { ACLService } from '@delon/acl';
+import { AbilityService } from '@shared/service/AbilityService';
 
 @Component({
   selector: 'app-config-icon',
@@ -22,10 +22,9 @@ export class IconComponent extends BaseAbilityComponent
     private modalService: NzModalService,
     private msg: NzMessageService,
     protected route: ActivatedRoute,
-    protected aclService: ACLService,
-    protected settingService: SettingsService,
+    protected ability: AbilityService
   ) {
-    super(aclService, http, settingService, route);
+    super(route, ability);
   }
   params: any = {};
   page: any = {
@@ -102,7 +101,7 @@ export class IconComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['modify'] },
+          acl: { ability: ['edit'] },
         },
         {
           text: '删除',

@@ -1,12 +1,11 @@
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient, SettingsService } from '@delon/theme';
-import { ACLService } from '@delon/acl';
 import { ActivatedRoute } from '@angular/router';
 import { ResponseCode } from '@shared/response.code';
 import { STComponent, STColumn, STPage } from '@delon/abc';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
-import { Api } from '@shared/api';
+import { AbilityService } from '@shared/service/AbilityService';
 
 @Component({
   selector: 'app-monitor-node',
@@ -16,13 +15,12 @@ export class MonitorNodeComponent extends BaseAbilityComponent
 implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
-    protected aclService: ACLService,
-    protected settingService: SettingsService,
     protected route: ActivatedRoute,
     private modalService: NzModalService,
     private msg: NzMessageService,
+    protected ability: AbilityService
   ) {
-    super(aclService, http, settingService, route);
+    super( route, ability);
   }
   pagination: STPage = {
     show: false,

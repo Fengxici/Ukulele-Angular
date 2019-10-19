@@ -10,6 +10,7 @@ import { DictIndexEditComponent } from './dict-index-edit.component';
 import { ActivatedRoute } from '@angular/router';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ACLService } from '@delon/acl';
+import { AbilityService } from '@shared/service/AbilityService';
 
 @Component({
   selector: 'app-system-dict',
@@ -23,10 +24,9 @@ export class SystemDictComponent extends BaseAbilityComponent
     private modalService: NzModalService,
     private msg: NzMessageService,
     protected route: ActivatedRoute,
-    protected settingService: SettingsService,
-    protected aclService: ACLService,
+    protected ability: AbilityService
   ) {
-    super(aclService, http, settingService, route);
+    super( route, ability);
   }
   params: any = {};
   page: any = {
