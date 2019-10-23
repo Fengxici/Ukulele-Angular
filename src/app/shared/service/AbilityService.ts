@@ -1,4 +1,4 @@
-import { _HttpClient, SettingsService } from '@delon/theme';
+import { _HttpClient } from '@delon/theme';
 import { ResponseCode } from '@shared/response.code';
 import { ACLService } from '@delon/acl';
 import { Api } from '@shared/api';
@@ -14,17 +14,19 @@ export class AbilityService {
   allAbilities: any = {} ;
 
   initAbilities() {
+    this.allAbilities = JSON.parse(localStorage.getItem('page_abilities'));
     this.http.get(Api.BaseAntMenuApi + 'role/abilities').subscribe((res: any) => {
       if (res && res.code === ResponseCode.SUCCESS) {
         if (res.data) {
           this.allAbilities = res.data;
+          localStorage.setItem('page_abilities', JSON.stringify(res.data));
         }
       }
     });
   }
 
   filterAbility(router: string) {
-    if (this.allAbilities[router])
+    if (this.allAbilities && this.allAbilities[router])
       this.aclService.setAbility(this.allAbilities[router]);
     else
       this.http.get(Api.BaseAntMenuApi + 'role/abilities').subscribe((res: any) => {

@@ -31,7 +31,7 @@ export class StartupService {
     private settingService: SettingsService,
     private aclService: ACLService,
     private titleService: TitleService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
   }

@@ -62,7 +62,7 @@ export class SystemMenuComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['modify'] },
+          acl: { ability: ['edit'] },
         },
         {
           text: '',
@@ -114,7 +114,7 @@ export class SystemMenuComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['modify'] },
+          acl: { ability: ['edit'] },
         },
         {
           text: '',
@@ -158,7 +158,7 @@ export class SystemMenuComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['modify'] },
+          acl: { ability: ['edit'] },
         },
         {
           text: '',

@@ -16,23 +16,10 @@ export abstract class BaseAbilityComponent {
         .filter(f => !!f[0])
         .map(([f]) => f.path)
         .join('/');
-    // const path =
-    //     'api/portal-service/ant-menu/user/abilities?router=' +
-    //     url +
-    //     '&userId=' +
-    //     this.settingService.user.id;
-    // this.http.get(path).subscribe((res: any) => {
-    //     if (res && res.code === ResponseCode.SUCCESS) {
-    //       if (res.data) {
-    //         this.aclService.setAbility(res.data);
-    //       }
-    //     }
-    //   });
     this.ability.filterAbility(url);
   }
 
   clearAbilities(): void {
-    // this.aclService.setAbility([]);
     this.ability.clear();
   }
 }

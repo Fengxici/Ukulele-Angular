@@ -9,7 +9,6 @@ import { Api } from '@shared/api';
 import { RoleMenuComponent } from './role-menu.component';
 import { ActivatedRoute } from '@angular/router';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ACLService } from '@delon/acl';
 import { AbilityService } from '@shared/service/AbilityService';
 
 @Component({
@@ -80,7 +79,7 @@ export class SystemRoleComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['modify'] },
+          acl: { ability: ['edit'] },
         },
         {
           text: '删除',

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
+import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -8,7 +8,6 @@ import { UserEditComponent } from './user-edit.component';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
-import { ACLService } from '@delon/acl';
 import { AbilityService } from '@shared/service/AbilityService';
 
 @Component({
@@ -85,7 +84,7 @@ export class SystemUserComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['modify'] },
+          acl: { ability: ['edit'] },
         },
         {
           text: '删除',

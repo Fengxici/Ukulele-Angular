@@ -86,7 +86,7 @@ export class SystemDictComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['modify'] },
+          acl: { ability: ['edit'] },
         },
         {
           text: '删除',
@@ -117,7 +117,7 @@ export class SystemDictComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['modify'] },
+          acl: { ability: ['edit'] },
         },
         {
           text: '删除',
