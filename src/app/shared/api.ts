@@ -5,7 +5,5 @@ export enum Api {
   BaseRoleApi = 'api/portal-service/role/',
   BaseDictApi = 'api/portal-service/dict/',
   BaseAntMenuApi = 'api/portal-service/ant-menu/',
-  BaseDeptApi = 'api/portal-service/dept/',
-  BaseSupplyApi = 'api/supply-service/',
-  BaseSupplyFirmApi = 'api/supply-service/firm'
+  BaseDeptApi = 'api/portal-service/dept/'
 }
