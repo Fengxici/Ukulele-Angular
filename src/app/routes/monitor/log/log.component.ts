@@ -5,7 +5,7 @@ import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
 
 @Component({
   selector: 'app-monitor-log',

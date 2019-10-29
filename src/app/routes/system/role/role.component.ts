@@ -9,7 +9,7 @@ import { Api } from '@shared/api';
 import { RoleMenuComponent } from './role-menu.component';
 import { ActivatedRoute } from '@angular/router';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
 
 @Component({
   selector: 'app-system-role',

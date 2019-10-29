@@ -13,7 +13,7 @@
         <nz-tag nzMode="closeable" [nzChecked]="true" *ngFor="let tag of node.origin.permisson.abilities"
           (nzAfterClose)="handleClose(tag,node)">{{ tag }}</nz-tag>
         <nz-tag *ngIf="!node.origin.permisson.inputVisible" nzNoAnimation (click)="showInput(node)">
-          <i nz-icon type="plus"></i> 新权限
+          <i nz-icon type="nz-plus"></i> 新权限
         </nz-tag>
         <input nz-input nzSize="small" *ngIf="node.origin.permisson.inputVisible" type="text" [(ngModel)]="node.origin.permisson.inputValue"
           style="width: 78px;" (blur)="handleInputConfirm(node)" (keydown.enter)="handleInputConfirm(node)" />
