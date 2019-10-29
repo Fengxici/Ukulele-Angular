@@ -1,10 +1,14 @@
 <page-header [action]="phActionTpl">
   <ng-template #phActionTpl>
-    <button (click)="add()" nz-button acl [acl-ability]="'add'" nzType="primary">新建</button>
+    <button *ngIf="editable===false" (click)="editable=!editable" nz-button acl [acl-ability]="'edit'" nzType="primary">编辑</button>
   </ng-template>
 </page-header>
 <nz-card>
-  <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)" acl [acl-ability]="'query'"></sf>
-  <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
-    [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination"></st>
+  <sf *ngIf="record" #sf mode="edit" [schema]="schema" [ui]="ui" [formData]="record" button="none" >
+    <div *ngIf="editable" class="modal-footer">
+      <button nz-button type="button" (click)="editable=false">取消</button>
+      <button nz-button type="submit" nzType="primary" (click)="save(sf.value)" 
+        [disabled]="!sf.valid" [nzLoading]="http.loading">保存</button>
+    </div>
+  </sf>
 </nz-card>
