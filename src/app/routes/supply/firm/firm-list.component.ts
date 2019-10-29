@@ -8,7 +8,7 @@ import { FirmEditComponent } from './firm-edit.component';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
 
 @Component({
   selector: 'app-supply-firm-list',

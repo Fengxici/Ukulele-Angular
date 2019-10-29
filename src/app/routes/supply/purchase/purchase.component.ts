@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
-import { SFSchema } from '@delon/form';
+import { SFSchema, SFSelectWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { PurchaseEditComponent } from './purchase-edit.component';
@@ -10,6 +10,8 @@ import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { PublicService } from '@shared/service/public.service';
+import { of, Observable, zip } from 'rxjs';
+import { delay, merge, pluck, startWith, catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-supply-purchase',
@@ -54,28 +56,35 @@ export class PurchaseComponent extends BaseAbilityComponent
       status: {
         type: 'string',
         title: '状态',
-        enum: [
-          { label: '所有', value: '-1' }
-        ],
+        default: '-1',
         ui: {
           widget: 'select',
-          width: 120,
+          asyncData: () => this.queryDicItem('PURCHASE_ORDER_STATUS') ,
+          width: 150,
           acl: { ability: ['query'] },
-        },
+        } ,
       },
       financeStatus: {
         type: 'string',
         title: '财务状态',
+        default: '-1',
         ui: {
+          widget: 'select',
+          asyncData: () => this.queryDicItem('FINANCE_STATUS') ,
+          width: 180,
           acl: { ability: ['query'] },
-        },
+        } ,
       },
       settleType: {
         type: 'string',
         title: '结算方式',
+        default: '-1',
         ui: {
+          widget: 'select',
+          asyncData: () => this.queryDicItem('SETTLE_TYPE') ,
+          width: 160,
           acl: { ability: ['query'] },
-        },
+        } ,
       },
       provider: {
         type: 'string',
@@ -123,7 +132,6 @@ export class PurchaseComponent extends BaseAbilityComponent
   ngOnInit() {
     super.initAbilities();
     this.query(null);
-    this.queryDicItem('PURCHASE_ORDER_STATUS');
   }
 
   ngOnDestroy(): void {
@@ -138,19 +146,24 @@ export class PurchaseComponent extends BaseAbilityComponent
     }
   }
 
-  queryDicItem(key: string) {
-    this.pubService.queryDicByIndex(key).subscribe((res: any) => {
-      if (res && res.code === ResponseCode.SUCCESS) {
-        if (res.data) {
-          this.searchSchema.properties.status.enum = [];
-          this.searchSchema.properties.status.enum.push({ label: '所有', value: '-1' });
-          res.data.array.forEach(element => {
-            this.searchSchema.properties.status.enum.push({label: element.label, value: element.value });
-          });
+  queryDicItem(key: string): Observable<any> {
+    const dicItemObservable = this.pubService.queryDicByIndex(key).pipe(
+      catchError(() => {
+        return [{ label: '所有', value: '-1' }];
+      }),
+      map(res => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            const data = [{ label: '所有', value: '-1' }];
+            return data.concat(res.data);
+          }
         }
-      }
-    });
+        return [{ label: '所有', value: '-1' }];
+      })
+    );
+    return dicItemObservable;
   }
+
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;

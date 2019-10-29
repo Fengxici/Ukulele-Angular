@@ -8,7 +8,10 @@ import { MarketEditComponent } from './market-edit.component';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
+import { Observable } from 'rxjs';
+import { PublicService } from '@shared/service/public.service';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-supply-market',
@@ -21,6 +24,7 @@ export class MarketComponent extends BaseAbilityComponent
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
+    private pubService: PublicService,
     protected route: ActivatedRoute,
     protected ability: AbilityService
   ) {
@@ -52,27 +56,39 @@ export class MarketComponent extends BaseAbilityComponent
       status: {
         type: 'string',
         title: '状态',
+        default: '-1',
         ui: {
+          widget: 'select',
+          asyncData: () => this.queryDicItem('MARKET_ORDER_STATUS') ,
+          width: 150,
           acl: { ability: ['query'] },
-        },
+        } ,
       },
       financeStatus: {
         type: 'string',
         title: '财务状态',
+        default: '-1',
         ui: {
+          widget: 'select',
+          asyncData: () => this.queryDicItem('FINANCE_STATUS') ,
+          width: 180,
           acl: { ability: ['query'] },
-        },
+        } ,
       },
       settleType: {
         type: 'string',
         title: '结算方式',
+        default: '-1',
         ui: {
+          widget: 'select',
+          asyncData: () => this.queryDicItem('SETTLE_TYPE') ,
+          width: 160,
           acl: { ability: ['query'] },
-        },
+        } ,
       },
       provider: {
         type: 'string',
-        title: '供应方',
+        title: '采购方',
         ui: {
           acl: { ability: ['query'] },
         },
@@ -128,6 +144,23 @@ export class MarketComponent extends BaseAbilityComponent
       this.params.current = e.pi;
       this.query(null);
     }
+  }
+  queryDicItem(key: string): Observable<any> {
+    const dicItemObservable = this.pubService.queryDicByIndex(key).pipe(
+      catchError(() => {
+        return [{ label: '所有', value: '-1' }];
+      }),
+      map(res => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            const data = [{ label: '所有', value: '-1' }];
+            return data.concat(res.data);
+          }
+        }
+        return [{ label: '所有', value: '-1' }];
+      })
+    );
+    return dicItemObservable;
   }
   query(event: any) {
     const current: number = this.params.current || 1;
