@@ -7,7 +7,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
 import { SupplierEditComponent } from './supplier-edit.component';
 
 @Component({
@@ -22,7 +22,7 @@ export class SupplierComponent extends BaseAbilityComponent
     private modalService: NzModalService,
     private msg: NzMessageService,
     protected route: ActivatedRoute,
-    protected ability: AbilityService
+    protected ability: AbilityService,
   ) {
     super(route, ability);
   }

@@ -8,7 +8,8 @@ import { PurchaseEditComponent } from './purchase-edit.component';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
+import { PublicService } from '@shared/service/public.service';
 
 @Component({
   selector: 'app-supply-purchase',
@@ -21,6 +22,7 @@ export class PurchaseComponent extends BaseAbilityComponent
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
+    private pubService: PublicService,
     protected route: ActivatedRoute,
     protected ability: AbilityService
   ) {
@@ -52,7 +54,12 @@ export class PurchaseComponent extends BaseAbilityComponent
       status: {
         type: 'string',
         title: '状态',
+        enum: [
+          { label: '所有', value: '-1' }
+        ],
         ui: {
+          widget: 'select',
+          width: 120,
           acl: { ability: ['query'] },
         },
       },
@@ -116,6 +123,7 @@ export class PurchaseComponent extends BaseAbilityComponent
   ngOnInit() {
     super.initAbilities();
     this.query(null);
+    this.queryDicItem('PURCHASE_ORDER_STATUS');
   }
 
   ngOnDestroy(): void {
@@ -128,6 +136,20 @@ export class PurchaseComponent extends BaseAbilityComponent
       this.params.current = e.pi;
       this.query(null);
     }
+  }
+
+  queryDicItem(key: string) {
+    this.pubService.queryDicByIndex(key).subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+        if (res.data) {
+          this.searchSchema.properties.status.enum = [];
+          this.searchSchema.properties.status.enum.push({ label: '所有', value: '-1' });
+          res.data.array.forEach(element => {
+            this.searchSchema.properties.status.enum.push({label: element.label, value: element.value });
+          });
+        }
+      }
+    });
   }
   query(event: any) {
     const current: number = this.params.current || 1;
