@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
+import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
@@ -9,8 +9,7 @@ import { Api } from '@shared/api';
 import { DictIndexEditComponent } from './dict-index-edit.component';
 import { ActivatedRoute } from '@angular/router';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ACLService } from '@delon/acl';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
 
 @Component({
   selector: 'app-system-dict',

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
+import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { Api } from '@shared/api';
@@ -8,8 +8,7 @@ import { ResponseCode } from '@shared/response.code';
 import { DeptEditComponent } from './dept-edit.component';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
-import { ACLService } from '@delon/acl';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
 
 @Component({
   selector: 'app-system-dept',

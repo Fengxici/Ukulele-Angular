@@ -1,7 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { _HttpClient } from '@delon/theme';
-import { ACLService } from '@delon/acl';
-import { AbilityService } from './service/AbilityService';
+import { AbilityService } from './service/ability.service';
 
 export abstract class BaseAbilityComponent {
   constructor(

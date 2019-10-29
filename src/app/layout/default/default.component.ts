@@ -26,7 +26,7 @@ import { SettingsService } from '@delon/theme';
 
 import { environment } from '@env/environment';
 import { SettingDrawerComponent } from './setting-drawer/setting-drawer.component';
-import { AbilityService } from '@shared/service/AbilityService';
+import { AbilityService } from '@shared/service/ability.service';
 
 @Component({
   selector: 'layout-default',
