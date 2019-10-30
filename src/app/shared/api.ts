@@ -12,4 +12,5 @@ export enum Api {
   BaseSupplyPurchaseApi = 'api/supply-service/purchaseOrder/',
   BaseSupplyUserApi = 'api/supply-service/firm/user',
   BaseSupplySupplierApi = 'api/supply-service/firm/supplier',
+  BaseSupplyConsumerApi = 'api/supply-service/firm/consumer',
 }
