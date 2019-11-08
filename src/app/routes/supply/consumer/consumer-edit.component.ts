@@ -92,7 +92,7 @@ export class ConsumerEditComponent {
   join(record: any) {
     console.log(record);
     const params = {
-      supplierId: record.id,
+      consumerId: record.id,
       firmId: 1
     };
     this.http.post(Api.BaseSupplyConsumerApi, null, params).subscribe((res: any) => {

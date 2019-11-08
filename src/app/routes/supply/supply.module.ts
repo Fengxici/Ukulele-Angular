@@ -12,14 +12,29 @@ import { EmployeeComponent } from './user/employee.component';
 import { EmployeeEditComponent } from './user/employee-edit.component';
 import { SupplierComponent } from './supplier/supplier.component';
 import { SupplierEditComponent } from './supplier/supplier-edit.component';
+import { ConsumerComponent } from './consumer/consumer.component';
+import { ConsumerEditComponent } from './consumer/consumer-edit.component';
+import { MaterialEditComponent } from './material/material-edit.component';
+import { MaterialComponent } from './material/material.component';
 
-const COMPONENTS = [FirmListComponent, FirmComponent, EmployeeComponent, SupplierComponent, MarketComponent, PurchaseComponent];
+const COMPONENTS = [
+  FirmListComponent,
+  FirmComponent,
+  EmployeeComponent,
+  SupplierComponent,
+  ConsumerComponent,
+  MarketComponent,
+  PurchaseComponent,
+  MaterialComponent
+];
 const COMPONENTS_NOROUNT = [
   FirmEditComponent,
   EmployeeEditComponent,
   SupplierEditComponent,
+  ConsumerEditComponent,
   MarketEditComponent,
-  PurchaseEditComponent
+  PurchaseEditComponent,
+  MaterialEditComponent
 ];
 
 @NgModule({
