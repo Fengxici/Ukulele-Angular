@@ -9,9 +9,6 @@ import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
-import { PublicService } from '@shared/service/public.service';
-import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-supply-material',
@@ -64,7 +61,7 @@ export class MaterialComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '物料编号', index: 'materialNo' },
-    { title: '物料名称', width: '150px', index: 'name' },
+    { title: '物料名称',  index: 'name' },
     { title: '规格', index: 'format' },
     { title: '单位', index: 'unit' },
     { title: '含税单价', index: 'price' },

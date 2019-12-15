@@ -98,7 +98,7 @@ export class PurchaseComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '订单编号', index: 'orderNo' },
-    { title: '状态', width: '150px', index: 'status' },
+    { title: '状态', index: 'status' },
     { title: '财务状态', index: 'financeStatus' },
     { title: '结算方式', index: 'settleType' },
     { title: '供应方', index: 'provider' },

@@ -49,9 +49,9 @@ export class FirmListComponent extends BaseAbilityComponent
           acl: { ability: ['query'] },
         },
       },
-      description: {
+      unicode: {
         type: 'string',
-        title: '描述',
+        title: '社会统一信用代码',
         ui: {
           acl: { ability: ['query'] },
         },
@@ -61,6 +61,13 @@ export class FirmListComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '名称', index: 'name' },
+    { title: '简称', index: 'shortName' },
+    { title: '社会统一信用代码', index: 'unicode' },
+    { title: '电话', index: 'phone' },
+    { title: '地址', index: 'address' },
+    { title: '银行账号', index: 'bankAccount' },
+    { title: '开户行', index: 'bankName' },
+    { title: '联系人', index: 'contacts' },
     { title: '描述', width: '150px', index: 'description' },
     {
       title: '操作',
