@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {
   SFSchema,
   SFUISchema,
-  SFTreeSelectWidgetSchema,
   SFSelectWidgetSchema,
 } from '@delon/form';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
@@ -16,7 +15,6 @@ import { Api } from '@shared/api';
 })
 export class UserEditComponent implements OnInit {
   record: any = {};
-  departmentList: any;
   schema: SFSchema = { properties: {} };
   ui: SFUISchema = {
     '*': {
@@ -33,8 +31,7 @@ export class UserEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // 查询部门树
-    this.queryDepartmentTree();
+    this.initSchema();
   }
 
   // 初始化表单，在获取完部门树数据之后再初始化
@@ -60,45 +57,10 @@ export class UserEditComponent implements OnInit {
             widget: 'select',
             mode: 'multiple',
           } as SFSelectWidgetSchema,
-        },
-        deptId: {
-          type: 'string',
-          title: '部门',
-          enum: this.departmentList,
-          ui: {
-            widget: 'tree-select',
-          } as SFTreeSelectWidgetSchema,
-        },
+        }
       },
       required: ['username', 'phone'],
     };
-  }
-
-  queryDepartmentTree() {
-    this.http.get(Api.BaseDeptApi + 'tree').subscribe((res: any) => {
-      if (res && res.code === ResponseCode.SUCCESS && res.data) {
-        this.departmentList = this.createDepartmentTree(res.data);
-      }
-      // 数据获取完再初始化表单，一方面此时this.record已经有值，另一方面控件可直接设置值域，无需动态获取。
-      this.initSchema();
-    });
-  }
-
-  createDepartmentTree(data: any): any {
-    const deptList = [];
-    data.forEach(item => {
-      const dept = {
-        title: item.name,
-        key: item.id,
-        children: [],
-        isLeaf: false,
-      };
-      if (item.children)
-        dept.children = this.createDepartmentTree(item.children);
-      else dept.isLeaf = true;
-      deptList.push(dept);
-    });
-    return deptList;
   }
 
   save(value: any) {

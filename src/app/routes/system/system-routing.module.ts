@@ -7,7 +7,6 @@ import { SystemUserComponent } from './user/user.component';
 import { SystemDictComponent } from './dict/dict.component';
 
 const routes: Routes = [
-
   { path: 'dept', component: SystemDeptComponent },
   { path: 'role', component: SystemRoleComponent },
   { path: 'menu', component: SystemMenuComponent },

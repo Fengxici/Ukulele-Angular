@@ -9,6 +9,7 @@ import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
+import { UserRoleComponent } from './user-role.component';
 
 @Component({
   selector: 'app-system-user',
@@ -47,13 +48,6 @@ export class SystemUserComponent extends BaseAbilityComponent
           acl: { ability: ['query'] },
         },
       },
-      deptName: {
-        type: 'string',
-        title: '部门',
-        ui: {
-          acl: { ability: ['query'] },
-        },
-      },
       label: {
         type: 'string',
         title: '角色标签',
@@ -69,7 +63,6 @@ export class SystemUserComponent extends BaseAbilityComponent
     { title: '头像', type: 'img', width: '50px', index: 'avatar' },
     { title: '用户名', index: 'username' },
     { title: '电话号码', index: 'phone' },
-    { title: '部门', index: 'deptName' },
     { title: '角色标签', index: 'label' },
     {
       title: '操作',
@@ -80,6 +73,18 @@ export class SystemUserComponent extends BaseAbilityComponent
           type: 'modal',
           modal: {
             component: UserEditComponent,
+          },
+          click: () => {
+            this.query(null);
+          },
+          acl: { ability: ['edit'] },
+        },
+        {
+          text: '角色',
+          icon: 'edit',
+          type: 'modal',
+          modal: {
+            component: UserRoleComponent,
           },
           click: () => {
             this.query(null);
