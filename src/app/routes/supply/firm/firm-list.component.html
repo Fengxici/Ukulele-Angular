@@ -1,0 +1,10 @@
+<page-header [action]="phActionTpl">
+  <ng-template #phActionTpl>
+    <button (click)="add()" nz-button acl [acl-ability]="'add'" nzType="primary">新建</button>
+  </ng-template>
+</page-header>
+<nz-card>
+  <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)" acl [acl-ability]="'query'"></sf>
+  <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
+    [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination"></st>
+</nz-card>
