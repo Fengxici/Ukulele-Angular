@@ -1694,6 +1694,10 @@ this.tinycolor = tinycolor;
 @btn-circle-size-lg: @btn-height-lg;
 @btn-circle-size-sm: @btn-height-sm;
 
+@btn-square-size: @btn-height-base;
+@btn-square-size-lg: @btn-height-lg;
+@btn-square-size-sm: @btn-height-sm;
+
 @btn-group-border: @primary-5;
 
 // Checkbox
@@ -1702,8 +1706,10 @@ this.tinycolor = tinycolor;
 @checkbox-check-color: #fff;
 @checkbox-border-width: @border-width-base;
 
-// Dropdown
+// Descriptions
+@descriptions-bg: #fafafa;
 
+// Dropdown
 @dropdown-selected-color: @primary-color;
 
 // Empty
@@ -1831,6 +1837,9 @@ this.tinycolor = tinycolor;
 @input-border-color: @border-color-base;
 @input-bg: @component-background;
 @input-number-handler-active-bg: #f4f4f4;
+@input-number-handler-hover-bg: @primary-5;
+@input-number-handler-bg: @component-background;
+@input-number-handler-border-color: @border-color-base;
 @input-addon-bg: @background-color-light;
 @input-hover-border-color: @primary-5;
 @input-disabled-bg: @disabled-bg;
@@ -1840,6 +1849,13 @@ this.tinycolor = tinycolor;
 // ---
 @select-border-color: @border-color-base;
 @select-item-selected-font-weight: 600;
+@select-dropdown-bg: @component-background;
+@select-item-selected-bg: @background-color-light;
+@select-item-active-bg: @item-active-bg;
+
+// Anchor
+// ---
+@anchor-border-color: @border-color-split;
 
 // Tooltip
 // ---
@@ -1879,6 +1895,7 @@ this.tinycolor = tinycolor;
 @modal-body-padding: 24px;
 @modal-header-bg: @component-background;
 @modal-footer-bg: transparent;
+@modal-footer-border-color-split: @border-color-split;
 @modal-mask-bg: fade(@black, 45%);
 
 // Progress
@@ -1986,7 +2003,8 @@ this.tinycolor = tinycolor;
 @card-inner-head-padding: 12px;
 @card-padding-base: 24px;
 @card-actions-background: @background-color-light;
-@card-background: #cfd8dc;
+@card-skeleton-bg: #cfd8dc;
+@card-background: @component-background;
 @card-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
 @card-radius: @border-radius-sm;
 
@@ -2061,8 +2079,10 @@ this.tinycolor = tinycolor;
 
 // PageHeader
 // ---
-@page-header-padding-horizontal: 24px;
+@page-header-padding: 24px;
 @page-header-padding-vertical: 16px;
+@page-header-padding-breadcrumb: 12px;
+@page-header-back-color: #000;
 
 // Breadcrumb
 // ---
@@ -2101,6 +2121,8 @@ this.tinycolor = tinycolor;
 @tree-child-padding: 18px;
 @tree-directory-selected-color: #fff;
 @tree-directory-selected-bg: @primary-color;
+@tree-node-hover-bg: @item-hover-bg;
+@tree-node-selected-bg: @primary-2;
 
 // Collapse
 // ---
@@ -2172,6 +2194,10 @@ this.tinycolor = tinycolor;
 @timeline-dot-border-width: 2px;
 @timeline-dot-color: @primary-color;
 @timeline-dot-bg: @component-background;
+
+// Typography
+// ---
+@typography-title-font-weight: 600;
 
 // Mixins
 // --------------------------------------------------
@@ -2569,6 +2595,7 @@ darker  @grey-9;
 @se-label-color: rgba(0, 0, 0, 0.5);
 @se-label-optional-color: rgba(0, 0, 0, 0.35);
 @se-compact-bottom: @layout-gutter;
+@se-optional-margin: 2px;
 
 @ellipsis-prefix: ~'.ellipsis';
 
@@ -2624,6 +2651,7 @@ darker  @grey-9;
 @sv-default-text: '-';
 @sv-unit-margin: 8px;
 @sv-unit-color: @grey-7;
+@sv-optional-margin: 2px;
 
 @g2-card-prefix: ~'.g2-card';
 
@@ -4337,6 +4365,10 @@ this.tinycolor = tinycolor;
 @btn-circle-size-lg: @btn-height-lg;
 @btn-circle-size-sm: @btn-height-sm;
 
+@btn-square-size: @btn-height-base;
+@btn-square-size-lg: @btn-height-lg;
+@btn-square-size-sm: @btn-height-sm;
+
 @btn-group-border: @primary-5;
 
 // Checkbox
@@ -4345,8 +4377,10 @@ this.tinycolor = tinycolor;
 @checkbox-check-color: #fff;
 @checkbox-border-width: @border-width-base;
 
-// Dropdown
+// Descriptions
+@descriptions-bg: #fafafa;
 
+// Dropdown
 @dropdown-selected-color: @primary-color;
 
 // Empty
@@ -4474,6 +4508,9 @@ this.tinycolor = tinycolor;
 @input-border-color: @border-color-base;
 @input-bg: @component-background;
 @input-number-handler-active-bg: #f4f4f4;
+@input-number-handler-hover-bg: @primary-5;
+@input-number-handler-bg: @component-background;
+@input-number-handler-border-color: @border-color-base;
 @input-addon-bg: @background-color-light;
 @input-hover-border-color: @primary-5;
 @input-disabled-bg: @disabled-bg;
@@ -4483,6 +4520,13 @@ this.tinycolor = tinycolor;
 // ---
 @select-border-color: @border-color-base;
 @select-item-selected-font-weight: 600;
+@select-dropdown-bg: @component-background;
+@select-item-selected-bg: @background-color-light;
+@select-item-active-bg: @item-active-bg;
+
+// Anchor
+// ---
+@anchor-border-color: @border-color-split;
 
 // Tooltip
 // ---
@@ -4522,6 +4566,7 @@ this.tinycolor = tinycolor;
 @modal-body-padding: 24px;
 @modal-header-bg: @component-background;
 @modal-footer-bg: transparent;
+@modal-footer-border-color-split: @border-color-split;
 @modal-mask-bg: fade(@black, 45%);
 
 // Progress
@@ -4629,7 +4674,8 @@ this.tinycolor = tinycolor;
 @card-inner-head-padding: 12px;
 @card-padding-base: 24px;
 @card-actions-background: @background-color-light;
-@card-background: #cfd8dc;
+@card-skeleton-bg: #cfd8dc;
+@card-background: @component-background;
 @card-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
 @card-radius: @border-radius-sm;
 
@@ -4704,8 +4750,10 @@ this.tinycolor = tinycolor;
 
 // PageHeader
 // ---
-@page-header-padding-horizontal: 24px;
+@page-header-padding: 24px;
 @page-header-padding-vertical: 16px;
+@page-header-padding-breadcrumb: 12px;
+@page-header-back-color: #000;
 
 // Breadcrumb
 // ---
@@ -4744,6 +4792,8 @@ this.tinycolor = tinycolor;
 @tree-child-padding: 18px;
 @tree-directory-selected-color: #fff;
 @tree-directory-selected-bg: @primary-color;
+@tree-node-hover-bg: @item-hover-bg;
+@tree-node-selected-bg: @primary-2;
 
 // Collapse
 // ---
@@ -4815,6 +4865,10 @@ this.tinycolor = tinycolor;
 @timeline-dot-border-width: 2px;
 @timeline-dot-color: @primary-color;
 @timeline-dot-bg: @component-background;
+
+// Typography
+// ---
+@typography-title-font-weight: 600;
 
 // Mixins
 // --------------------------------------------------
@@ -6182,6 +6236,7 @@ textarea.cdk-textarea-autosize-measuring {
 
   position: relative;
   padding: 8px 15px 8px 37px;
+  word-wrap: break-word;
   border-radius: @border-radius-base;
 
   &&-no-icon {
@@ -6243,6 +6298,8 @@ textarea.cdk-textarea-autosize-measuring {
     overflow: hidden;
     font-size: @font-size-sm;
     line-height: 22px;
+    background-color: transparent;
+    border: none;
     cursor: pointer;
 
     .@{iconfont-css-prefix}-close {
@@ -6377,7 +6434,7 @@ textarea.cdk-textarea-autosize-measuring {
       width: @anchor-border-width;
       height: 100%;
       margin: 0 auto;
-      background-color: @border-color-split;
+      background-color: @anchor-border-color;
       content: ' ';
     }
     &-ball {
@@ -6467,6 +6524,7 @@ textarea.cdk-textarea-autosize-measuring {
     display: block;
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -6748,6 +6806,9 @@ textarea.cdk-textarea-autosize-measuring {
 
   & > span:last-child {
     color: @breadcrumb-last-item-color;
+    a {
+      color: @breadcrumb-last-item-color;
+    }
   }
 
   & > span:last-child &-separator {
@@ -6767,6 +6828,14 @@ textarea.cdk-textarea-autosize-measuring {
 
   &-overlay-link {
     > .@{iconfont-css-prefix} {
+      margin-left: 4px;
+    }
+  }
+}
+
+.@{breadcrumb-prefix-cls} {
+  &-link {
+    .@{iconfont-css-prefix} + span {
       margin-left: 4px;
     }
   }
@@ -6904,6 +6973,11 @@ textarea.cdk-textarea-autosize-measuring {
     .button-size(@btn-height-lg; @btn-padding-lg; @btn-font-size-lg; 0);
     line-height: @btn-height-lg - 2px;
   }
+  &-lg > .@{btnClassName}.@{btnClassName}-icon-only {
+    .square(@btn-height-lg);
+    padding-right: 0;
+    padding-left: 0;
+  }
   &-sm > .@{btnClassName},
   &-sm > span > .@{btnClassName} {
     .button-size(@btn-height-sm; @btn-padding-sm; @font-size-base; 0);
@@ -6911,6 +6985,11 @@ textarea.cdk-textarea-autosize-measuring {
     > .@{iconfont-css-prefix} {
       font-size: @font-size-base;
     }
+  }
+  &-sm > .@{btnClassName}.@{btnClassName}-icon-only {
+    .square(@btn-height-sm);
+    padding-right: 0;
+    padding-left: 0;
   }
 }
 // Base styles of buttons
@@ -6999,10 +7078,10 @@ textarea.cdk-textarea-autosize-measuring {
 }
 // round button
 .btn-round(@btnClassName: btn) {
-  .button-size(@btn-circle-size; 0 @btn-circle-size / 2; @font-size-base + 2px; @btn-circle-size);
+  .button-size(@btn-circle-size; 0 @btn-circle-size / 2; @font-size-base; @btn-circle-size);
   &.@{btnClassName}-lg {
     .button-size(
-      @btn-circle-size-lg; 0 @btn-circle-size-lg / 2; @btn-font-size-lg + 2px; @btn-circle-size-lg
+      @btn-circle-size-lg; 0 @btn-circle-size-lg / 2; @btn-font-size-lg; @btn-circle-size-lg
     );
   }
   &.@{btnClassName}-sm {
@@ -7011,17 +7090,33 @@ textarea.cdk-textarea-autosize-measuring {
     );
   }
 }
-// circle button: the content only contains icon
-.btn-circle(@btnClassName: btn) {
-  .square(@btn-circle-size);
-  .button-size(@btn-circle-size; 0; @font-size-base + 2px; 50%);
+// square button: the content only contains icon
+.btn-square(@btnClassName: btn) {
+  .square(@btn-square-size);
+  .button-size(@btn-square-size; 0; @font-size-base + 2px; @btn-border-radius-base);
   &.@{btnClassName}-lg {
-    .square(@btn-circle-size-lg);
-    .button-size(@btn-circle-size-lg; 0; @btn-font-size-lg + 2px; 50%);
+    .square(@btn-square-size-lg);
+    .button-size(@btn-square-size-lg; 0; @btn-font-size-lg + 2px; @btn-border-radius-base);
   }
   &.@{btnClassName}-sm {
-    .square(@btn-circle-size-sm);
-    .button-size(@btn-circle-size-sm; 0; @font-size-base; 50%);
+    .square(@btn-square-size-sm);
+    .button-size(@btn-square-size-sm; 0; @font-size-base; @btn-border-radius-base);
+  }
+}
+// circle button: the content only contains icon
+.btn-circle(@btnClassName: btn) {
+  min-width: @btn-height-base;
+  padding-right: 0;
+  padding-left: 0;
+  text-align: center;
+  border-radius: 50%;
+  &.@{btnClassName}-lg {
+    min-width: @btn-height-lg;
+    border-radius: 50%;
+  }
+  &.@{btnClassName}-sm {
+    min-width: @btn-height-sm;
+    border-radius: 50%;
   }
 }
 // Horizontal button groups style
@@ -7170,8 +7265,15 @@ textarea.cdk-textarea-autosize-measuring {
     .btn-link;
   }
 
+  &-icon-only {
+    .btn-square(@btn-prefix-cls);
+  }
+
   &-round {
     .btn-round(@btn-prefix-cls);
+    &.@{btn-prefix-cls}-icon-only {
+      width: auto;
+    }
   }
 
   &-circle,
@@ -7233,11 +7335,6 @@ textarea.cdk-textarea-autosize-measuring {
 
   &-group {
     .btn-group(@btn-prefix-cls);
-  }
-
-  &:not(&-circle):not(&-circle-outline)&-icon-only {
-    padding-right: 8px;
-    padding-left: 8px;
   }
 
   // http://stackoverflow.com/a/21281554/3040605
@@ -7311,14 +7408,14 @@ a.@{btn-prefix-cls} {
 @card-hover-border: fade(@black, 9%);
 @card-action-icon-size: 16px;
 
-@gradient-min: fade(@card-background, 20%);
-@gradient-max: fade(@card-background, 40%);
+@gradient-min: fade(@card-skeleton-bg, 20%);
+@gradient-max: fade(@card-skeleton-bg, 40%);
 
 .@{card-prefix-cls} {
   .reset-component;
 
   position: relative;
-  background: @component-background;
+  background: @card-background;
   border-radius: @card-radius;
   transition: all 0.3s;
 
@@ -7403,10 +7500,12 @@ a.@{btn-prefix-cls} {
       1px 1px 0 0 @border-color-split, 1px 0 0 0 @border-color-split inset,
       0 1px 0 0 @border-color-split inset;
     transition: all 0.3s;
-    &:hover {
-      position: relative;
-      z-index: 1;
-      box-shadow: @box-shadow-base;
+    &-hoverable {
+      &:hover {
+        position: relative;
+        z-index: 1;
+        box-shadow: @box-shadow-base;
+      }
     }
   }
 
@@ -7456,7 +7555,7 @@ a.@{btn-prefix-cls} {
           transition: color 0.3s;
         }
 
-        a,
+        a:not(.@{ant-prefix}-btn),
         > .anticon {
           display: inline-block;
           width: 100%;
@@ -8018,7 +8117,8 @@ a.@{btn-prefix-cls} {
   // Create an empty element to avoid margin collapsing
   // https://github.com/ant-design/ant-design/issues/18103
   &-content::before {
-    display: table;
+    display: block;
+    overflow: hidden;
     content: '';
   }
 
@@ -8052,7 +8152,6 @@ a.@{btn-prefix-cls} {
     height: 100%;
     border-bottom: 0;
 
-    .@{tab-prefix-cls}-tab-arrow-show,
     .@{tab-prefix-cls}-tab-arrow-show {
       width: 100%;
       height: @tabs-scrolling-size;
@@ -8784,6 +8883,12 @@ a.@{btn-prefix-cls} {
       color: @disabled-color;
       cursor: not-allowed;
     }
+
+    // Not show highlight border of checkbox when disabled
+    &:hover::after,
+    .@{checkbox-prefix-cls}-wrapper:hover &::after {
+      visibility: hidden;
+    }
   }
 
   .@{checkbox-prefix-cls}-wrapper {
@@ -9090,15 +9195,11 @@ a.@{btn-prefix-cls} {
   height: @input-height-lg;
   padding: @input-padding-vertical-lg @input-padding-horizontal-lg;
   font-size: @font-size-lg;
-  line-height: @input-height-lg;
-  line-height: ~'@{line-height-base} \9'; // https://github.com/ant-design/ant-design/issues/17753
 }
 
 .input-sm() {
   height: @input-height-sm;
   padding: @input-padding-vertical-sm @input-padding-horizontal-sm;
-  line-height: @input-height-sm;
-  line-height: ~'@{line-height-base} \9'; // https://github.com/ant-design/ant-design/issues/17753
 }
 
 // input status
@@ -9136,8 +9237,7 @@ a.@{btn-prefix-cls} {
   padding: @input-padding-vertical-base @input-padding-horizontal-base;
   color: @input-color;
   font-size: @font-size-base;
-  line-height: @input-height-base;
-  line-height: ~'@{line-height-base} \9'; // https://github.com/ant-design/ant-design/issues/17753
+  line-height: @line-height-base;
   background-color: @input-bg;
   background-image: none;
   border: @border-width-base @border-style-base @input-border-color;
@@ -9248,7 +9348,6 @@ a.@{btn-prefix-cls} {
     color: @input-color;
     font-weight: normal;
     font-size: @font-size-base;
-    line-height: 1;
     text-align: center;
     background-color: @input-addon-bg;
     border: @border-width-base @border-style-base @input-border-color;
@@ -9470,12 +9569,21 @@ a.@{btn-prefix-cls} {
     position: absolute;
     top: 50%;
     z-index: 2;
+    display: flex;
+    align-items: center;
     color: @input-color;
     line-height: 0;
     transform: translateY(-50%);
 
     :not(.anticon) {
       line-height: @line-height-base;
+    }
+  }
+
+  .@{inputClass}-disabled ~ .@{inputClass}-suffix {
+    .anticon {
+      color: @disabled-color;
+      cursor: not-allowed;
     }
   }
 
@@ -9882,10 +9990,6 @@ a.@{btn-prefix-cls} {
 
   &-selected-day &-date {
     background: @primary-2;
-  }
-
-  &-selected-date {
-    .calendar-selected-cell;
   }
 
   &-last-month-cell &-date,
@@ -10444,6 +10548,7 @@ a.@{btn-prefix-cls} {
 
 .@{calendar-prefix-cls}-month-panel-header {
   .calendarPanelHeader(~'@{calendar-prefix-cls}-month-panel');
+  position: relative;
 }
 
 .@{calendar-prefix-cls}-month-panel-body {
@@ -10530,6 +10635,7 @@ a.@{btn-prefix-cls} {
 
 .@{calendar-prefix-cls}-year-panel-header {
   .calendarPanelHeader(~'@{calendar-prefix-cls}-year-panel');
+  position: relative;
 }
 
 .@{calendar-prefix-cls}-year-panel-body {
@@ -10610,6 +10716,7 @@ a.@{btn-prefix-cls} {
 
 .@{calendar-prefix-cls}-decade-panel-header {
   .calendarPanelHeader(~'@{calendar-prefix-cls}-decade-panel');
+  position: relative;
 }
 
 .@{calendar-prefix-cls}-decade-panel-body {
@@ -11220,6 +11327,24 @@ a.@{btn-prefix-cls} {
     }
   }
 
+  &-middle {
+    .@{descriptions-prefix-cls}-row {
+      > th,
+      > td {
+        padding-bottom: 12px;
+      }
+    }
+  }
+
+  &-small {
+    .@{descriptions-prefix-cls}-row {
+      > th,
+      > td {
+        padding-bottom: 8px;
+      }
+    }
+  }
+
   &-bordered {
     .@{descriptions-prefix-cls}-view {
       border: 1px solid @border-color-split;
@@ -11239,7 +11364,7 @@ a.@{btn-prefix-cls} {
     }
 
     .@{descriptions-prefix-cls}-item-label {
-      background-color: #fafafa;
+      background-color: @descriptions-bg;
       &::after {
         display: none;
       }
@@ -11386,14 +11511,15 @@ a.@{btn-prefix-cls} {
   z-index: @zindex-modal;
   width: 0%;
   height: 100%;
-  transition: transform @animation-duration-slow @ease-base-out;
+  transition: transform @animation-duration-slow @ease-base-out,
+    height 0s ease @animation-duration-slow, width 0s ease @animation-duration-slow;
   > * {
     transition: transform @animation-duration-slow @ease-base-out,
       box-shadow @animation-duration-slow @ease-base-out;
   }
 
   &-content-wrapper {
-    position: fixed;
+    position: absolute;
   }
   .@{drawer-prefix-cls}-content {
     width: 100%;
@@ -11410,6 +11536,7 @@ a.@{btn-prefix-cls} {
     }
     &.@{drawer-prefix-cls}-open {
       width: 100%;
+      transition: transform @animation-duration-slow @ease-base-out;
     }
     &.@{drawer-prefix-cls}-open.no-mask {
       width: 0%;
@@ -11436,6 +11563,11 @@ a.@{btn-prefix-cls} {
       .@{drawer-prefix-cls}-content-wrapper {
         box-shadow: @shadow-1-left;
       }
+      // https://github.com/ant-design/ant-design/issues/18607, Avoid edge alignment bug.
+      &.no-mask {
+        right: 1px;
+        transform: translateX(1px);
+      }
     }
   }
 
@@ -11450,6 +11582,7 @@ a.@{btn-prefix-cls} {
     }
     &.@{drawer-prefix-cls}-open {
       height: 100%;
+      transition: transform @animation-duration-slow @ease-base-out;
     }
     &.@{drawer-prefix-cls}-open.no-mask {
       height: 0%;
@@ -11478,6 +11611,10 @@ a.@{btn-prefix-cls} {
       .@{drawer-prefix-cls}-content-wrapper {
         box-shadow: @shadow-1-up;
       }
+      &.no-mask {
+        bottom: 1px;
+        transform: translateY(1px);
+      }
     }
   }
 
@@ -11503,6 +11640,7 @@ a.@{btn-prefix-cls} {
   &-content {
     position: relative;
     z-index: 1;
+    overflow: auto;
     background-color: @component-background;
     background-clip: padding-box;
     border: 0;
@@ -11561,7 +11699,7 @@ a.@{btn-prefix-cls} {
   }
 
   &-mask {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -11921,7 +12059,7 @@ a.@{btn-prefix-cls} {
     }
     &:hover &-up-inner,
     &:hover &-down-inner {
-      color: @primary-5;
+      color: @input-number-handler-hover-bg;
     }
   }
 
@@ -12001,8 +12139,8 @@ a.@{btn-prefix-cls} {
     right: 0;
     width: 22px;
     height: 100%;
-    background: @component-background;
-    border-left: @border-width-base @border-style-base @border-color-base;
+    background: @input-number-handler-bg;
+    border-left: @border-width-base @border-style-base @input-number-handler-border-color;
     border-radius: 0 @border-radius-base @border-radius-base 0;
     opacity: 0;
     transition: opacity 0.24s linear 0.1s;
@@ -12030,6 +12168,7 @@ a.@{btn-prefix-cls} {
   }
 
   &-handler-up {
+    border-top-right-radius: @border-radius-base;
     cursor: pointer;
     &-inner {
       top: 50%;
@@ -12044,6 +12183,7 @@ a.@{btn-prefix-cls} {
   &-handler-down {
     top: 0;
     border-top: @border-width-base @border-style-base @border-color-base;
+    border-bottom-right-radius: @border-radius-base;
     cursor: pointer;
     &-inner {
       top: 50%;
@@ -13147,7 +13287,7 @@ form {
     }
   }
 
-  &-grid &-item {
+  &-grid .@{ant-prefix}-col > &-item {
     display: block;
     max-width: 100%;
     margin-bottom: 16px;
@@ -14476,7 +14616,7 @@ form {
     .@{iconfont-css-prefix} {
       color: @menu-dark-selected-item-icon-color;
     }
-    span {
+    .@{iconfont-css-prefix} + span {
       color: @menu-dark-selected-item-text-color;
     }
   }
@@ -14997,7 +15137,7 @@ form {
     padding: @modal-footer-padding-vertical @modal-footer-padding-horizontal;
     text-align: right;
     background: @modal-footer-bg;
-    border-top: @border-width-base @border-style-base @border-color-split;
+    border-top: @border-width-base @border-style-base @modal-footer-border-color-split;
     border-radius: 0 0 @border-radius-base @border-radius-base;
     button + button {
       margin-bottom: 0;
@@ -15345,21 +15485,30 @@ form {
   .reset-component;
 
   position: relative;
-  padding: @page-header-padding-vertical @page-header-padding-horizontal;
-  background: @component-background;
+  padding: @page-header-padding-vertical @page-header-padding;
+  background-color: @component-background;
 
-  &.@{pageheader-prefix-cls}-has-footer {
+  &-ghost {
+    background-color: inherit;
+  }
+
+  &.has-breadcrumb {
+    padding-top: @page-header-padding-breadcrumb;
+  }
+
+  &.has-footer {
     padding-bottom: 0;
   }
 
   &-back {
-    display: inline-block;
-    padding: 4px 0;
+    float: left;
+    margin: 8px 0;
+    margin-right: 16px;
     font-size: 16px;
-    line-height: 100%;
+    line-height: 1;
     &-button {
       .operation-unit();
-      color: @text-color;
+      color: @page-header-back-color;
       cursor: pointer;
     }
   }
@@ -15367,40 +15516,48 @@ form {
   .@{ant-prefix}-divider-vertical {
     height: 14px;
     margin: 0 12px;
+    vertical-align: middle;
   }
 
   .@{ant-prefix}-breadcrumb + &-heading {
-    margin-top: 12px;
+    margin-top: 8px;
   }
 
   &-heading {
-    display: inline-block;
+    width: 100%;
+    overflow: hidden;
     &-title {
-      display: inline-block;
+      display: block;
+      float: left;
+      margin-bottom: 0;
       padding-right: 12px;
       color: @heading-color;
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 1.4;
+      font-weight: 600;
+      font-size: @heading-4-size;
+      line-height: 32px;
+    }
+
+    .@{ant-prefix}-avatar {
+      float: left;
+      margin-right: 12px;
     }
 
     &-sub-title {
-      display: inline-block;
-      padding-right: 12px;
+      float: left;
+      margin: 5px 0;
+      margin-right: 12px;
       color: @text-color-secondary;
       font-size: 14px;
-      line-height: 1.8;
+      line-height: 22px;
     }
 
     &-tags {
-      display: inline-block;
-      vertical-align: top;
+      float: left;
+      margin: 4px 0;
     }
 
     &-extra {
-      position: absolute;
-      top: 16px;
-      right: @page-header-padding-horizontal;
+      float: right;
       > * {
         margin-left: 8px;
       }
@@ -15412,22 +15569,33 @@ form {
 
   &-content {
     padding-top: 12px;
+    overflow: hidden;
   }
 
   &-footer {
-    margin: 0 -8px;
-    padding-top: 24px;
+    margin-top: 16px;
     .@{ant-prefix}-tabs-bar {
       margin-bottom: 1px;
       border-bottom: 0;
       .@{ant-prefix}-tabs-nav .@{ant-prefix}-tabs-tab {
-        padding: 12px 8px;
-        padding-top: 0;
+        padding: 8px;
+        font-size: 16px;
+      }
+    }
+  }
+
+  @media (max-width: @screen-sm) {
+    &-heading {
+      &-extra {
+        display: block;
+        float: unset;
+        width: 100%;
+        padding-top: 12px;
+        overflow: hidden;
       }
     }
   }
 }
-
 // style dependencies
 
 // style dependencies
@@ -15873,7 +16041,7 @@ form {
   // https://github.com/ant-design/ant-design/issues/11456
   // https://github.com/ant-design/ant-design/issues/11843
   font-variant: initial;
-  background-color: @component-background;
+  background-color: @select-dropdown-bg;
   border-radius: @border-radius-base;
   outline: none;
   box-shadow: @box-shadow-base;
@@ -15958,7 +16126,7 @@ form {
       &-selected {
         color: @text-color;
         font-weight: @select-item-selected-font-weight;
-        background-color: @background-color-light;
+        background-color: @select-item-selected-bg;
       }
 
       &-disabled {
@@ -15972,7 +16140,7 @@ form {
       }
 
       &-active:not(&-disabled) {
-        background-color: @item-active-bg;
+        background-color: @select-item-active-bg;
       }
 
       &-divider {
@@ -16287,7 +16455,7 @@ form {
   }
 
   &-inner:not(.@{ant-prefix}-progress-circle-gradient) {
-     .@{ant-prefix}-progress-circle-path {
+    .@{ant-prefix}-progress-circle-path {
       stroke: @progress-default-color;
     }
   }
@@ -17307,10 +17475,10 @@ span.@{radio-prefix-cls} + * {
   }
   &-subtitle {
     display: inline;
-    color: @text-color-secondary;
-    font-size: @font-size-base;
     margin-left: 8px;
+    color: @text-color-secondary;
     font-weight: normal;
+    font-size: @font-size-base;
   }
   &-description {
     color: @text-color-secondary;
@@ -17336,7 +17504,7 @@ span.@{radio-prefix-cls} + * {
 }
 
 // ===================== Clickable =====================
-.@{steps-prefix-cls}:not(.@{steps-prefix-cls}-navigation) .@{steps-prefix-cls}-item {
+.@{steps-prefix-cls} .@{steps-prefix-cls}-item {
   &:not(.@{steps-prefix-cls}-item-active) {
     & > .@{steps-prefix-cls}-item-container[role='button'] {
       cursor: pointer;
@@ -17459,7 +17627,7 @@ span.@{radio-prefix-cls} + * {
 
 .@{steps-prefix-cls}-small {
   &.@{steps-prefix-cls}-horizontal:not(.@{steps-prefix-cls}-label-vertical)
-  .@{steps-prefix-cls}-item {
+    .@{steps-prefix-cls}-item {
     margin-right: 12px;
     &:last-child {
       margin-right: 0;
@@ -17502,6 +17670,7 @@ span.@{radio-prefix-cls} + * {
     }
   }
 }
+
 .steps-vertical() {
   display: block;
   .@{steps-prefix-cls}-item {
@@ -17525,8 +17694,8 @@ span.@{radio-prefix-cls} + * {
   }
 
   > .@{steps-prefix-cls}-item
-  > .@{steps-prefix-cls}-item-container
-  > .@{steps-prefix-cls}-item-tail {
+    > .@{steps-prefix-cls}-item-container
+    > .@{steps-prefix-cls}-item-tail {
     position: absolute;
     top: 0;
     left: 16px;
@@ -17540,15 +17709,15 @@ span.@{radio-prefix-cls} + * {
   }
 
   > .@{steps-prefix-cls}-item:not(:last-child)
-  > .@{steps-prefix-cls}-item-container
-  > .@{steps-prefix-cls}-item-tail {
+    > .@{steps-prefix-cls}-item-container
+    > .@{steps-prefix-cls}-item-tail {
     display: block;
   }
 
   > .@{steps-prefix-cls}-item
-  > .@{steps-prefix-cls}-item-container
-  > .@{steps-prefix-cls}-item-content
-  > .@{steps-prefix-cls}-item-title {
+    > .@{steps-prefix-cls}-item-container
+    > .@{steps-prefix-cls}-item-content
+    > .@{steps-prefix-cls}-item-title {
     &::after {
       display: none;
     }
@@ -17576,6 +17745,7 @@ span.@{radio-prefix-cls} + * {
     .steps-vertical;
   }
 }
+
 .@{steps-prefix-cls}-label-vertical {
   .@{steps-prefix-cls}-item {
     overflow: visible;
@@ -17610,7 +17780,8 @@ span.@{radio-prefix-cls} + * {
   }
 }
 
-.@{steps-prefix-cls}-dot {
+.@{steps-prefix-cls}-dot,
+.@{steps-prefix-cls}-dot.@{steps-prefix-cls}-small {
   .@{steps-prefix-cls}-item {
     &-title {
       line-height: @line-height-base;
@@ -17675,7 +17846,8 @@ span.@{radio-prefix-cls} + * {
     margin-top: 8px;
     margin-left: 0;
   }
-  .@{steps-prefix-cls}-item-tail {
+  // https://github.com/ant-design/ant-design/issues/18354
+  .@{steps-prefix-cls}-item > .@{steps-prefix-cls}-item-container > .@{steps-prefix-cls}-item-tail {
     top: 2px;
     left: -9px;
     margin: 0;
@@ -17701,15 +17873,15 @@ span.@{radio-prefix-cls} + * {
   }
 
   .@{steps-prefix-cls}-item {
-    text-align: center;
     overflow: visible;
+    text-align: center;
 
     &-container {
       display: inline-block;
-      text-align: left;
       height: 100%;
-      padding-bottom: 12px;
       margin-left: -16px;
+      padding-bottom: 12px;
+      text-align: left;
       transition: opacity 0.3s;
 
       .@{steps-prefix-cls}-item-content {
@@ -17717,10 +17889,10 @@ span.@{radio-prefix-cls} + * {
       }
 
       .@{steps-prefix-cls}-item-title {
-        padding-right: 0;
         max-width: 100%;
-        white-space: nowrap;
+        padding-right: 0;
         overflow: hidden;
+        white-space: nowrap;
         text-overflow: ellipsis;
 
         &::after {
@@ -17746,32 +17918,32 @@ span.@{radio-prefix-cls} + * {
     }
 
     &::after {
-      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
       display: inline-block;
       width: 12px;
       height: 12px;
+      margin-top: -14px;
+      margin-left: -2px;
       border: 1px solid @steps-nav-arrow-color;
       border-bottom: none;
       border-left: none;
       transform: rotate(45deg);
-      position: absolute;
-      top: 50%;
-      left: 100%;
-      margin-top: -14px;
-      margin-left: -2px;
+      content: '';
     }
 
     &::before {
-      content: '';
-      display: inline-block;
       position: absolute;
-      left: 50%;
       bottom: 0;
-      height: 3px;
+      left: 50%;
+      display: inline-block;
       width: 0;
+      height: 3px;
       background-color: @steps-nav-active-color;
       transition: width 0.3s, left 0.3s;
       transition-timing-function: ease-out;
+      content: '';
     }
   }
 
@@ -17780,6 +17952,7 @@ span.@{radio-prefix-cls} + * {
     width: 100%;
   }
 }
+
 .@{steps-prefix-cls}-flex-not-supported {
   &.@{steps-prefix-cls}-horizontal.@{steps-prefix-cls}-label-horizontal {
     .@{steps-prefix-cls}-item {
@@ -18235,7 +18408,7 @@ span.@{radio-prefix-cls} + * {
     transition: all 0.3s, height 0s;
     &.@{table-prefix-cls}-row-hover,
     &:hover {
-      &:not(.@{table-prefix-cls}-expanded-row) > td {
+      &:not(.@{table-prefix-cls}-expanded-row):not(.@{table-prefix-cls}-row-selected) > td {
         background: @table-row-hover-bg;
       }
     }
@@ -18555,10 +18728,11 @@ span.@{radio-prefix-cls} + * {
       width: 17px;
       height: 17px;
       color: inherit;
-      line-height: 14px;
+      line-height: 13px;
       text-align: center;
       background: @component-background;
       border: @border-width-base @border-style-base @border-color-split;
+      border-radius: @border-radius-sm;
       outline: none;
       transition: all 0.3s;
       user-select: none;
@@ -18911,7 +19085,7 @@ span.@{radio-prefix-cls} + * {
       border-left: 0;
     }
 
-    .@{table-prefix-cls}-thead > tr > th:last-child,
+    .@{table-prefix-cls}-thead > tr:only-child > th:last-child,
     .@{table-prefix-cls}-tbody > tr > td:last-child {
       border-right: none;
     }
@@ -19234,7 +19408,7 @@ a[nz-tab-link] {
 
       &-right {
         .@{timeline-prefix-cls}-item-content {
-          width: calc(50% - 14px);
+          width: calc(50% - 12px);
           margin: 0;
           text-align: right;
         }
@@ -19247,6 +19421,7 @@ a[nz-tab-link] {
       .@{timeline-prefix-cls}-item-tail,
       .@{timeline-prefix-cls}-item-head,
       .@{timeline-prefix-cls}-item-head-custom {
+        // stylelint-disable-next-line function-calc-no-invalid
         left: calc(100% - 4px - @timeline-width);
       }
       .@{timeline-prefix-cls}-item-content {
@@ -19539,7 +19714,7 @@ a[nz-tab-link] {
 .typography-title(@fontSize; @lineHeight) {
   margin-bottom: 0.5em;
   color: @heading-color;
-  font-weight: 600;
+  font-weight: @typography-title-font-weight;
   font-size: @fontSize;
   line-height: @lineHeight;
 }
@@ -19699,6 +19874,7 @@ a[nz-tab-link] {
     div& {
       left: -@input-padding-horizontal - 1px;
       margin-top: -@input-padding-vertical-base - 1px;
+      // stylelint-disable-next-line function-calc-no-invalid
       margin-bottom: calc(1em - @input-padding-vertical-base - 2px);
     }
 
@@ -19885,6 +20061,7 @@ a[nz-tab-link] {
     .clearfix;
 
     display: inline-block;
+    width: 100%;
   }
 }
 
@@ -19912,6 +20089,8 @@ a[nz-tab-link] {
 
       > span {
         display: block;
+        width: 100%;
+        height: 100%;
       }
 
       .@{iconfont-css-prefix}-loading,
@@ -20129,6 +20308,7 @@ a[nz-tab-link] {
       display: block;
       width: 100%;
       height: 100%;
+      object-fit: cover;
     }
 
     .@{upload-item}-name {
@@ -20797,10 +20977,10 @@ a[nz-tab-link] {
       cursor: pointer;
       transition: all 0.3s;
       &:hover {
-        background-color: @item-hover-bg;
+        background-color: @tree-node-hover-bg;
       }
       &.@{tree-prefix-cls}-node-selected {
-        background-color: @primary-2;
+        background-color: @tree-node-selected-bg;
       }
     }
     span {
@@ -20970,6 +21150,11 @@ a[nz-tab-link] {
 
 .font-highlight {
   color: @highlight-color;
+}
+
+.@{tree-prefix-cls}-child-tree {
+  // The overflow of the collapse animation in edge and IE is invalid
+  overflow: hidden;
 }
 
 @select-prefix-cls: ~'@{ant-prefix}-select';
@@ -22315,7 +22500,7 @@ fieldset {
     &-add {
       margin-right: 16px;
     }
-      &-container {
+    &-container {
       nz-card {
         margin: 0 16px 0 0;
         @{sf-prefix}__array-remove {
@@ -22407,15 +22592,25 @@ fieldset {
         .@{ant-prefix}-form-item {
           display: block !important;
           width: initial !important;
-          margin-right: 0;;
+          margin-right: 0;
         }
       }
-      .@{ant-prefix}-form-item-label, .@{ant-prefix}-form-item-control-wrapper {
+      .@{ant-prefix}-form-item-label,
+      .@{ant-prefix}-form-item-control-wrapper {
         display: block !important;
         width: 100% !important;
         padding: inherit;
         line-height: @form-component-max-height - 0.0001px;
         text-align: left;
+      }
+    }
+  }
+  &__no-colon {
+    .@{ant-prefix}-form-item-label {
+      label {
+        &:after {
+          content: ' ';
+        }
       }
     }
   }
@@ -23101,9 +23296,10 @@ code {
       }
     }
     &-text {
-      margin-right: 2px;
+      margin-right: @sv-optional-margin;
     }
     &-optional {
+      margin-left: -@sv-optional-margin;
       color: @sv-label-optional-color;
     }
   }
@@ -23219,7 +23415,11 @@ code {
     white-space: nowrap;
     text-align: right;
     &-optional {
+      margin-left: @se-optional-margin;
       color: @se-label-optional-color;
+      > .anticon {
+        margin-left: @se-optional-margin;
+      }
     }
   }
   &__control {
@@ -23860,6 +24060,29 @@ ellipsis {
   background-color: @reuse-tab-bg;
   outline: none;
   user-select: none;
+  .@{ant-prefix}-tabs {
+    &-nav .@{ant-prefix}-tabs-tab {
+      @{reuse-tab-prefix}__op {
+        position: absolute;
+        display: none;
+        margin: 0;
+        font-size: 10px;
+        color: rgba(0, 0, 0, 0.45);
+      }
+      &:hover {
+        @{reuse-tab-prefix}__op {
+          display: block;
+        }
+      }
+      @{reuse-tab-prefix}__name {
+        &-width {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: inline-block;
+        }
+      }
+    }
+  }
   &__line {
     padding: @reuse-tab-padding;
     border-bottom: 1px solid @reuse-tab-border-color;
@@ -23871,17 +24094,8 @@ ellipsis {
       &-nav .@{ant-prefix}-tabs-tab {
         padding: 0;
         @{reuse-tab-prefix}__op {
-          position: absolute;
           top: 12px;
           right: 2px;
-          display: none;
-          margin: 0;
-          font-size: 10px;
-        }
-        &:hover {
-          @{reuse-tab-prefix}__op {
-            display: block;
-          }
         }
         @{reuse-tab-prefix}__name {
           display: inline-block;
@@ -23897,9 +24111,8 @@ ellipsis {
     }
     .@{ant-prefix}-tabs-nav .@{ant-prefix}-tabs-tab {
       @{reuse-tab-prefix}__op {
-        margin-right: 0;
-        margin-left: 4px;
-        color: rgba(0, 0, 0, 0.45);
+        top: 4px;
+        right: 4px;
       }
     }
   }
