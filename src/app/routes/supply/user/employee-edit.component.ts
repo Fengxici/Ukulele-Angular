@@ -1,116 +1,135 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { SFSchema, SFUISchema, SFSelectWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
-import { STPage, STComponent, STColumn, STChange } from '@delon/abc';
 @Component({
   selector: 'app-supply-employee-edit',
   templateUrl: './employee-edit.component.html',
 })
-export class EmployeeEditComponent {
+export class EmployeeEditComponent implements OnInit {
   constructor(
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
   ) {}
-
+  record: any = {};
   params: any = {};
-  page: any = {
-    records: [],
-    current: 1,
-    total: 0,
-    size: 10,
+  schema: SFSchema = {
+    properties: {
+      username: { type: 'string', title: '用户名', maxLength: 15, readOnly: true },
+      phone: { type: 'string', title: '电话', readOnly: true },
+      owner: { type: 'boolean', title: '拥有者' },
+      admin: { type: 'boolean', title: '管理员' },
+      userTag: {
+        type: 'string',
+        title: '角色',
+        enum: [
+          { label: '采购', value: 'PURCHASE' },
+          { label: '销售', value: 'MARKET' },
+          { label: '计划', value: 'PLAN' },
+          { label: '仓库', value: 'DEPOSITORY' },
+          { label: '质检', value: 'QUALITY' },
+          { label: '财务', value: 'FINANCE' }
+        ],
+        ui: {
+          widget: 'select',
+          mode: 'tags',
+        } as SFSelectWidgetSchema,
+        default: null,
+      },
+    },
+    required: ['username', 'phone', 'userTag'],
   };
-  pagination: STPage = {
-    front: false,
-    pageSizes: [10, 20, 30, 40, 50],
-    total: true,
-    showSize: true,
-    showQuickJumper: true,
+  ui: SFUISchema = {
+    '*': {
+      spanLabel: 10,
+      spanControl: 14,
+      grid: { span: 12 },
+    },
   };
-
   searchSchema: SFSchema = {
     properties: {
-      username: {
+      param: {
         type: 'string',
-        title: '用户名'
-      },
-      phone: {
-        type: 'string',
-        title: '电话号码'
+        title: '用户名或手机号'
       }
     },
   };
-
-  @ViewChild('st', { static: true }) st: STComponent;
-  columns: STColumn[] = [
-    { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '用户名', index: 'username' },
-    { title: '电话号码', index: 'phone' },
-    {
-      title: '操作',
-      buttons: [
-        {
-          text: '加入',
-          icon: 'plus',
-          click: (record: any) => {
-            this.join(record);
-          },
-        }
-      ],
-    },
-  ];
-
-  change(e: STChange) {
-    if (e.type === 'pi' || e.type === 'ps') {
-      this.params.size = e.ps;
-      this.params.current = e.pi;
-      this.query(null);
+  ngOnInit(): void {
+    if (this.record) {
+      this.record.userTag = this.record.userTagList;
     }
+  }
+  reset() {
+    this.params = {};
   }
 
   query(event: any) {
     if (event) {
-      if (event.username) this.params.username = event.username;
-      if (event.phone) this.params.phone = event.phone;
+      if (event.param) this.params.param = event.param;
     }
-    if (!(this.params.username || this.params.phone)) {
+    if (!this.params.param) {
       this.msgSrv.warning('请先输入查询条件！');
       return;
     }
-    const current: number = this.params.current || 1;
-    const size: number = this.params.size || 10;
-    this.params = {};
     this.http
-      .get(Api.BaseUserApi + 'page/' + current + '/' + size, this.params)
+      .get(Api.BaseUserApi + 'param/' + this.params.param)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
-          if (res.data) this.page = res.data;
+          if (res.data) {
+            this.record = res.data;
+            this.record.owner = false;
+            this.record.admin = false;
+          } else {
+          this.msgSrv.info('不存在用户：' + this.params.param);
+          }
         }
       });
-  }
+    }
 
   join(record: any) {
     console.log(record);
+    if (!record.userTag || record.userTag.length === 0) {
+      this.msgSrv.warning('必须选择至少一个角色');
+      return;
+    }
     const params = {
-      userId: record.id,
+      userId: record.id || record.userId,
       firmId: 1,
-      userTag: '["salers","supplyer"]'
+      owner: record.owner,
+      admin: record.admin,
+      userTag: record.userTag
     };
-    this.http.post(Api.BaseSupplyUserApi, null, params).subscribe((res: any) => {
-      if (res) {
-        if (res.code === ResponseCode.SUCCESS) {
-          this.msgSrv.success('保存成功');
-          this.modal.close(true);
+    if (record.id) {
+      this.http.post(Api.BaseSupplyUserApi, null, params).subscribe((res: any) => {
+        if (res) {
+          if (res.code === ResponseCode.SUCCESS) {
+            this.msgSrv.success('加入成功');
+            this.modal.close(true);
+          } else {
+            this.msgSrv.warning(res.message);
+          }
         } else {
-          this.msgSrv.warning(res.message);
+          this.msgSrv.error('加入失败，未知错误');
         }
-      } else {
-        this.msgSrv.error('保存失败，未知错误');
-      }
-    });
+      });
+    } else {
+      this.http.put(Api.BaseSupplyUserApi, null, params).subscribe((res: any) => {
+        if (res) {
+          if (res.code === ResponseCode.SUCCESS) {
+            this.msgSrv.success('保存成功');
+            this.modal.close(true);
+          } else {
+            this.msgSrv.warning(res.message);
+          }
+        } else {
+          this.msgSrv.error('保存失败，未知错误');
+        }
+      });
+    }
+
   }
 
   close() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
@@ -12,6 +12,7 @@ import { AbilityService } from '@shared/service/ability.service';
 import { Observable } from 'rxjs';
 import { PublicService } from '@shared/service/public.service';
 import { catchError, map } from 'rxjs/operators';
+import { FirmDrawerComponent } from '../common/firm-drawer.component';
 
 @Component({
   selector: 'app-supply-market',
@@ -20,7 +21,7 @@ import { catchError, map } from 'rxjs/operators';
 export class MarketComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
-    protected http: _HttpClient,
+    private http: _HttpClient,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
@@ -96,6 +97,7 @@ export class MarketComponent extends BaseAbilityComponent
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
     { title: '订单编号', index: 'orderNo' },
     { title: '状态', index: 'status' },
@@ -131,7 +133,6 @@ export class MarketComponent extends BaseAbilityComponent
 
   ngOnInit() {
     super.initAbilities();
-    this.query(null);
   }
 
   ngOnDestroy(): void {
@@ -145,6 +146,7 @@ export class MarketComponent extends BaseAbilityComponent
       this.query(null);
     }
   }
+
   queryDicItem(key: string): Observable<any> {
     const dicItemObservable = this.pubService.queryDicByIndex(key).pipe(
       catchError(() => {
@@ -165,7 +167,8 @@ export class MarketComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    this.params = {firmId: 1};
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;
       if (event.description) this.params.description = event.description;

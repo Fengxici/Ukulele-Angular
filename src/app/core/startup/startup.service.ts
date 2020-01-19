@@ -56,7 +56,7 @@ export class StartupService {
           // application data
           const res: any = appData;
           // 初始化菜单
-          this.menuService.add(res.data);
+          this.menuService.add( res.data || []  );
           const app: any = {
             name: `Ukulele`,
             description: `Ukulele是一个多语言跨平台的中台框架，旨在打造企业级的微服务快速开发框架`,

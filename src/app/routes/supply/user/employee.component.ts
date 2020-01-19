@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
-import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
+import { STColumn, STComponent, STPage, STChange, STColumnBadge } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -9,6 +9,7 @@ import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { EmployeeEditComponent } from './employee-edit.component';
+import { FirmDrawerComponent } from '../common/firm-drawer.component';
 
 @Component({
   selector: 'app-supply-employee',
@@ -26,6 +27,10 @@ export class EmployeeComponent extends BaseAbilityComponent
   ) {
     super(route, ability);
   }
+  DISABLE_BADGE: STColumnBadge = {
+    true: {text: '注销', color: 'default'},
+    false: {text: '启用', color: 'success'}
+  };
   params: any = {};
   page: any = {
     records: [],
@@ -59,13 +64,29 @@ export class EmployeeComponent extends BaseAbilityComponent
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
-    { title: '编号', index: 'userId' },
-    { title: '标签', index: 'userTag' },
-    { title: '状态', index: 'disabled' },
+    { title: '用户名', index: 'username' },
+    { title: '手机', index: 'phone' },
+    { title: '角色',  render: 'taglist'},
+    { title: '拥有者',  index: 'owner', type: 'yn'},
+    { title: '管理员',  index: 'admin', type: 'yn'},
+    { title: '状态', index: 'disabled', type: 'badge', badge: this.DISABLE_BADGE },
     {
       title: '操作',
       buttons: [
+        {
+          text: '编辑',
+          icon: 'edit',
+          type: 'modal',
+          modal: {
+            component: EmployeeEditComponent,
+          },
+          click: () => {
+            this.query(null);
+          },
+          acl: { ability: ['edit'] },
+        },
         {
           text: '删除',
           icon: 'delete',
@@ -77,6 +98,23 @@ export class EmployeeComponent extends BaseAbilityComponent
       ],
     },
   ];
+
+  getTag(value): string {
+    if (value === 'PURCHASE')
+      return '采购';
+    else if ( value === 'MARKET')
+      return '销售';
+    else if ( value === 'PLAN')
+      return '计划';
+    else if (value === 'DEPOSITORY')
+      return '仓库';
+    else if (value === 'QUALITY')
+      return '质检';
+    else if (value === 'FINANCE')
+      return '财务';
+    else
+      return '未知';
+  }
 
   ngOnInit() {
     super.initAbilities();
@@ -97,7 +135,8 @@ export class EmployeeComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    this.params = {firmId: 1};
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;
       if (event.description) this.params.description = event.description;

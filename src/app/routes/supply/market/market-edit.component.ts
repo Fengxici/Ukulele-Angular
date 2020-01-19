@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { SFSchema, SFUISchema, SFStringWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 @Component({
@@ -13,7 +13,7 @@ export class MarketEditComponent {
   i: any;
   schema: SFSchema = {
     properties: {
-      orderNo: { type: 'string', title: '订单编号', maxLength: 15 },
+      orderNo: { type: 'string', title: '订单编号', maxLength: 15, ui: {placeholder: '自动生成'} as SFStringWidgetSchema, readOnly: true },
       status: { type: 'string', title: '状态' },
       financeStatus: { type: 'string', title: '财务状态' },
       settleType: { type: 'string', title: '结算方式' },

@@ -73,11 +73,6 @@ export class FirmListComponent extends BaseAbilityComponent
       title: '操作',
       buttons: [
         {
-          text: '编辑员工',
-          icon: 'edit',
-          acl: { ability: ['edit'] },
-        },
-        {
           text: '编辑',
           icon: 'edit',
           type: 'modal',

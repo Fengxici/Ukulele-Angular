@@ -4,7 +4,6 @@ import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
-import { PurchaseEditComponent } from './purchase-edit.component';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +11,7 @@ import { AbilityService } from '@shared/service/ability.service';
 import { PublicService } from '@shared/service/public.service';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { FirmDrawerComponent } from '../common/firm-drawer.component';
 
 @Component({
   selector: 'app-supply-purchase',
@@ -96,6 +96,7 @@ export class PurchaseComponent extends BaseAbilityComponent
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
     { title: '订单编号', index: 'orderNo' },
     { title: '状态', index: 'status' },
@@ -109,9 +110,6 @@ export class PurchaseComponent extends BaseAbilityComponent
           text: '编辑',
           icon: 'edit',
           type: 'modal',
-          modal: {
-            component: PurchaseEditComponent,
-          },
           click: () => {
             this.query(null);
           },
@@ -167,7 +165,8 @@ export class PurchaseComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    this.params = {firmId: 1};
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;
       if (event.description) this.params.description = event.description;
@@ -182,9 +181,7 @@ export class PurchaseComponent extends BaseAbilityComponent
   }
 
   add() {
-    this.modal
-      .createStatic(PurchaseEditComponent)
-      .subscribe(() => this.st.reload());
+    // this.route.
   }
 
   delete(record: any) {

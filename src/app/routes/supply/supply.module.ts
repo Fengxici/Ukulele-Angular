@@ -6,7 +6,6 @@ import { FirmEditComponent } from './firm/firm-edit.component';
 import { MarketComponent } from './market/market.component';
 import { MarketEditComponent } from './market/market-edit.component';
 import { PurchaseComponent } from './purchase/purchase.component';
-import { PurchaseEditComponent } from './purchase/purchase-edit.component';
 import { FirmComponent } from './firm/firm.component';
 import { EmployeeComponent } from './user/employee.component';
 import { EmployeeEditComponent } from './user/employee-edit.component';
@@ -16,6 +15,13 @@ import { ConsumerComponent } from './consumer/consumer.component';
 import { ConsumerEditComponent } from './consumer/consumer-edit.component';
 import { MaterialEditComponent } from './material/material-edit.component';
 import { MaterialComponent } from './material/material.component';
+import { AdsComponent } from './ads/ads.component';
+import { AdsEditComponent } from './ads/ads-edit.component';
+import { AnnouncementComponent } from './announcement/announcement.component';
+import { AnnouncementEditComponent } from './announcement/announcement-edit.component';
+import { EmployeeApplyComponent } from './join/apply.component';
+import { EmployeeApplyHandleComponent } from './join/apply-access.component';
+import { PurchaseEditComponent } from './purchase/purchase-edit.component';
 
 const COMPONENTS = [
   FirmListComponent,
@@ -25,7 +31,11 @@ const COMPONENTS = [
   ConsumerComponent,
   MarketComponent,
   PurchaseComponent,
-  MaterialComponent
+  MaterialComponent,
+  AdsComponent,
+  AnnouncementComponent,
+  EmployeeApplyComponent,
+  PurchaseEditComponent
 ];
 const COMPONENTS_NOROUNT = [
   FirmEditComponent,
@@ -33,8 +43,10 @@ const COMPONENTS_NOROUNT = [
   SupplierEditComponent,
   ConsumerEditComponent,
   MarketEditComponent,
-  PurchaseEditComponent,
-  MaterialEditComponent
+  MaterialEditComponent,
+  AdsEditComponent,
+  AnnouncementEditComponent,
+  EmployeeApplyHandleComponent
 ];
 
 @NgModule({

@@ -9,6 +9,7 @@ import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { ConsumerEditComponent } from './consumer-edit.component';
+import { FirmDrawerComponent } from '../common/firm-drawer.component';
 
 @Component({
   selector: 'app-supply-consumer',
@@ -52,6 +53,7 @@ export class ConsumerComponent extends BaseAbilityComponent
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
     { title: '编号', index: 'consumerId' },
     { title: '状态', index: 'disabled' },
@@ -89,7 +91,8 @@ export class ConsumerComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    this.params = {firmId: 1};
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;
       if (event.description) this.params.description = event.description;

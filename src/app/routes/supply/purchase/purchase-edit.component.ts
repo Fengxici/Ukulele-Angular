@@ -1,73 +1,63 @@
-import { Component } from '@angular/core';
-import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { NzMessageService, NzTabChangeEvent } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
-import { ResponseCode } from '@shared/response.code';
-import { Api } from '@shared/api';
+import { STColumn } from '@delon/abc';
+
 @Component({
   selector: 'app-supply-purchase-edit',
   templateUrl: './purchase-edit.component.html',
+  styleUrls: ['./purchase-edit.component.less']
 })
-export class PurchaseEditComponent {
-  record: any = {};
-  i: any;
-  schema: SFSchema = {
-    properties: {
-      orderNo: { type: 'string', title: '订单编号', maxLength: 15 },
-      status: { type: 'string', title: '状态' },
-      financeStatus: { type: 'string', title: '财务状态' },
-      settleType: { type: 'string', title: '结算方式' },
-      provider: { type: 'string', title: '供应方' },
-      consumer: { type: 'string', title: '需求方' }
-    },
-    required: ['name'],
-  };
-  ui: SFUISchema = {
-    '*': {
-      spanLabel: 10,
-      spanControl: 14,
-      grid: { span: 12 },
-    },
+export class PurchaseEditComponent implements OnInit {
+  list: any[] = [];
+
+  data = {
+    advancedOperation1: [],
+    advancedOperation2: [],
+    advancedOperation3: [],
   };
 
-  constructor(
-    private modal: NzModalRef,
-    private msgSrv: NzMessageService,
-    public http: _HttpClient,
-  ) {}
+  opColumns: STColumn[] = [
+    { title: '操作类型', index: 'type' },
+    { title: '操作人', index: 'name' },
+    { title: '执行结果', index: 'status', render: 'status' },
+    { title: '操作时间', index: 'updatedAt', type: 'date' },
+    { title: '备注', index: 'memo', default: '-' },
+  ];
 
-  save(value: any) {
-    console.log(value);
-    if (this.record.id) {
-      this.http.put(Api.BaseSupplyPurchaseApi, value).subscribe((res: any) => {
-        if (res) {
-          if (res.code === ResponseCode.SUCCESS) {
-            this.msgSrv.success('修改成功');
-            this.modal.close(true);
-          } else {
-            this.msgSrv.warning(res.msg);
-          }
-        } else {
-          this.msgSrv.error('修改失败，未知错误');
-        }
-      });
-    } else {
-      this.http.post(Api.BaseSupplyPurchaseApi, value).subscribe((res: any) => {
-        if (res) {
-          if (res.code === ResponseCode.SUCCESS) {
-            this.msgSrv.success('保存成功');
-            this.modal.close(true);
-          } else {
-            this.msgSrv.warning(res.msg);
-          }
-        } else {
-          this.msgSrv.error('保存失败，未知错误');
-        }
-      });
-    }
+  basicNum = 0;
+  amountNum = 0;
+  goods: any = [];
+  goodsColumns: STColumn[] = [
+    {
+      title: '商品编号',
+      index: 'id',
+      type: 'link',
+      click: (item: any) => this.msg.success(`show ${item.id}`),
+    },
+    { title: '商品名称', index: 'name' },
+    { title: '商品条码', index: 'barcode' },
+    { title: '单价', index: 'price', type: 'currency' },
+    { title: '数量（件）', index: 'num', className: 'text-right' },
+    { title: '金额', index: 'amount', type: 'currency' },
+  ];
+
+  constructor(public msg: NzMessageService, private http: _HttpClient, private cdr: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    // this.http.get('/profile/advanced').subscribe((res: any) => {
+    //   this.data = res;
+    //   this.change({ index: 0, tab: null! });
+    //   this.cdr.detectChanges();
+    // });
+  }
+  query(event) {
+
   }
 
-  close() {
-    this.modal.destroy();
+change(args: NzTabChangeEvent) {
+    this.list = this.data[`advancedOperation${args.index + 1}`];
   }
+
+
 }

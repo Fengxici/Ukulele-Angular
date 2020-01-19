@@ -9,6 +9,7 @@ import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
+import { FirmDrawerComponent } from '../common/firm-drawer.component';
 
 @Component({
   selector: 'app-supply-material',
@@ -59,6 +60,7 @@ export class MaterialComponent extends BaseAbilityComponent
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
     { title: '物料编号', index: 'materialNo' },
     { title: '物料名称',  index: 'name' },
@@ -112,7 +114,8 @@ export class MaterialComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    this.params = {firmId: 1};
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;
       if (event.materialNo) this.params.materialNo = event.materialNo;
