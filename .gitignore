@@ -45,3 +45,5 @@ testem.log
 .DS_Store
 Thumbs.db
 /yarn.lock
+/src/app/routes/supply/purchase/purchase-edit.component1.html
+/src/app/routes/supply/purchase/purchase-edit.component1.ts
