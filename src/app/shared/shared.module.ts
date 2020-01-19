@@ -13,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 // #region third libs
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CountdownModule } from 'ngx-countdown';
+import { FirmDrawerComponent } from 'app/routes/supply/common/firm-drawer.component';
 const THIRDMODULES = [
   NgZorroAntdModule,
   CountdownModule
@@ -20,7 +21,7 @@ const THIRDMODULES = [
 // #endregion
 
 // #region your componets & directives
-const COMPONENTS = [];
+const COMPONENTS = [FirmDrawerComponent];
 const DIRECTIVES = [];
 // #endregion
 
