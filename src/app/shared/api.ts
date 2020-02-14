@@ -18,5 +18,6 @@ export enum Api {
   BaseSupplyUserAccessApi = 'api/supply-service/firm/user/access',
   BaseSupplySupplierApi = 'api/supply-service/firm/supplier',
   BaseSupplyConsumerApi = 'api/supply-service/firm/consumer',
+  BaseSupplyOrderFlowApi= 'api/supply-service/flow',
   FirmUserJoinedUrl= 'api/supply-service/firm/user/firm/list',
 }

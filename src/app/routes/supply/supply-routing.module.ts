@@ -12,6 +12,7 @@ import { AdsComponent } from './ads/ads.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { EmployeeApplyComponent } from './join/apply.component';
 import { PurchaseEditComponent } from './purchase/purchase-edit.component';
+import { MarketEditComponent } from './market/market-edit.component';
 
 const routes: Routes = [
   { path: 'firms', component: FirmListComponent },
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path: 'ads', component: AdsComponent},
   { path: 'announce', component: AnnouncementComponent},
   { path: 'join', component: EmployeeApplyComponent},
-  { path: 'purchaseAdd', component: PurchaseEditComponent}
+  { path: 'purchaseAdd', component: PurchaseEditComponent},
+  { path: 'marketDetail', component: MarketEditComponent}
 ];
 
 @NgModule({

@@ -35,14 +35,14 @@ const COMPONENTS = [
   AdsComponent,
   AnnouncementComponent,
   EmployeeApplyComponent,
-  PurchaseEditComponent
+  PurchaseEditComponent,
+  MarketEditComponent
 ];
 const COMPONENTS_NOROUNT = [
   FirmEditComponent,
   EmployeeEditComponent,
   SupplierEditComponent,
   ConsumerEditComponent,
-  MarketEditComponent,
   MaterialEditComponent,
   AdsEditComponent,
   AnnouncementEditComponent,
