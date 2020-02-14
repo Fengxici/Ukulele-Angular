@@ -1,13 +1,12 @@
-import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
-import { MarketEditComponent } from './market-edit.component';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { Observable } from 'rxjs';
 import { PublicService } from '@shared/service/public.service';
@@ -22,10 +21,10 @@ export class MarketComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     private http: _HttpClient,
-    private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
     private pubService: PublicService,
+    private router: Router,
     protected route: ActivatedRoute,
     protected ability: AbilityService
   ) {
@@ -108,14 +107,10 @@ export class MarketComponent extends BaseAbilityComponent
       title: '操作',
       buttons: [
         {
-          text: '编辑',
+          text: '详情',
           icon: 'edit',
-          type: 'modal',
-          modal: {
-            component: MarketEditComponent,
-          },
-          click: () => {
-            this.query(null);
+          click: (record: any) => {
+            this.toDetail(record);
           },
           acl: { ability: ['edit'] },
         },
@@ -182,10 +177,9 @@ export class MarketComponent extends BaseAbilityComponent
       });
   }
 
-  add() {
-    this.modal
-      .createStatic(MarketEditComponent)
-      .subscribe(() => this.st.reload());
+  toDetail(record: any) {
+    this.router.navigate(['/supply/marketDetail',
+    {queryParams: JSON.stringify({orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0'})}]);
   }
 
   delete(record: any) {

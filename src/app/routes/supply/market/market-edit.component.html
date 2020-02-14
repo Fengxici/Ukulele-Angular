@@ -1,11 +1,122 @@
-<div class="modal-header">
-  <div class="modal-title">编辑 {{ record.id }} 信息</div>
-</div>
-<nz-spin *ngIf="!record" class="modal-spin"></nz-spin>
-<sf *ngIf="record" #sf mode="edit" [schema]="schema" [ui]="ui" [formData]="record" button="none" >
-  <div class="modal-footer">
-    <button nz-button type="button" (click)="close()">关闭</button>
-    <button nz-button type="submit" nzType="primary" (click)="save(sf.value)" 
-      [disabled]="!sf.valid" [nzLoading]="http.loading">保存</button>
-  </div>
-</sf>
+<page-header [title]="'订单明细'" [action]="action" [extra]="extra">
+  <ng-template #action>
+    <nz-button-group>
+      <button nz-button (click)="backList($event)">返回列表</button>
+      <button nz-button>完结订单</button>
+    </nz-button-group>
+  </ng-template>
+  <ng-template #extra>
+    <div nz-row>
+      <div nz-col nzXs="24" nzSm="12">
+        <p class="text-grey">状态</p>
+        <p class="text-lg">{{orderInfo.status}}</p>
+      </div>
+      <div nz-col nzXs="24" nzSm="12">
+        <p class="text-grey">订单金额</p>
+        <p class="text-lg">¥ {{amountNum}}</p>
+      </div>
+    </div>
+  </ng-template>
+  <sv-container size="small" col="2">
+    <sv label="订单编号">{{orderInfo.orderNo}}</sv>
+    <sv label="提交人">{{orderInfo.createBy}}</sv>
+    <sv label="提交时间">{{orderInfo.createTime}}</sv>
+    <sv label="收货信息">{{orderInfo.receiveInfo}}</sv>
+    <sv label="是否开票">{{orderInfo.needInvoice}}</sv>
+    <sv label="备注">{{orderInfo.remark}}</sv>
+    <sv label="审核人">{{orderInfo.createBy}}</sv>
+    <sv label="审核时间">{{orderInfo.createTime}}</sv>
+  </sv-container>
+</page-header>
+<nz-card [nzBordered]="false" class="mb-lg" nzTitle="流程进度" >
+  <nz-steps [nzCurrent]="currentStep" nzProgressDot>
+    <nz-step [nzTitle]="'提交订单'" [nzDescription]="createDesc">
+      <ng-template #createDesc>
+        <div class="desc">
+          <div class="my-sm">
+            {{orderInfo.createBy}}
+          </div>
+          <div>{{orderInfo.createTime}}</div>
+        </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'审核'" [nzDescription]="verifyDesc">
+      <ng-template #verifyDesc>
+        <div class="desc">
+          <div class="my-sm">
+            {{orderInfo.verifyBy}}
+          </div>
+          {{orderInfo.verifyTime}}
+          <a (click)="verifyOrder()" *ngIf="orderInfo.status==0">审核</a>
+        </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'发货中'" [nzDescription]="deliverDesc">
+      <ng-template #deliverDesc>
+        <div class="desc">
+          <div class="my-sm">
+            {{orderInfo.verifyBy}}
+          </div>
+          {{orderInfo.verifyTime}}
+        </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'完成'"></nz-step>
+  </nz-steps>
+  <div class="steps-content"></div>
+</nz-card>
+<nz-card nzTitle="订单详情" [nzHoverable]="true" [nzBordered]="false">
+  <sv-container size="large" title="采购方信息">
+    <sv label="名称">{{consumerInfo.name}}</sv>
+    <sv label="联系人">{{consumerInfo.contacts}}</sv>
+    <sv label="联系电话">{{consumerInfo.phone}}</sv>
+    <sv label="社会统一信用代码">{{consumerInfo.unicode}}</sv>
+    <sv label="地址">{{consumerInfo.address}}</sv>
+  </sv-container>
+  <nz-divider></nz-divider>
+  <div class="text-lg mb-md">物料清单</div>
+  <st #st [data]="orderDetail" [columns]="detailColumns" [body]="detailBody" [page]="{ show: false }">
+    <ng-template #detailBody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-right">合计</td>
+        <td class="text-right">
+          <strong>{{ basicNum }}</strong>
+        </td>
+        <td class="text-right">
+          <strong>{{ amountNum | _currency }}</strong>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+    </ng-template>
+  </st>
+</nz-card>
+<!-- 物料编辑框 -->
+<nz-modal
+    [(nzVisible)]="materialModalVisibility"
+    [nzTitle]="materialInfoTitle"
+    [nzContent]="materialInfoContent"
+    [nzWidth]="750"
+    [nzFooter]="null"
+    (nzOnCancel)="handleMaterialInfoModalClose(null,null)"
+  >
+  <ng-template #materialInfoTitle>
+    <div class="modal-title">编辑物料信息</div>
+  </ng-template>
+  <ng-template #materialInfoContent>
+    <sf *ngIf="tmpMaterialRecord" #materialsf mode="edit" [schema]="materialSchema" [ui]="materialUi" [formData]="tmpMaterialRecord" button="none" >
+      <div class="modal-footer">
+        <button nz-button type="button" (click)="handleMaterialInfoModalClose(null)">关闭</button>
+        <button nz-button type="submit" nzType="primary" (click)="handleMaterialInfoModalClose(null)" *ngIf="!tmpMaterialRecord.id"
+          [disabled]="!materialsf.valid" >添加</button>
+        <button nz-button type="submit" nzType="primary" (click)="handleMaterialInfoModalClose(materialsf.value)" *ngIf="tmpMaterialRecord.id"
+          [disabled]="!materialsf.valid" >修改</button>
+      </div>
+    </sf>
+  </ng-template>
+</nz-modal>

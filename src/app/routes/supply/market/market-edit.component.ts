@@ -1,73 +1,200 @@
-import { Component } from '@angular/core';
-import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
+import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema, SFStringWidgetSchema } from '@delon/form';
+import { SFSchema, SFUISchema, SFDateWidgetSchema, SFNumberWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
+import { STComponent, STColumn } from '@delon/abc';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-supply-market-edit',
   templateUrl: './market-edit.component.html',
 })
-export class MarketEditComponent {
-  record: any = {};
-  i: any;
-  schema: SFSchema = {
-    properties: {
-      orderNo: { type: 'string', title: '订单编号', maxLength: 15, ui: {placeholder: '自动生成'} as SFStringWidgetSchema, readOnly: true },
-      status: { type: 'string', title: '状态' },
-      financeStatus: { type: 'string', title: '财务状态' },
-      settleType: { type: 'string', title: '结算方式' },
-      provider: { type: 'string', title: '供应方' },
-      consumer: { type: 'string', title: '需求方' }
+export class MarketEditComponent implements OnInit {
+  orderId: string;
+  consumerId: string;
+  orderInfo: any = {};
+  orderDetail: any[] = [];
+  consumerInfo: any = {};
+  tmpMaterialRecord: any = {};
+  materialModalVisibility = false;
+  currentStep = 1;
+  basicNum = 0;
+  amountNum = 0;
+  @ViewChild('st', { static: true }) st: STComponent;
+  detailColumns: STColumn[] = [
+    {title: '编号', type: 'no'},
+    { title: '物料编号', index: 'materialNo'},
+    { title: '物料名称', index: 'name' },
+    { title: '规格', index: 'format' },
+    { title: '单位', index: 'unit' },
+    { title: '单价', index: 'price', type: 'currency' },
+    { title: '数量', index: 'number', className: 'text-right' },
+    { title: '金额', index: 'subtotal', type: 'currency' },
+    { title: '期望交货时间', index: 'expectDeliverTime', type: 'date' },
+    { title: '预计交货时间', index: 'estimateDeliverTime', type: 'date' },
+    {
+      title: '操作',
+      buttons: [
+        {
+          text: '修改',
+          icon: 'edit',
+          click: (record) => {
+            this.editMaterialInfo(record);
+          }
+        }
+      ],
     },
-    required: ['name'],
+  ];
+  materialSchema: SFSchema = {
+    properties: {
+      materialNo: { type: 'string', title: '物料编号', maxLength: 15, readOnly: true },
+      name: { type: 'string', title: '物料名称', readOnly: true },
+      format: { type: 'string', title: '规格', readOnly: true },
+      unit: { type: 'string', title: '单位', readOnly: true },
+      number: { type: 'number', title: '数量', readOnly: true },
+      expectDeliverTime: { type: 'string', ui: { widget: 'date', showTime: true } as SFDateWidgetSchema, title: '期望交货时间',  readOnly: true},
+      price: { type: 'number', title: '单价', ui: { prefix: '$' } as SFNumberWidgetSchema },
+      estimateDeliverTime: { type: 'string', ui: { widget: 'date', showTime: true } as SFDateWidgetSchema, title: '预计交货时间'  },
+    },
+    required: [ 'price', 'estimateDeliverTime'],
   };
-  ui: SFUISchema = {
+  materialUi: SFUISchema = {
     '*': {
       spanLabel: 10,
       spanControl: 14,
       grid: { span: 12 },
     },
   };
+  constructor(public msg: NzMessageService, private http: _HttpClient,
+              private route: Router, private router: ActivatedRoute, private cdr: ChangeDetectorRef) {
+    const that = this;
+    this.router.params.subscribe((res) => {
+      const params = JSON.parse(res.queryParams);
+      that.orderId = params.orderId;
+      that.consumerId = params.consumerId;
+    });
+  }
 
-  constructor(
-    private modal: NzModalRef,
-    private msgSrv: NzMessageService,
-    public http: _HttpClient,
-  ) {}
-
-  save(value: any) {
-    console.log(value);
-    if (this.record.id) {
-      this.http.put(Api.BaseSupplyMarketApi, value).subscribe((res: any) => {
-        if (res) {
-          if (res.code === ResponseCode.SUCCESS) {
-            this.msgSrv.success('修改成功');
-            this.modal.close(true);
-          } else {
-            this.msgSrv.warning(res.msg);
-          }
-        } else {
-          this.msgSrv.error('修改失败，未知错误');
-        }
-      });
-    } else {
-      this.http.post(Api.BaseSupplyMarketApi, value).subscribe((res: any) => {
-        if (res) {
-          if (res.code === ResponseCode.SUCCESS) {
-            this.msgSrv.success('保存成功');
-            this.modal.close(true);
-          } else {
-            this.msgSrv.warning(res.msg);
-          }
-        } else {
-          this.msgSrv.error('保存失败，未知错误');
-        }
-      });
+  ngOnInit() {
+    if (this.orderId && this.orderId !== '0') {
+      this.queryOrderInfo();
+      this.queryOrderDetail();
+    }
+    if (this.consumerId && this.consumerId !== '0') {
+      this.querySupplyFirmInfo();
     }
   }
 
-  close() {
-    this.modal.destroy();
+  queryOrderInfo() {
+    this.http
+    .get(Api.BaseSupplyMarketApi + this.orderId)
+    .subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+        if (res.data) {
+          this.orderInfo = res.data;
+          if (this.orderInfo.status === 0) {
+            this.currentStep = 1;
+          } else if (this.orderInfo.status === 5) {
+            this.currentStep = 2;
+          } else if (this.orderInfo.status === 10) {
+            this.currentStep = 3;
+          } else {
+            this.currentStep = 4;
+          }
+        }
+      }
+    });
+  }
+
+  queryOrderDetail() {
+    this.http
+    .get(Api.BaseSupplyMarketApi + 'detail/' + this.orderId)
+    .subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+        if (res.data) this.orderDetail = res.data;
+        this.calculatDetail();
+      }
+    });
+  }
+
+  calculatDetail() {
+    if (this.orderDetail) {
+      this.basicNum = 0;
+      this.amountNum = 0.00;
+      // tslint:disable-next-line: prefer-for-of
+      for (let i = 0; i < this.orderDetail.length; i++) {
+        this.basicNum += this.orderDetail[i].number;
+        this.orderDetail[i].subtotal = this.orderDetail[i].number * this.orderDetail[i].price;
+        this.amountNum += this.orderDetail[i].subtotal;
+      }
+    }
+  }
+
+  querySupplyFirmInfo() {
+    this.http
+    .get(Api.BaseSupplyFirmApi + this.consumerId)
+    .subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+        if (res.data) this.consumerInfo = res.data;
+      }
+    });
+  }
+
+  backList(event: any) {
+    this.route.navigate(['/supply/market']);
+  }
+
+  editMaterialInfo(record: any) {
+    this.materialModalVisibility = true;
+    this.tmpMaterialRecord = record;
+  }
+  handleMaterialInfoModalClose(value: any): void {
+    if (!value)
+      this.materialModalVisibility = false;
+    if (value.id && value.price && value.estimateDeliverTime) {
+      this.http
+      .put(Api.BaseSupplyOrderFlowApi + '/material/price/delivery', value)
+      .subscribe((res: any) => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          for (let i = 0; i < this.orderDetail.length; i++) {
+            if (value.id === this.orderDetail[i].id) {
+              this.orderDetail[i] = value;
+              break;
+            }
+          }
+          this.calculatDetail();
+          this.st.reload();
+          this.materialModalVisibility = false;
+        } else {
+          this.msg.error(res ? res.message : '未知错误');
+        }
+      });
+    } else {
+      this.msg.warning('请填写单价和预计交期');
+    }
+  }
+  handleDeleteMaterialInfo(record: any) {
+    for (let i = 0; i < this.orderDetail.length; i++) {
+      if (record.materialNo === this.orderDetail[i].materialNo) {
+        this.orderDetail.splice(i, 1);
+        break;
+      }
+    }
+    this.calculatDetail();
+    this.st.reload();
+  }
+
+  verifyOrder() {
+    this.http
+    .put(Api.BaseSupplyOrderFlowApi + '/market/verify/' + this.orderId )
+    .subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+          this.orderInfo.status = 5;
+          this.materialModalVisibility = false;
+      } else {
+        this.msg.error(res ? res.message : '未知错误');
+      }
+    });
   }
 }
