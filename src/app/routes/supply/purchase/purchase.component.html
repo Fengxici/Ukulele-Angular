@@ -3,7 +3,7 @@
     <app-firm-drawer #drawer (callback)="query($event)"></app-firm-drawer>
   </ng-template>
   <ng-template #phActionTpl>
-    <button (click)="add()" nz-button acl [acl-ability]="'add'" nzType="primary">新建</button>
+    <button (click)="toDetail()" nz-button acl [acl-ability]="'add'" nzType="primary">新建</button>
   </ng-template>
 </page-header>
 <nz-card>

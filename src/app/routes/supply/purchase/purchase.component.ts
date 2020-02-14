@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { PublicService } from '@shared/service/public.service';
 import { Observable } from 'rxjs';
@@ -21,10 +21,10 @@ export class PurchaseComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
-    private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
     private pubService: PublicService,
+    private router: Router,
     protected route: ActivatedRoute,
     protected ability: AbilityService
   ) {
@@ -107,12 +107,20 @@ export class PurchaseComponent extends BaseAbilityComponent
       title: '操作',
       buttons: [
         {
-          text: '编辑',
+          text: '详情',
           icon: 'edit',
-          type: 'modal',
-          click: () => {
-            this.query(null);
+          click: (record: any) => {
+            this.toDetail(record);
           },
+          acl: { ability: ['edit'] },
+        },
+        {
+          text: '提交',
+          icon: 'check',
+          click: (record: any) => {
+            this.commitPurchaseOrder(record);
+          },
+          iif: record => record.status === 0,
           acl: { ability: ['edit'] },
         },
         {
@@ -180,8 +188,9 @@ export class PurchaseComponent extends BaseAbilityComponent
       });
   }
 
-  add() {
-    // this.route.
+  toDetail(record: any) {
+    this.router.navigate(['/supply/purchaseAdd',
+      {queryParams: JSON.stringify({orderId: record ? record.id : '0', providerId: record ? record.provider : '0'})}]);
   }
 
   delete(record: any) {
@@ -209,6 +218,21 @@ export class PurchaseComponent extends BaseAbilityComponent
           }),
       nzCancelText: '取消',
       nzOnCancel: () => console.log('Cancel'),
+    });
+  }
+
+  commitPurchaseOrder(record) {
+    this.http.post(Api.BaseSupplyOrderFlowApi + '/purchase/commit/' + record.id).subscribe((res: any) => {
+      if (res) {
+        if (res.code === ResponseCode.SUCCESS) {
+          record.status = 5;
+          this.msg.success('提交成功');
+        } else {
+          this.msg.warning(res.message);
+        }
+      } else {
+        this.msg.error('提交失败，未知错误');
+      }
     });
   }
 }
