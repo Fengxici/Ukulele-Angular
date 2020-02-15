@@ -9,7 +9,7 @@ import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
-import { UserRoleComponent } from './user-role.component';
+// import { UserRoleComponent } from './user-role.component';
 
 @Component({
   selector: 'app-system-user',
@@ -84,7 +84,7 @@ export class SystemUserComponent extends BaseAbilityComponent
           icon: 'edit',
           type: 'modal',
           modal: {
-            component: UserRoleComponent,
+            // component: UserRoleComponent,
           },
           click: () => {
             this.query(null);
