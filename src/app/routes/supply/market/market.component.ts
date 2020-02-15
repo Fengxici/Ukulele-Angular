@@ -199,7 +199,7 @@ export class MarketComponent extends BaseAbilityComponent
                 this.st.reload();
                 this.msg.success('删除成功');
               } else {
-                this.msg.warning(res.msg);
+                this.msg.warning(res.message);
               }
             } else {
               this.msg.error('删除失败，未知错误');
