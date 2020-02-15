@@ -1,5 +1,5 @@
 <form nz-form [formGroup]="form" (ngSubmit)="submit()" role="form">
-  <nz-tabset [nzAnimated]="false" class="tabs" (nzSelectChange)="switch($event)">
+  <nz-tabset [nzAnimated]="false" class="tabs" (nzSelectChange)="tabSwitch($event)">
     <nz-tab [nzTitle]="'app.login.tab-login-credentials' | translate" (nzClick)="showLoginButton=true">
       <nz-alert *ngIf="error" [nzType]="'error'" [nzMessage]="error" [nzShowIcon]="true" class="mb-lg"></nz-alert>
       <nz-form-item>
@@ -17,13 +17,13 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-          <nz-col [nzSpan]="12">
-            <label nz-checkbox formControlName="remember">{{ 'app.login.remember-me' | translate }}</label>
-          </nz-col>
-          <nz-col [nzSpan]="12" class="text-right">
-            <a class="forgot" (click)="msg.error('请找欧阳锋')">{{ 'app.login.forgot-password' | translate }}</a>
-          </nz-col>
-        </nz-form-item>
+        <nz-col [nzSpan]="12">
+          <label nz-checkbox formControlName="remember">{{ 'app.login.remember-me' | translate }}</label>
+        </nz-col>
+        <nz-col [nzSpan]="12" class="text-right">
+          <a class="forgot" (click)="msg.error('请找欧阳锋')">{{ 'app.login.forgot-password' | translate }}</a>
+        </nz-col>
+      </nz-form-item>
     </nz-tab>
     <nz-tab [nzTitle]="'app.login.tab-login-mobile' | translate" (nzClick)="showLoginButton=true">
       <nz-form-item>
