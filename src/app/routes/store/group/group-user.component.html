@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <div class="modal-title">编辑 {{ record.name }} 组用户</div>
+</div>
+<nz-spin *ngIf="!record" class="modal-spin"></nz-spin>
+<sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)"></sf>
+<st #st [data]="page.records" [columns]="columns" (change)="change($event)"
+  [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination">
+</st>
+<nz-spin *ngIf="!record" class="modal-spin"></nz-spin>
+<nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+  <input type="text" nz-input placeholder="输入用户名" [(ngModel)]="account"/>
+</nz-input-group>
+<ng-template #suffixButton>
+  <button nz-button nzType="primary" nzSize="large" nzSearch (click)="join()">加入</button>
+</ng-template>
+<div class="modal-footer">
+  <button nz-button type="button" (click)="close()">关闭</button>
+</div>
