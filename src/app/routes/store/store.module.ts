@@ -3,9 +3,11 @@ import { SharedModule } from '@shared';
 import { StoreRoutingModule } from './store-routing.module';
 import { StoreUserComponent } from './user/user.component';
 import { StoreUserEditComponent } from './user/user-edit.component';
+import { StoreDiskComponent } from './disk/disk.component';
 
 const COMPONENTS = [
-  StoreUserComponent
+  StoreUserComponent,
+  StoreDiskComponent
 ];
 const COMPONENTS_NOROUNT = [
   StoreUserEditComponent

@@ -32,7 +32,7 @@ const routes: Routes = [
       // 系统管理
       {path: 'system', loadChildren: './system/system.module#SystemModule'},
       // 风灯医管-网盘
-      {path: 'store', loadChildren: '/store/store.module#StoreModule'}
+      {path: 'store', loadChildren: './store/store.module#StoreModule'}
     ]
   },
   // 全屏布局
