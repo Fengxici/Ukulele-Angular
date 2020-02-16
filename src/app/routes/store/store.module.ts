@@ -4,13 +4,19 @@ import { StoreRoutingModule } from './store-routing.module';
 import { StoreUserComponent } from './user/user.component';
 import { StoreUserEditComponent } from './user/user-edit.component';
 import { StoreDiskComponent } from './disk/disk.component';
+import { GroupComponent } from './group/group.component';
+import { GroupEditComponent } from './group/group-edit.component';
+import { GroupUserComponent } from './group/group-user.component';
 
 const COMPONENTS = [
   StoreUserComponent,
-  StoreDiskComponent
+  StoreDiskComponent,
+  GroupComponent
 ];
 const COMPONENTS_NOROUNT = [
-  StoreUserEditComponent
+  StoreUserEditComponent,
+  GroupEditComponent,
+  GroupUserComponent
 ];
 
 @NgModule({

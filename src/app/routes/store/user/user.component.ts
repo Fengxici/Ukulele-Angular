@@ -34,37 +34,39 @@ export class StoreUserComponent implements OnInit {
   };
   searchSchema: SFSchema = {
     properties: {
-      userId: {
+      account: {
         type: 'string',
-        title: '编号',
-        ui: {
-          acl: { ability: ['query'] },
-        },
+        title: '账号',
       },
-      userTag: {
-        type: 'string',
-        title: '标签',
-        ui: {
-          acl: { ability: ['query'] },
-        },
-      }
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
-    { title: '编号', index: 'userId' },
-    { title: '标签', index: 'userTag' },
-    { title: '状态', index: 'disabled' },
+    { title: '编号', type: 'no' },
+    { title: '账号', index: 'account' },
+    { title: '操作权限', render: 'authList' },
+    { title: '最大上传大小', index: 'maxSize' },
+    { title: '最大下载速度', index: 'maxRate' },
     {
       title: '操作',
       buttons: [
+        {
+          text: '修改',
+          icon: 'edit',
+          type: 'modal',
+          modal: {
+            component: StoreUserEditComponent,
+          },
+          click: () => {
+            this.query(null);
+          },
+        },
         {
           text: '删除',
           icon: 'delete',
           click: (record: any) => {
             this.delete(record);
-          },
-          acl: { ability: ['delete'] },
+          }
         },
       ],
     },
@@ -81,6 +83,7 @@ export class StoreUserComponent implements OnInit {
       this.query(null);
     }
   }
+
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
@@ -90,12 +93,43 @@ export class StoreUserComponent implements OnInit {
       if (event.description) this.params.description = event.description;
     }
     this.http
-      .get(Api.BaseSupplyUserApi + '/page/' + current + '/' + size, this.params)
+      .get(Api.BaseStoreUserApi + 'page/' + current + '/' + size, this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
-          if (res.data) this.page = res.data;
+          if (res.data){
+            this.page = res.data;
+            this.handleAuth();
+          }
         }
       });
+  }
+
+  handleAuth() {
+    if (this.page && this.page.records){
+      for (const item of this.page.records){
+        item.authList = [];
+        for (const ch of item.auth) {
+          item.authList.push(ch);
+        }
+      }
+    }
+    console.log(this.page);
+  }
+  getTag(value): string {
+    if (value === 'c')
+      return '创建文件夹';
+    else if ( value === 'u')
+      return '上传文件';
+    else if ( value === 'd')
+      return '删除文件或文件夹';
+    else if (value === 'r')
+      return '重命名文件或编辑文件夹';
+    else if (value === 'l')
+      return '下载文件';
+    else if (value === 'm')
+      return '移动文件或文件夹';
+    else
+      return '未知';
   }
 
   add() {
@@ -106,7 +140,7 @@ export class StoreUserComponent implements OnInit {
 
   delete(record: any) {
     console.log(record);
-    const params = {userId: record.userId, firmId: 1};
+    // const params = {userId: record.userId, firmId: 1};
     this.modalService.confirm({
       nzTitle: '确定删除吗?',
       nzContent:
@@ -115,7 +149,7 @@ export class StoreUserComponent implements OnInit {
       nzOkType: 'danger',
       nzOnOk: () =>
         this.http
-          .delete(Api.BaseSupplyUserApi, params)
+          .delete(Api.BaseStoreUserApi + 'delete/' + record.userId)
           .subscribe((res: any) => {
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {

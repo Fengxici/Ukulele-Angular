@@ -1,105 +1,107 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema } from '@delon/form';
+import { SFSchema, SFUISchema, SFSelectWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
-import { STPage, STComponent, STColumn, STChange } from '@delon/abc';
 @Component({
   selector: 'app-store-user-edit',
   templateUrl: './user-edit.component.html',
 })
-export class StoreUserEditComponent {
+export class StoreUserEditComponent implements OnInit {
   constructor(
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
   ) {}
 
-  params: any = {};
-  page: any = {
-    records: [],
-    current: 1,
-    total: 0,
-    size: 10,
-  };
-  pagination: STPage = {
-    front: false,
-    pageSizes: [10, 20, 30, 40, 50],
-    total: true,
-    showSize: true,
-    showQuickJumper: true,
-  };
-
+  record: any;
   searchSchema: SFSchema = {
     properties: {
-      username: {
+      param: {
         type: 'string',
-        title: '用户名'
-      },
-      phone: {
-        type: 'string',
-        title: '电话号码'
+        title: '用户名或手机号'
       }
     },
   };
 
-  @ViewChild('st', { static: true }) st: STComponent;
-  columns: STColumn[] = [
-    { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '用户名', index: 'username' },
-    { title: '电话号码', index: 'phone' },
-    {
-      title: '操作',
-      buttons: [
-        {
-          text: '加入',
-          icon: 'plus',
-          click: (record: any) => {
-            this.join(record);
-          },
-        }
-      ],
+  schema: SFSchema = {
+    properties: {
+      account: {type: 'string', title: '用户名'},
+      authList: {
+        type: 'string',
+        title: '权限',
+        enum: [
+          { label: '创建文件夹', value: 'c' },
+          { label: '上传文件', value: 'u' },
+          { label: '删除文件或文件夹', value: 'd' },
+          { label: '重命名文件或编辑文件夹', value: 'r' },
+          { label: '下载文件', value: 'l' },
+          { label: '移动文件或文件夹', value: 'm' },
+        ],
+        default: ['l'],
+        ui: {
+          widget: 'select',
+          mode: 'multiple',
+        } as SFSelectWidgetSchema,
+      },
+      maxSize: {type: 'string', title: '最大上传大小', default: '1MB'},
+      maxRate: {type: 'string', title: '最大下载速度', default: '-1'},
     },
-  ];
+    required: ['account', 'authList'],
+  };
+  ui: SFUISchema = {
+    '*': {
+      spanLabel: 10,
+      spanControl: 14,
+      grid: { span: 12 },
+    },
+  };
 
-  change(e: STChange) {
-    if (e.type === 'pi' || e.type === 'ps') {
-      this.params.size = e.ps;
-      this.params.current = e.pi;
-      this.query(null);
+  ngOnInit(): void {
+    if (this.record) {
+      this.record.authList = [];
+      for (const ch of this.record.auth) {
+        this.record.authList.push(ch);
+      }
     }
   }
 
   query(event: any) {
-    if (event) {
-      if (event.username) this.params.username = event.username;
-      if (event.phone) this.params.phone = event.phone;
+    if (!(event && event.param)) {
+    this.msgSrv.warning('请先输入查询条件！');
+    return;
     }
-    if (!(this.params.username || this.params.phone)) {
-      this.msgSrv.warning('请先输入查询条件！');
-      return;
-    }
-    const current: number = this.params.current || 1;
-    const size: number = this.params.size || 10;
-    this.params = {};
     this.http
-      .get(Api.BaseUserApi + 'page/' + current + '/' + size, this.params)
+      .get(Api.BaseUserApi + 'param/' +  event.param)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
-          if (res.data) this.page = res.data;
+          if (res.data) {
+            this.record = res.data;
+            this.record.account = res.data.username;
+            this.record.userId = res.data.id;
+          }
         }
       });
   }
 
-  join(record: any) {
+join(record: any) {
     console.log(record);
     const params = {
-      userId: record.id,
-      firmId: 1,
-      userTag: '["salers","supplyer"]'
+      userId: record.userId,
+      account: record.account,
+      maxSize: record.maxSize,
+      maxRate: record.maxRate,
+      auth: ''
     };
-    this.http.post(Api.BaseSupplyUserApi, null, params).subscribe((res: any) => {
+    if (!record.authList) {
+      this.msgSrv.warning('必须至少选择一个权限！');
+      return;
+    }
+    for (const item of record.authList) {
+      params.auth += item;
+    }
+    this.http.post(Api.BaseStoreUserApi + 'add', params).subscribe((res: any) => {
       if (res) {
         if (res.code === ResponseCode.SUCCESS) {
           this.msgSrv.success('保存成功');
@@ -113,7 +115,7 @@ export class StoreUserEditComponent {
     });
   }
 
-  close() {
+close() {
     this.modal.destroy();
   }
 }

@@ -6,5 +6,12 @@
   "/api/**":{
     "target": "http://192.168.0.106:10000",
     "secure": false
+  },
+  "/store":{
+    "target": "http://192.168.0.106:60001",
+    "secure": false,
+    "pathRewrite": {
+      "^/store": "/"
+    }
   }
 }
