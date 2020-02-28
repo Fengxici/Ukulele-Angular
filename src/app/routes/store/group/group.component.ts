@@ -50,7 +50,7 @@ export class GroupComponent implements OnInit{
       buttons: [
         {
           text: '用户',
-          icon: 'profile',
+          icon: 'user',
           type: 'modal',
           modal: {
             component: GroupUserComponent,
@@ -100,7 +100,7 @@ export class GroupComponent implements OnInit{
       if (event.name) this.params.namge = event.name;
     }
     this.http
-      .get(Api.BaseStroeGroupApi + 'page/' + current + '/' + size, this.params)
+      .get(Api.BaseStoreGroupApi + 'page/' + current + '/' + size, this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data){
@@ -154,7 +154,7 @@ export class GroupComponent implements OnInit{
       nzOkType: 'danger',
       nzOnOk: () =>
         this.http
-          .delete(Api.BaseStroeGroupApi + 'delete/' + record.id)
+          .delete(Api.BaseStoreGroupApi + 'delete/' + record.id)
           .subscribe((res: any) => {
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {

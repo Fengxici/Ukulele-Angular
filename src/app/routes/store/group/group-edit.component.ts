@@ -67,7 +67,7 @@ export class GroupEditComponent implements OnInit{
       value.auth += item;
     }
     if (this.record.id) {
-      this.http.put(Api.BaseStroeGroupApi + 'modify', value).subscribe((res: any) => {
+      this.http.put(Api.BaseStoreGroupApi + 'modify', value).subscribe((res: any) => {
         if (res) {
           if (res.code === ResponseCode.SUCCESS) {
             this.msgSrv.success('修改成功');
@@ -80,7 +80,7 @@ export class GroupEditComponent implements OnInit{
         }
       });
     } else {
-      this.http.post(Api.BaseStroeGroupApi + 'add', value).subscribe((res: any) => {
+      this.http.post(Api.BaseStoreGroupApi + 'add', value).subscribe((res: any) => {
         if (res) {
           if (res.code === ResponseCode.SUCCESS) {
             this.msgSrv.success('保存成功');

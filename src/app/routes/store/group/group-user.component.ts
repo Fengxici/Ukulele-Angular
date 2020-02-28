@@ -67,7 +67,7 @@ export class GroupUserComponent implements OnInit{
       if (event.name) this.params.account = event.name;
     }
     this.http
-      .get(Api.BaseStroeGroupApi + '/user/page/' + current + '/' + size, this.params)
+      .get(Api.BaseStoreGroupApi + '/user/page/' + current + '/' + size, this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) {
@@ -95,7 +95,7 @@ export class GroupUserComponent implements OnInit{
         account: this.account,
         groupId: this.record.id
       };
-      this.http.post(Api.BaseStroeGroupApi + 'user/add', value).subscribe((res: any) => {
+      this.http.post(Api.BaseStoreGroupApi + 'user/add', value).subscribe((res: any) => {
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {
                 this.msgSrv.success('保存成功');
@@ -118,7 +118,7 @@ export class GroupUserComponent implements OnInit{
       groupId: this.record.id,
       userId: record.userId
     };
-    this.http.delete(Api.BaseStroeGroupApi + 'user/delete', value).subscribe((res: any) => {
+    this.http.delete(Api.BaseStoreGroupApi + 'user/delete', value).subscribe((res: any) => {
       if (res) {
         if (res.code === ResponseCode.SUCCESS) {
           this.msgSrv.success('删除成功');

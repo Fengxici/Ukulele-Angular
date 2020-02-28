@@ -8,5 +8,6 @@ export enum Api {
   BaseDeptApi = 'api/portal-service/dept/',
 
   BaseStoreUserApi= 'store/account/',
-  BaseStroeGroupApi = 'store/group/'
+  BaseStoreGroupApi = 'store/group/',
+  BaseStoreHomeApi = 'store/home/'
 }
