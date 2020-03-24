@@ -148,10 +148,13 @@ export class PurchaseEditComponent implements OnInit {
   constructor(public msg: NzMessageService, private http: _HttpClient,
               private route: Router, private router: ActivatedRoute, private cdr: ChangeDetectorRef) {
     const that = this;
-    this.router.params.subscribe((res) => {
-      const params = JSON.parse(res.queryParams);
-      that.orderId = params.orderId;
-      that.providerId = params.providerId;
+    this.router.queryParams.subscribe((res) => {
+      if (!res) {
+        this.msg.error('参数有误');
+        return;
+      }
+      that.orderId = res.orderId;
+      that.providerId = res.providerId;
       if (that.orderId && that.providerId && that.orderId !== '0' && that.providerId !== '0') {
         that.addFlag.first = false;
       }

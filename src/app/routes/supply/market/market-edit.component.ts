@@ -42,6 +42,20 @@ export class MarketEditComponent implements OnInit {
           click: (record) => {
             this.editMaterialInfo(record);
           }
+        },
+        {
+          text: '完成',
+          icon: 'edit',
+          click: (record) => {
+            this.editMaterialInfo(record);
+          }
+        },
+        {
+          text: '加入发货单',
+          icon: 'edit',
+          click: (record) => {
+            this.editMaterialInfo(record);
+          }
         }
       ],
     },
@@ -69,10 +83,13 @@ export class MarketEditComponent implements OnInit {
   constructor(public msg: NzMessageService, private http: _HttpClient,
               private route: Router, private router: ActivatedRoute, private cdr: ChangeDetectorRef) {
     const that = this;
-    this.router.params.subscribe((res) => {
-      const params = JSON.parse(res.queryParams);
-      that.orderId = params.orderId;
-      that.consumerId = params.consumerId;
+    this.router.queryParams.subscribe((res) => {
+      if (!res) {
+        this.msg.error('参数有误');
+        return;
+      }
+      that.orderId = res.orderId;
+      that.consumerId = res.consumerId;
     });
   }
 

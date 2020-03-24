@@ -1,4 +1,4 @@
-<page-header [title]="'订单明细'" [action]="action" [extra]="extra">
+<page-header [title]="'销售订单明细'" [action]="action" [extra]="extra">
   <ng-template #action>
     <nz-button-group>
       <button nz-button (click)="backList($event)">返回列表</button>
@@ -95,6 +95,9 @@
       </tr>
     </ng-template>
   </st>
+  <div style="text-align: center; margin-top: 15px;">
+    <button nz-button type="submit" nzType="primary" >一键发货</button>
+  </div>
 </nz-card>
 <!-- 物料编辑框 -->
 <nz-modal

@@ -189,8 +189,8 @@ export class PurchaseComponent extends BaseAbilityComponent
   }
 
   toDetail(record: any) {
-    this.router.navigate(['/supply/purchaseAdd',
-      {queryParams: JSON.stringify({orderId: record ? record.id : '0', providerId: record ? record.provider : '0'})}]);
+    this.router.navigate(['/supply/purchaseAdd'],
+      {queryParams: {orderId: record ? record.id : '0', providerId: record ? record.provider : '0'}});
   }
 
   delete(record: any) {

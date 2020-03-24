@@ -15,6 +15,7 @@ import { I18NService } from '../i18n/i18n.service';
 import { NzIconService } from 'ng-zorro-antd';
 import { ICONS_AUTO } from '../../../style-icons-auto';
 import { ICONS } from '../../../style-icons';
+import { Api } from '@shared/api';
 
 /**
  * 用于应用启动时
@@ -37,7 +38,7 @@ export class StartupService {
 
   private refredhMenu(resolve: any, reject: any) {
     zip(
-      this.httpClient.get('api/portal-service/ant-menu/user'),
+      this.httpClient.get(Api.BaseAntMenuApi + 'user'),
     )
       .pipe(
         // 接收其他拦截器后产生的异常消息

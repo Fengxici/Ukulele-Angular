@@ -178,8 +178,8 @@ export class MarketComponent extends BaseAbilityComponent
   }
 
   toDetail(record: any) {
-    this.router.navigate(['/supply/marketDetail',
-    {queryParams: JSON.stringify({orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0'})}]);
+    this.router.navigate(['/supply/marketDetail'],
+    {queryParams: {orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0'}});
   }
 
   delete(record: any) {
