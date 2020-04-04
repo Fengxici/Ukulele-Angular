@@ -1,0 +1,9 @@
+<page-header [content]="content">
+  <ng-template #content>
+    <app-firm-drawer #drawer (callback)="query($event)"></app-firm-drawer>
+  </ng-template>
+</page-header>
+<nz-card>
+  <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)"></sf>
+  <st #st [data]="record" [columns]="columns" (change)="change($event)"></st>
+</nz-card>
