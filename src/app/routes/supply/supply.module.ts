@@ -22,6 +22,10 @@ import { AnnouncementEditComponent } from './announcement/announcement-edit.comp
 import { EmployeeApplyComponent } from './join/apply.component';
 import { EmployeeApplyHandleComponent } from './join/apply-access.component';
 import { PurchaseEditComponent } from './purchase/purchase-edit.component';
+import { ReceiveComponent } from './deliver/receive.component';
+import { DeliverEditComponent } from './deliver/deliver-edit.component';
+import { CartComponent } from './deliver/cart.component';
+import { ReceiveEditComponent } from './deliver/receive-edit.component';
 
 const COMPONENTS = [
   FirmListComponent,
@@ -36,7 +40,9 @@ const COMPONENTS = [
   AnnouncementComponent,
   EmployeeApplyComponent,
   PurchaseEditComponent,
-  MarketEditComponent
+  MarketEditComponent,
+  CartComponent,
+  ReceiveComponent
 ];
 const COMPONENTS_NOROUNT = [
   FirmEditComponent,
@@ -46,7 +52,9 @@ const COMPONENTS_NOROUNT = [
   MaterialEditComponent,
   AdsEditComponent,
   AnnouncementEditComponent,
-  EmployeeApplyHandleComponent
+  EmployeeApplyHandleComponent,
+  DeliverEditComponent,
+  ReceiveEditComponent
 ];
 
 @NgModule({

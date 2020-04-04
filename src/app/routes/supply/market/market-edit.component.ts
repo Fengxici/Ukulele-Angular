@@ -6,6 +6,7 @@ import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 import { STComponent, STColumn } from '@delon/abc';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Recoverable } from 'repl';
 @Component({
   selector: 'app-supply-market-edit',
   templateUrl: './market-edit.component.html',
@@ -39,6 +40,7 @@ export class MarketEditComponent implements OnInit {
         {
           text: '修改',
           icon: 'edit',
+          iif: record => record.status === 0,
           click: (record) => {
             this.editMaterialInfo(record);
           }
@@ -46,15 +48,27 @@ export class MarketEditComponent implements OnInit {
         {
           text: '完成',
           icon: 'edit',
+          iif: record => record.status < 5,
+          pop: {
+            title: '确定该物料完成了吗?',
+            okType: 'default',
+            icon: 'star',
+          },
           click: (record) => {
-            this.editMaterialInfo(record);
+            this.completeMaterial(record);
           }
         },
         {
           text: '加入发货单',
           icon: 'edit',
+          iif: record => record.status < 10,
+          pop: {
+            title: '确定该物料加入发货单吗?',
+            okType: 'default',
+            icon: 'star',
+          },
           click: (record) => {
-            this.editMaterialInfo(record);
+            this.deliverMaterial(record);
           }
         }
       ],
@@ -209,6 +223,32 @@ export class MarketEditComponent implements OnInit {
       if (res && res.code === ResponseCode.SUCCESS) {
           this.orderInfo.status = 5;
           this.materialModalVisibility = false;
+      } else {
+        this.msg.error(res ? res.message : '未知错误');
+      }
+    });
+  }
+
+  completeMaterial(record: any) {
+    this.http
+    .put(Api.BaseSupplyOrderFlowApi + '/market/material/complete/' + record.id )
+    .subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+          this.queryOrderDetail();
+          this.msg.success(res.message);
+      } else {
+        this.msg.error(res ? res.message : '未知错误');
+      }
+    });
+  }
+
+  deliverMaterial(record: any) {
+    this.http
+    .put(Api.BaseSupplyOrderFlowApi + '/market/material/deliver/' + record.id )
+    .subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+          this.queryOrderDetail();
+          this.msg.success(res.message);
       } else {
         this.msg.error(res ? res.message : '未知错误');
       }

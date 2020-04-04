@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 
 @Component({
-  selector: 'app-supply-material',
+  selector: 'app-supply-ads',
   templateUrl: './ads.component.html',
 })
 export class AdsComponent extends BaseAbilityComponent

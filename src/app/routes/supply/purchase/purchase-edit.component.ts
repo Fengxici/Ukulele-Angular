@@ -68,6 +68,7 @@ export class PurchaseEditComponent implements OnInit {
         {
           text: '删除',
           icon: 'delete',
+          iif: (record) => record.status < 10,
           pop: {
             title: '确定要删除吗?',
             okType: 'danger',
