@@ -11,7 +11,7 @@
   <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
     [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination">
     <ng-template st-row="taglist" let-item let-index="index">
-    <nz-tag [nzColor]="'#2db7f5'" *ngFor="let tag of item.userTagList">{{ getTag(tag) }}</nz-tag>
+      <nz-tag [nzColor]="'#2db7f5'" *ngFor="let tag of item.userTagList">{{ getTag(tag) }}</nz-tag>
     </ng-template>
   </st>
 </nz-card>

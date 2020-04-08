@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
+import { STColumn, STComponent, STPage, STChange, STColumnBadge } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -37,6 +37,24 @@ export class PurchaseComponent extends BaseAbilityComponent
     total: 0,
     size: 10,
   };
+  PURCHASE_ORDER_STATUS: STColumnBadge = {
+    0: {text: '创建', color: 'default'},
+    20: {text: '提交', color: 'success'},
+    40: {text: '确认', color: 'success'},
+    60: {text: '生产中', color: 'success'},
+    80: {text: '发货中', color: 'success'},
+    90: {text: '完成', color: 'success'},
+  };
+  FINANCE_STATUS: STColumnBadge = {
+    1: {text: '待付款', color: 'warning'},
+    2: {text: '待开票', color: 'success'},
+    3: {text: '已付款', color: 'success'},
+    4: {text: '已开票', color: 'success'},
+  };
+  SETTLE_TYPE: STColumnBadge = {
+    1: {text: '预付款', color: 'warning'},
+    2: {text: '月结', color: 'success'},
+  };
   pagination: STPage = {
     front: false,
     pageSizes: [10, 20, 30, 40, 50],
@@ -49,9 +67,6 @@ export class PurchaseComponent extends BaseAbilityComponent
       orderNo: {
         type: 'string',
         title: '订单编号',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
       status: {
         type: 'string',
@@ -61,7 +76,6 @@ export class PurchaseComponent extends BaseAbilityComponent
           widget: 'select',
           asyncData: () => this.queryDicItem('PURCHASE_ORDER_STATUS') ,
           width: 150,
-          acl: { ability: ['query'] },
         } ,
       },
       financeStatus: {
@@ -72,7 +86,6 @@ export class PurchaseComponent extends BaseAbilityComponent
           widget: 'select',
           asyncData: () => this.queryDicItem('FINANCE_STATUS') ,
           width: 180,
-          acl: { ability: ['query'] },
         } ,
       },
       settleType: {
@@ -83,15 +96,11 @@ export class PurchaseComponent extends BaseAbilityComponent
           widget: 'select',
           asyncData: () => this.queryDicItem('SETTLE_TYPE') ,
           width: 160,
-          acl: { ability: ['query'] },
         } ,
       },
       provider: {
         type: 'string',
-        title: '供应方',
-        ui: {
-          acl: { ability: ['query'] },
-        },
+        title: '供应商',
       },
     },
   };
@@ -99,10 +108,10 @@ export class PurchaseComponent extends BaseAbilityComponent
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
     { title: '订单编号', index: 'orderNo' },
-    { title: '状态', index: 'status' },
-    { title: '财务状态', index: 'financeStatus' },
-    { title: '结算方式', index: 'settleType' },
-    { title: '供应方', index: 'provider' },
+    { title: '状态', index: 'status' , type: 'badge', badge: this.PURCHASE_ORDER_STATUS},
+    { title: '财务状态', index: 'financeStatus', type: 'badge', badge: this.FINANCE_STATUS },
+    { title: '结算方式', index: 'settleType', type: 'badge', badge: this.SETTLE_TYPE },
+    { title: '供应商', index: 'provider' },
     {
       title: '操作',
       buttons: [
