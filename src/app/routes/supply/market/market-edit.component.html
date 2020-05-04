@@ -40,14 +40,14 @@
         </div>
       </ng-template>
     </nz-step>
-    <nz-step [nzTitle]="'审核'" [nzDescription]="verifyDesc">
+    <nz-step [nzTitle]="'确认'" [nzDescription]="verifyDesc">
       <ng-template #verifyDesc>
         <div class="desc">
           <div class="my-sm">
             {{orderInfo.verifyBy}}
           </div>
           {{orderInfo.verifyTime}}
-          <a (click)="verifyOrder()" *ngIf="orderInfo.status==0">审核</a>
+          <a (click)="verifyOrder()" *ngIf="orderInfo.status==0">确认</a>
         </div>
       </ng-template>
     </nz-step>

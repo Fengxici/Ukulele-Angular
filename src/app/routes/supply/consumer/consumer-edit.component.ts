@@ -46,12 +46,13 @@ export class ConsumerEditComponent {
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '名称', index: 'name' },
+    { title: '社会统一信用代码', index: 'unicode' },
     { title: '描述', width: '150px', index: 'description' },
     {
       title: '操作',
       buttons: [
         {
-          text: '加入',
+          text: '选择',
           icon: 'plus',
           click: (record: any) => {
             this.join(record);
@@ -79,7 +80,6 @@ export class ConsumerEditComponent {
     }
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    this.params = {};
     this.http
     .get(Api.BaseSupplyFirmApi + 'page/' + current + '/' + size, this.params)
     .subscribe((res: any) => {
@@ -87,13 +87,19 @@ export class ConsumerEditComponent {
         if (res.data) this.page = res.data;
       }
     });
+    this.params = {};
   }
 
   join(record: any) {
     console.log(record);
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    if (record.id === firmInfo.id) {
+      this.msgSrv.warning('不能选择自己作为客户');
+      return;
+    }
     const params = {
       consumerId: record.id,
-      firmId: 1
+      firmId: firmInfo.id
     };
     this.http.post(Api.BaseSupplyConsumerApi, null, params).subscribe((res: any) => {
       if (res) {

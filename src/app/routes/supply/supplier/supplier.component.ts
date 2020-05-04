@@ -41,22 +41,27 @@ export class SupplierComponent extends BaseAbilityComponent
     showSize: true,
     showQuickJumper: true,
   };
-  searchSchema: SFSchema = {
-    properties: {
-      userId: {
-        type: 'string',
-        title: '编号',
-        ui: {
-          acl: { ability: ['query'] },
-        },
-      }
-    },
-  };
+  // searchSchema: SFSchema = {
+  //   properties: {
+      // userId: {
+      //   type: 'string',
+      //   title: '编号',
+      //   ui: {
+      //     acl: { ability: ['query'] },
+      //   },
+      // }
+  //   },
+  // };
   @ViewChild('st', { static: true }) st: STComponent;
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
-    { title: '编号', index: 'supplierId' },
-    { title: '状态', index: 'disabled' },
+    { title: '名称', index: 'name' },
+    { title: '简称', index: 'shortName' },
+    { title: '社会统一信用代码', index: 'unicode' },
+    { title: '电话', index: 'phone' },
+    { title: '地址', index: 'address' },
+    { title: '联系人', index: 'contacts' },
+    { title: '描述', width: '150px', index: 'description' },
     {
       title: '操作',
       buttons: [
@@ -114,7 +119,7 @@ export class SupplierComponent extends BaseAbilityComponent
 
   delete(record: any) {
     console.log(record);
-    const params = {supplerId: record.supplerId, firmId: 1};
+    const params = {supplierId: record.supplierId, firmId: record.firmId};
     this.modalService.confirm({
       nzTitle: '确定删除吗?',
       nzContent:
