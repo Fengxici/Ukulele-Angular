@@ -45,7 +45,7 @@ export class MaterialComponent extends BaseAbilityComponent
     properties: {
       materialNo: {
         type: 'string',
-        title: '订单编号',
+        title: '物料编号',
         ui: {
           acl: { ability: ['query'] },
         },
@@ -66,7 +66,7 @@ export class MaterialComponent extends BaseAbilityComponent
     { title: '物料名称',  index: 'name' },
     { title: '规格', index: 'format' },
     { title: '单位', index: 'unit' },
-    { title: '含税单价', index: 'price' },
+    { title: '含税单价', index: 'price', type: 'currency' },
     {
       title: '操作',
       buttons: [
@@ -115,7 +115,7 @@ export class MaterialComponent extends BaseAbilityComponent
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
-    this.params = {firmId: firmInfo.id};
+    this.params.firmId = firmInfo.id;
     if (event) {
       if (event.name) this.params.name = event.name;
       if (event.materialNo) this.params.materialNo = event.materialNo;

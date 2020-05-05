@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { SFSchema, SFUISchema, SFNumberWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 @Component({
@@ -17,7 +17,7 @@ export class MaterialEditComponent {
       name: { type: 'string', title: '物料名称' },
       format: { type: 'string', title: '规格' },
       unit: { type: 'string', title: '单位' },
-      price: { type: 'string', title: '含税单价' }
+      price: {  type: 'number', title: '单价', ui: { prefix: '￥' } as SFNumberWidgetSchema }
     },
     required: ['name'],
   };
@@ -51,6 +51,8 @@ export class MaterialEditComponent {
         }
       });
     } else {
+      const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+      value.firmId = firmInfo.id;
       this.http.post(Api.BaseSupplyMaterialApi, value).subscribe((res: any) => {
         if (res) {
           if (res.code === ResponseCode.SUCCESS) {

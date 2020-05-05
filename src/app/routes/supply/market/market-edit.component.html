@@ -9,7 +9,7 @@
     <div nz-row>
       <div nz-col nzXs="24" nzSm="12">
         <p class="text-grey">状态</p>
-        <p class="text-lg">{{orderInfo.status}}</p>
+        <p class="text-lg">{{orderInfo.statusText}}</p>
       </div>
       <div nz-col nzXs="24" nzSm="12">
         <p class="text-grey">订单金额</p>
@@ -22,10 +22,10 @@
     <sv label="提交人">{{orderInfo.createBy}}</sv>
     <sv label="提交时间">{{orderInfo.createTime}}</sv>
     <sv label="收货信息">{{orderInfo.receiveInfo}}</sv>
-    <sv label="是否开票">{{orderInfo.needInvoice}}</sv>
+    <sv label="是否开票">{{orderInfo.needInvoice?'开票':'不开票'}}</sv>
     <sv label="备注">{{orderInfo.remark}}</sv>
-    <sv label="审核人">{{orderInfo.createBy}}</sv>
-    <sv label="审核时间">{{orderInfo.createTime}}</sv>
+    <sv label="确认人">{{orderInfo.verifyBy}}</sv>
+    <sv label="确认时间">{{orderInfo.verifyTime}}</sv>
   </sv-container>
 </page-header>
 <nz-card [nzBordered]="false" class="mb-lg" nzTitle="流程进度" >
@@ -47,18 +47,23 @@
             {{orderInfo.verifyBy}}
           </div>
           {{orderInfo.verifyTime}}
-          <a (click)="verifyOrder()" *ngIf="orderInfo.status==0">确认</a>
+          <a (click)="verifyOrder()" *ngIf="orderInfo.status===20">确认</a>
         </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'采购商确认'" [nzDescription]="consumerVerifyDesc">
+      <ng-template #consumerVerifyDesc>
+        <div class="desc">
+          <a *ngIf="orderInfo.status===40">催一下</a>
+        </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'生产中'" [nzDescription]="produceDesc">
+      <ng-template #produceDesc>
       </ng-template>
     </nz-step>
     <nz-step [nzTitle]="'发货中'" [nzDescription]="deliverDesc">
       <ng-template #deliverDesc>
-        <div class="desc">
-          <div class="my-sm">
-            {{orderInfo.verifyBy}}
-          </div>
-          {{orderInfo.verifyTime}}
-        </div>
       </ng-template>
     </nz-step>
     <nz-step [nzTitle]="'完成'"></nz-step>
@@ -96,7 +101,7 @@
     </ng-template>
   </st>
   <div style="text-align: center; margin-top: 15px;">
-    <button nz-button type="submit" nzType="primary" >一键发货</button>
+    <button nz-button type="submit" nzType="primary" *ngIf="orderInfo.status>50">一键发货</button>
   </div>
 </nz-card>
 <!-- 物料编辑框 -->

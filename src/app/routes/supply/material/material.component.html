@@ -1,5 +1,5 @@
-<page-header [content]="content">
-  <ng-template #content>
+<page-header [content]="content" [action]="phActionTpl" >
+  <ng-template #content >
     <app-firm-drawer #drawer (callback)="query($event)"></app-firm-drawer>
   </ng-template>
   <ng-template #phActionTpl>

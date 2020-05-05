@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
-import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Api } from '@shared/api';

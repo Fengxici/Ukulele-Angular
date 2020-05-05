@@ -39,10 +39,11 @@ export class PurchaseComponent extends BaseAbilityComponent
   };
   PURCHASE_ORDER_STATUS: STColumnBadge = {
     0: {text: '创建', color: 'default'},
-    20: {text: '提交', color: 'success'},
-    40: {text: '确认', color: 'success'},
-    60: {text: '生产中', color: 'success'},
-    80: {text: '发货中', color: 'success'},
+    20: {text: '提交', color: 'processing'},
+    40: {text: '供应商确认', color: 'processing'},
+    50: {text: '订单确认', color: 'processing'},
+    60: {text: '生产中', color: 'processing'},
+    80: {text: '发货中', color: 'processing'},
     90: {text: '完成', color: 'success'},
   };
   FINANCE_STATUS: STColumnBadge = {
@@ -101,6 +102,12 @@ export class PurchaseComponent extends BaseAbilityComponent
       provider: {
         type: 'string',
         title: '供应商',
+        default: '-1',
+        ui: {
+          widget: 'select',
+          asyncData: () => this.queryProviderList() ,
+          width: 260,
+        } ,
       },
     },
   };
@@ -111,7 +118,9 @@ export class PurchaseComponent extends BaseAbilityComponent
     { title: '状态', index: 'status' , type: 'badge', badge: this.PURCHASE_ORDER_STATUS},
     { title: '财务状态', index: 'financeStatus', type: 'badge', badge: this.FINANCE_STATUS },
     { title: '结算方式', index: 'settleType', type: 'badge', badge: this.SETTLE_TYPE },
-    { title: '供应商', index: 'provider' },
+    { title: '下单时间', index: 'orderTime' },
+    { title: '订单金额', index: 'orderSum', type: 'currency' },
+    { title: '供应商', index: 'providerName' },
     {
       title: '操作',
       buttons: [
@@ -179,6 +188,31 @@ export class PurchaseComponent extends BaseAbilityComponent
     return dicItemObservable;
   }
 
+  queryProviderList() {
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const params = {firmId: firmInfo.id};
+    const providerObservalbe =  this.http
+    .get(Api.BaseSupplySupplierApi + '/list', params).pipe(
+      catchError(() => {
+        return [{ label: '所有', value: '-1' }];
+      }),
+      map(res => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            const data = [{ label: '所有', value: '-1' }];
+            res.data.forEach(element => {
+              const item = {value: element.supplierId, label: element.name};
+              data.push(item);
+            });
+            return data;
+          }
+        }
+        return [{ label: '所有', value: '-1' }];
+      })
+    );
+    return providerObservalbe;
+  }
+
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
@@ -200,6 +234,10 @@ export class PurchaseComponent extends BaseAbilityComponent
   toDetail(record: any) {
     this.router.navigate(['/supply/purchaseAdd'],
       {queryParams: {orderId: record ? record.id : '0', providerId: record ? record.provider : '0'}});
+  }
+
+  toAdd() {
+    this.router.navigate(['/supply/purchaseAdd']);
   }
 
   delete(record: any) {
@@ -234,7 +272,7 @@ export class PurchaseComponent extends BaseAbilityComponent
     this.http.post(Api.BaseSupplyOrderFlowApi + '/purchase/commit/' + record.id).subscribe((res: any) => {
       if (res) {
         if (res.code === ResponseCode.SUCCESS) {
-          record.status = 5;
+          this.st.reload();
           this.msg.success('提交成功');
         } else {
           this.msg.warning(res.message);

@@ -21,7 +21,7 @@
     <div nz-row>
       <div nz-col nzXs="24" nzSm="12">
         <p class="text-grey">状态</p>
-        <p class="text-lg">{{orderInfo.status}}</p>
+        <p class="text-lg">{{orderInfo.statusText}}</p>
       </div>
       <div nz-col nzXs="24" nzSm="12">
         <p class="text-grey">订单金额</p>
@@ -34,7 +34,7 @@
     <sv label="订单编号">{{orderInfo.orderNo}}</sv>
     <sv label="下单时间">{{orderInfo.orderTime}}</sv>
     <sv label="收货信息">{{orderInfo.receiveInfo}}</sv>
-    <sv label="是否开票">{{orderInfo.needInvoice}}</sv>
+    <sv label="是否开票">{{orderInfo.needInvoice?"开票":"不开票"}}</sv>
     <sv label="备注">{{orderInfo.remark}}</sv>
   </sv-container>
 </page-header>
@@ -57,28 +57,38 @@
             {{orderInfo.commitBy}}
           </div>
           <div>{{orderInfo.commitTime}}</div>
-          <a (click)="commitPurchaseOrder()" *ngIf="orderInfo.status==0">提交</a>
+          <a (click)="commitPurchaseOrder()" *ngIf="orderInfo.status===0">提交</a>
         </div>
       </ng-template>
     </nz-step>
-    <nz-step [nzTitle]="'等待供方审核'" [nzDescription]="verifyDesc">
+    <nz-step [nzTitle]="'供应商确认'" [nzDescription]="verifyDesc">
       <ng-template #verifyDesc>
         <div class="desc">
-          <div class="my-sm">
-            {{orderInfo.verifyBy}}
-          </div>
-          {{orderInfo.verifyTime}}
-          <a (click)="msg.success('click')" *ngIf="orderInfo.status==5">催一下</a>
+          <a (click)="msg.success('click')" *ngIf="orderInfo.status===20">催一下</a>
         </div>
       </ng-template>
     </nz-step>
-    <nz-step [nzTitle]="'供方发货中'" [nzDescription]="deliverDesc">
-      <ng-template #deliverDesc>
+    <nz-step [nzTitle]="'订单确认'" [nzDescription]="consumerVerifyDesc">
+      <ng-template #consumerVerifyDesc>
         <div class="desc">
           <div class="my-sm">
             {{orderInfo.verifyBy}}
           </div>
           {{orderInfo.verifyTime}}
+          <a (click)="verifyPurchaseOrder()" *ngIf="orderInfo.status===40">确认</a>
+        </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'生产中'" [nzDescription]="produceDesc">
+      <ng-template #produceDesc>
+        <div class="desc">
+        </div>
+      </ng-template>
+    </nz-step>
+    <nz-step [nzTitle]="'供应商发货中'" [nzDescription]="deliverDesc">
+      <ng-template #deliverDesc>
+        <div class="desc">
+          <a (click)="msg.success('click')" *ngIf="orderInfo.status===50">催一下</a>
         </div>
       </ng-template>
     </nz-step>
@@ -89,8 +99,8 @@
 <nz-card nzTitle="订单详情" [nzHoverable]="true" [nzBordered]="false" [nzExtra]="extraTemplate" [nzActions]="[actionSave]">
   <ng-template #extraTemplate>
     <nz-button-group >
-      <button nz-button (click)="editProviderInfo()">选择供应商</button>
-      <button nz-button (click)="editMaterialInfo({})">添加物料</button>
+      <button nz-button (click)="editProviderInfo()" *ngIf="!orderInfo.status||orderInfo.status<20">选择供应商</button>
+      <button nz-button (click)="editMaterialInfo()" *ngIf="!orderInfo.status||orderInfo.status<20">添加物料</button>
     </nz-button-group>
   </ng-template>
   <sv-container size="large" title="供应商信息">
@@ -102,7 +112,7 @@
   </sv-container>
   <nz-divider></nz-divider>
   <div class="text-lg mb-md">物料清单</div>
-  <st #st [data]="orderDetail" [columns]="detailColumns" [body]="detailBody" [page]="{ show: false }">
+  <st #orderDetailSt [data]="orderDetail" [columns]="detailColumns" [body]="detailBody" [page]="{ show: false }">
     <ng-template #detailBody>
       <tr>
         <td></td>
@@ -124,7 +134,7 @@
   </st>
 </nz-card>
 <ng-template #actionSave>
-  <button nz-button type="submit" nzType="primary" (click)="saveOrder()">保存订单</button>
+  <button nz-button type="submit" nzType="primary" (click)="saveOrder()" *ngIf="!orderInfo.status||orderInfo.status<20">保存订单</button>
 </ng-template>
 <ng-template #tplOrderInfo>
   <sf #sf mode="edit" [schema]="orderInfoSchema" [ui]="orderInfoUi" [formData]="orderInfo" button="none" ></sf>
@@ -163,7 +173,7 @@
     <div class="modal-title">选择供应商</div>
   </ng-template>
   <ng-template #providerInfoContent>
-    <sf mode="search" [schema]="providerSearchSchema" (formSubmit)="queryProvider($event)"></sf>
+    <sf mode="search" [schema]="providerSearchSchema" (formSubmit)="queryProvider($event)"  (formReset)="queryProvider($event)"></sf>
     <st #providerst [data]="providerPage.records" [columns]="providerColumns" (change)="providerPageChange($event)"
     [pi]="providerPage.current" [ps]="providerPage.size" [total]="providerPage.total" [page]="providerPagination"></st>
   </ng-template>
@@ -181,12 +191,16 @@
     <div class="modal-title">编辑物料信息</div>
   </ng-template>
   <ng-template #materialInfoContent>
-    <sf *ngIf="tmpMaterialRecord" #materialsf mode="edit" [schema]="materialSchema" [ui]="materialUi" [formData]="tmpMaterialRecord" button="none" >
+    <sf mode="search" [schema]="materialSearchSchema" (formSubmit)="queryMaterial($event)" (formReset)="materialSearchSt.reset($event)" *ngIf="!tmpMaterialRecord"></sf>
+    <st #materialSearchSt [data]="materialSearchPage.records" [columns]="materialSearchColumns" (change)="materialStChange($event)"
+    [pi]="materialSearchPage.current" [ps]="materialSearchPage.size" [total]="materialSearchPage.total" [page]="materialSearchPagination" *ngIf="!tmpMaterialRecord"></st>
+    <sf *ngIf="tmpMaterialRecord" #materialsf mode="edit" [schema]="materialSchema" [ui]="materialUi" [formData]="tmpMaterialRecord" button="none" style="margin-top:10px" >
       <div class="modal-footer">
+        <button nz-button type="button" (click)="this.tmpMaterialRecord=null">重选</button>
         <button nz-button type="button" (click)="handleMaterialInfoModalClose(null,null)">关闭</button>
-        <button nz-button type="submit" nzType="primary" (click)="handleMaterialInfoModalClose(materialsf.value,false)" *ngIf="!tmpMaterialRecord.id"
+        <button nz-button type="submit" nzType="primary" (click)="handleMaterialInfoModalClose(materialsf.value,false)" *ngIf="!(tmpMaterialRecord.newFlag||tmpMaterialRecord.id)"
           [disabled]="!materialsf.valid" >添加</button>
-        <button nz-button type="submit" nzType="primary" (click)="handleMaterialInfoModalClose(materialsf.value,true)" *ngIf="tmpMaterialRecord.id"
+        <button nz-button type="submit" nzType="primary" (click)="handleMaterialInfoModalClose(materialsf.value,true)" *ngIf="tmpMaterialRecord.newFlag||tmpMaterialRecord.id"
           [disabled]="!materialsf.valid" >修改</button>
       </div>
     </sf>

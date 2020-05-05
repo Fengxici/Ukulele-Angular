@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange, STColumnBadge } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { Observable } from 'rxjs';
 import { PublicService } from '@shared/service/public.service';
@@ -47,7 +47,8 @@ export class MarketComponent extends BaseAbilityComponent
   PURCHASE_ORDER_STATUS: STColumnBadge = {
     0: {text: '创建', color: 'default'},
     20: {text: '提交', color: 'success'},
-    40: {text: '确认', color: 'success'},
+    40: {text: '供应商确认', color: 'success'},
+    50: {text: '订单确认', color: 'success'},
     60: {text: '生产中', color: 'success'},
     80: {text: '发货中', color: 'success'},
     90: {text: '完成', color: 'success'},
@@ -101,6 +102,12 @@ export class MarketComponent extends BaseAbilityComponent
       provider: {
         type: 'string',
         title: '采购商',
+        default: '-1',
+        ui: {
+          widget: 'select',
+          asyncData: () => this.queryConsumerList() ,
+          width: 260,
+        } ,
       },
     },
   };
@@ -111,7 +118,8 @@ export class MarketComponent extends BaseAbilityComponent
     { title: '状态', index: 'status' , type: 'badge', badge: this.PURCHASE_ORDER_STATUS},
     { title: '财务状态', index: 'financeStatus', type: 'badge', badge: this.FINANCE_STATUS },
     { title: '结算方式', index: 'settleType', type: 'badge', badge: this.SETTLE_TYPE },
-    { title: '采购商', index: 'consumer' },
+    { title: '采购商', index: 'consumerName' },
+    { title: '订单金额', index: 'orderSum', type: 'currency' },
     {
       title: '操作',
       buttons: [
@@ -188,7 +196,30 @@ export class MarketComponent extends BaseAbilityComponent
     this.router.navigate(['/supply/marketDetail'],
     {queryParams: {orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0'}});
   }
-
+  queryConsumerList() {
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const params = {firmId: firmInfo.id};
+    const providerObservalbe =  this.http
+    .get(Api.BaseSupplyConsumerApi + '/list', params).pipe(
+      catchError(() => {
+        return [{ label: '所有', value: '-1' }];
+      }),
+      map(res => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            const data = [{ label: '所有', value: '-1' }];
+            res.data.forEach(element => {
+              const item = {value: element.supplierId, label: element.name};
+              data.push(item);
+            });
+            return data;
+          }
+        }
+        return [{ label: '所有', value: '-1' }];
+      })
+    );
+    return providerObservalbe;
+  }
   delete(record: any) {
     console.log(record);
     this.modalService.confirm({

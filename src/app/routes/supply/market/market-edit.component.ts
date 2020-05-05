@@ -4,9 +4,9 @@ import { _HttpClient } from '@delon/theme';
 import { SFSchema, SFUISchema, SFDateWidgetSchema, SFNumberWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
-import { STComponent, STColumn } from '@delon/abc';
+import { STComponent, STColumn, STColumnBadge } from '@delon/abc';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Recoverable } from 'repl';
+
 @Component({
   selector: 'app-supply-market-edit',
   templateUrl: './market-edit.component.html',
@@ -22,6 +22,18 @@ export class MarketEditComponent implements OnInit {
   currentStep = 1;
   basicNum = 0;
   amountNum = 0;
+  ORDER_DETAIL_STATUS: STColumnBadge = {
+    0: {text: '创建', color: 'default'},
+    10: {text: '提交', color: 'processing'},
+    20: {text: '供应商确认', color: 'processing'},
+    25: {text: '采购商确认', color: 'processing'},
+    30: {text: '生产中', color: 'processing'},
+    40: {text: '完成生产', color: 'processing'},
+    50: {text: '发货中', color: 'processing'},
+    60: {text: '签收', color: 'processing'},
+    70: {text: '验收', color: 'processing'},
+    80: {text: '退货', color: 'error'},
+  };
   @ViewChild('st', { static: true }) st: STComponent;
   detailColumns: STColumn[] = [
     {title: '编号', type: 'no'},
@@ -32,23 +44,31 @@ export class MarketEditComponent implements OnInit {
     { title: '单价', index: 'price', type: 'currency' },
     { title: '数量', index: 'number', className: 'text-right' },
     { title: '金额', index: 'subtotal', type: 'currency' },
-    { title: '期望交货时间', index: 'expectDeliverTime', type: 'date' },
-    { title: '预计交货时间', index: 'estimateDeliverTime', type: 'date' },
+    { title: '期望交货时间', index: 'expectDeliverTime', type: 'date' , dateFormat: 'YYYY-MM-DD'},
+    { title: '预计交货时间', index: 'estimateDeliverTime', type: 'date', dateFormat: 'YYYY-MM-DD' },
+    { title: '状态', index: 'status' , type: 'badge', badge: this.ORDER_DETAIL_STATUS},
     {
       title: '操作',
       buttons: [
         {
           text: '修改',
           icon: 'edit',
-          iif: record => record.status === 0,
+          iif: record => record.status === 10,
           click: (record) => {
             this.editMaterialInfo(record);
           }
         },
         {
+          text: '变更交期',
+          icon: 'edit',
+          iif: record => record.status >= 25 && record.status <= 40,
+          click: (record) => {
+          }
+        },
+        {
           text: '完成',
           icon: 'edit',
-          iif: record => record.status < 5,
+          iif: record => record.status === 25,
           pop: {
             title: '确定该物料完成了吗?',
             okType: 'default',
@@ -61,7 +81,7 @@ export class MarketEditComponent implements OnInit {
         {
           text: '加入发货单',
           icon: 'edit',
-          iif: record => record.status < 10,
+          iif: record => record.status === 40,
           pop: {
             title: '确定该物料加入发货单吗?',
             okType: 'default',
@@ -81,11 +101,13 @@ export class MarketEditComponent implements OnInit {
       format: { type: 'string', title: '规格', readOnly: true },
       unit: { type: 'string', title: '单位', readOnly: true },
       number: { type: 'number', title: '数量', readOnly: true },
-      expectDeliverTime: { type: 'string', ui: { widget: 'date', showTime: true } as SFDateWidgetSchema, title: '期望交货时间',  readOnly: true},
-      price: { type: 'number', title: '单价', ui: { prefix: '$' } as SFNumberWidgetSchema },
-      estimateDeliverTime: { type: 'string', ui: { widget: 'date', showTime: true } as SFDateWidgetSchema, title: '预计交货时间'  },
+      expectDeliverTime: { type: 'string', ui: { widget: 'date', format: 'YYYY-MM-DD' } as SFDateWidgetSchema,
+                          title: '期望交货时间',  readOnly: true},
+      price: { type: 'number', title: '单价', ui: { prefix: '￥' } as SFNumberWidgetSchema, readOnly: true },
+      estimateDeliverTime: { type: 'string', ui: { widget: 'date', format: 'YYYY-MM-DD 00:00:00' } as SFDateWidgetSchema,
+                          title: '预计交货时间'  },
     },
-    required: [ 'price', 'estimateDeliverTime'],
+    required: [ 'estimateDeliverTime'],
   };
   materialUi: SFUISchema = {
     '*': {
@@ -124,18 +146,26 @@ export class MarketEditComponent implements OnInit {
       if (res && res.code === ResponseCode.SUCCESS) {
         if (res.data) {
           this.orderInfo = res.data;
-          if (this.orderInfo.status === 0) {
-            this.currentStep = 1;
-          } else if (this.orderInfo.status === 5) {
-            this.currentStep = 2;
-          } else if (this.orderInfo.status === 10) {
-            this.currentStep = 3;
-          } else {
-            this.currentStep = 4;
-          }
+          this.stepTo();
         }
       }
     });
+  }
+
+  stepTo() {
+    if (this.orderInfo.status === 20) {
+      this.currentStep = 1;
+    } else if (this.orderInfo.status === 40) {
+      this.currentStep = 2;
+    } else if (this.orderInfo.status === 50) {
+      this.currentStep = 3;
+    } else if (this.orderInfo.status === 60) {
+      this.currentStep = 4;
+    } else if (this.orderInfo.status === 80) {
+      this.currentStep = 5;
+    } else {
+      this.currentStep = 1;
+    }
   }
 
   queryOrderDetail() {
@@ -183,9 +213,9 @@ export class MarketEditComponent implements OnInit {
   handleMaterialInfoModalClose(value: any): void {
     if (!value)
       this.materialModalVisibility = false;
-    if (value.id && value.price && value.estimateDeliverTime) {
+    if (value.id && value.estimateDeliverTime) {
       this.http
-      .put(Api.BaseSupplyOrderFlowApi + '/material/price/delivery', value)
+      .put(Api.BaseSupplyOrderFlowApi + '/material/delivery', value)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           for (let i = 0; i < this.orderDetail.length; i++) {
@@ -202,7 +232,7 @@ export class MarketEditComponent implements OnInit {
         }
       });
     } else {
-      this.msg.warning('请填写单价和预计交期');
+      this.msg.warning('请填写预计交期');
     }
   }
   handleDeleteMaterialInfo(record: any) {
@@ -217,11 +247,19 @@ export class MarketEditComponent implements OnInit {
   }
 
   verifyOrder() {
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.orderDetail.length; i++) {
+      if (!this.orderDetail[i].estimateDeliverTime) {
+        this.msg.warning('请先填写完所有物料的预计交期！');
+        return;
+      }
+    }
     this.http
     .put(Api.BaseSupplyOrderFlowApi + '/market/verify/' + this.orderId )
     .subscribe((res: any) => {
       if (res && res.code === ResponseCode.SUCCESS) {
-          this.orderInfo.status = 5;
+          this.queryOrderInfo();
+          this.queryOrderDetail();
           this.materialModalVisibility = false;
       } else {
         this.msg.error(res ? res.message : '未知错误');
