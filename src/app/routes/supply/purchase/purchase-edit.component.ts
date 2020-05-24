@@ -61,12 +61,17 @@ export class PurchaseEditComponent implements OnInit {
     10: {text: '提交', color: 'processing'},
     20: {text: '供应商确认', color: 'processing'},
     25: {text: '采购商确认', color: 'processing'},
-    30: {text: '生产中', color: 'processing'},
+    30: {text: '安排中', color: 'processing'},
     40: {text: '完成生产', color: 'processing'},
     50: {text: '发货中', color: 'processing'},
     60: {text: '签收', color: 'processing'},
-    70: {text: '验收', color: 'processing'},
-    80: {text: '退货', color: 'error'},
+    70: {text: '入库', color: 'processing'},
+    80: {text: '售后', color: 'error'},
+  };
+  CHANGE_STATUS: STColumnBadge = {
+    0: {text: '未变更', color: 'default'},
+    1: {text: '处理中', color: 'processing'},
+    2: {text: '已处理', color: 'success'},
   };
   @ViewChild('orderDetailSt', { static: true }) orderDetailSt: STComponent;
   detailColumns: STColumn[] = [
@@ -81,6 +86,7 @@ export class PurchaseEditComponent implements OnInit {
     { title: '期望交货时间', index: 'expectDeliverTime', type: 'date' , dateFormat: 'YYYY-MM-DD'},
     { title: '预计交货时间', index: 'estimateDeliverTime', type: 'date', dateFormat: 'YYYY-MM-DD' },
     { title: '状态', index: 'status' , type: 'badge', badge: this.ORDER_DETAIL_STATUS},
+    { title: '变更状态', index: 'changeStatus', type: 'badge', badge: this.CHANGE_STATUS },
     {
       title: '操作',
       buttons: [
@@ -252,19 +258,21 @@ export class PurchaseEditComponent implements OnInit {
 
   stepTo() {
     if (this.orderInfo.status === 0) {
-      this.currentStep = 1;
+      this.currentStep = 0;
     } else if (this.orderInfo.status === 20) {
-      this.currentStep = 2;
+      this.currentStep = 1;
     } else if (this.orderInfo.status === 40) {
-      this.currentStep = 3;
+      this.currentStep = 2;
     } else if (this.orderInfo.status === 50) {
-      this.currentStep = 4;
+      this.currentStep = 3;
     } else if (this.orderInfo.status === 60) {
-      this.currentStep = 5;
+      this.currentStep = 4;
     } else if (this.orderInfo.status === 80) {
+      this.currentStep = 5;
+    }  else if (this.orderInfo.status === 90) {
       this.currentStep = 6;
     } else {
-      this.currentStep = 1;
+      this.currentStep = 0;
     }
   }
 

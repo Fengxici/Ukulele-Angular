@@ -19,6 +19,7 @@ export class MarketEditComponent implements OnInit {
   consumerInfo: any = {};
   tmpMaterialRecord: any = {};
   materialModalVisibility = false;
+  changeDeliverDateModalVisibility = false;
   currentStep = 1;
   basicNum = 0;
   amountNum = 0;
@@ -27,12 +28,17 @@ export class MarketEditComponent implements OnInit {
     10: {text: '提交', color: 'processing'},
     20: {text: '供应商确认', color: 'processing'},
     25: {text: '采购商确认', color: 'processing'},
-    30: {text: '生产中', color: 'processing'},
+    30: {text: '安排中', color: 'processing'},
     40: {text: '完成生产', color: 'processing'},
     50: {text: '发货中', color: 'processing'},
     60: {text: '签收', color: 'processing'},
-    70: {text: '验收', color: 'processing'},
-    80: {text: '退货', color: 'error'},
+    70: {text: '入库', color: 'processing'},
+    80: {text: '售后', color: 'error'},
+  };
+  CHANGE_STATUS: STColumnBadge = {
+    0: {text: '未变更', color: 'default'},
+    1: {text: '处理中', color: 'processing'},
+    2: {text: '已处理', color: 'success'},
   };
   @ViewChild('st', { static: true }) st: STComponent;
   detailColumns: STColumn[] = [
@@ -47,6 +53,7 @@ export class MarketEditComponent implements OnInit {
     { title: '期望交货时间', index: 'expectDeliverTime', type: 'date' , dateFormat: 'YYYY-MM-DD'},
     { title: '预计交货时间', index: 'estimateDeliverTime', type: 'date', dateFormat: 'YYYY-MM-DD' },
     { title: '状态', index: 'status' , type: 'badge', badge: this.ORDER_DETAIL_STATUS},
+    { title: '变更状态', index: 'changeStatus', type: 'badge', badge: this.CHANGE_STATUS },
     {
       title: '操作',
       buttons: [
@@ -63,12 +70,13 @@ export class MarketEditComponent implements OnInit {
           icon: 'edit',
           iif: record => record.status >= 25 && record.status <= 40,
           click: (record) => {
+            this.openChangeDelverDateModal(record);
           }
         },
         {
           text: '完成',
           icon: 'edit',
-          iif: record => record.status === 25,
+          iif: record => record.status === 30,
           pop: {
             title: '确定该物料完成了吗?',
             okType: 'default',
@@ -79,7 +87,7 @@ export class MarketEditComponent implements OnInit {
           }
         },
         {
-          text: '加入发货单',
+          text: '加入发货仓',
           icon: 'edit',
           iif: record => record.status === 40,
           pop: {
@@ -154,17 +162,19 @@ export class MarketEditComponent implements OnInit {
 
   stepTo() {
     if (this.orderInfo.status === 20) {
-      this.currentStep = 1;
+      this.currentStep = 0;
     } else if (this.orderInfo.status === 40) {
-      this.currentStep = 2;
-    } else if (this.orderInfo.status === 50) {
-      this.currentStep = 3;
-    } else if (this.orderInfo.status === 60) {
-      this.currentStep = 4;
-    } else if (this.orderInfo.status === 80) {
-      this.currentStep = 5;
-    } else {
       this.currentStep = 1;
+    } else if (this.orderInfo.status === 50) {
+      this.currentStep = 2;
+    } else if (this.orderInfo.status === 60) {
+      this.currentStep = 3;
+    } else if (this.orderInfo.status === 80) {
+      this.currentStep = 4;
+    } else if (this.orderInfo.status === 90) {
+      this.currentStep = 5;
+    }  else {
+      this.currentStep = 0;
     }
   }
 
@@ -215,7 +225,7 @@ export class MarketEditComponent implements OnInit {
       this.materialModalVisibility = false;
     if (value.id && value.estimateDeliverTime) {
       this.http
-      .put(Api.BaseSupplyOrderFlowApi + '/material/delivery', value)
+      .put(Api.BaseSupplyOrderFlowApi + '/material/delivery/set', value)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           for (let i = 0; i < this.orderDetail.length; i++) {
@@ -267,6 +277,20 @@ export class MarketEditComponent implements OnInit {
     });
   }
 
+  markingOrder() {
+    this.http
+    .put(Api.BaseSupplyOrderFlowApi + '/market/making/' + this.orderId )
+    .subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+          this.queryOrderInfo();
+          this.queryOrderDetail();
+          this.materialModalVisibility = false;
+      } else {
+        this.msg.error(res ? res.message : '未知错误');
+      }
+    });
+  }
+
   completeMaterial(record: any) {
     this.http
     .put(Api.BaseSupplyOrderFlowApi + '/market/material/complete/' + record.id )
@@ -291,5 +315,41 @@ export class MarketEditComponent implements OnInit {
         this.msg.error(res ? res.message : '未知错误');
       }
     });
+  }
+
+  openChangeDelverDateModal(record: any) {
+    this.changeDeliverDateModalVisibility = true;
+    this.tmpMaterialRecord = record;
+  }
+
+  deliverDateChange(record: any) {
+    if (record && record.estimateDeliverTime) {
+      this.http
+      .put(Api.BaseSupplyOrderFlowApi + '/material/delivery/change', record)
+      .subscribe((res: any) => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+            this.st.reload();
+            this.msg.success(res.message);
+        } else {
+          this.msg.error(res ? res.message : '未知错误');
+        }
+      });
+    }
+    this.changeDeliverDateModalVisibility = false;
+  }
+  deliverDateSet(record: any) {
+    if (record && record.estimateDeliverTime) {
+      this.http
+      .put(Api.BaseSupplyOrderFlowApi + '/material/delivery/set', record)
+      .subscribe((res: any) => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+            this.st.reload();
+            this.msg.success(res.message);
+        } else {
+          this.msg.error(res ? res.message : '未知错误');
+        }
+      });
+    }
+    this.changeDeliverDateModalVisibility = false;
   }
 }

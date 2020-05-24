@@ -13,6 +13,7 @@ import { MenuEditComponent } from './menu/menu-edit.component';
 import { DictIndexEditComponent } from './dict/dict-index-edit.component';
 import { DeptEditComponent } from './dept/dept-edit.component';
 import { RoleMenuComponent } from './role/role-menu.component';
+import { UserRoleComponent } from './user/user-role.component';
 
 const COMPONENTS = [
   SystemDeptComponent,
@@ -29,6 +30,7 @@ const COMPONENTS_NOROUNT = [
   DictIndexEditComponent,
   MenuEditComponent,
   DeptEditComponent,
+  UserRoleComponent,
 ];
 
 @NgModule({

@@ -79,16 +79,17 @@
         </div>
       </ng-template>
     </nz-step>
-    <nz-step [nzTitle]="'生产中'" [nzDescription]="produceDesc">
+    <nz-step [nzTitle]="'安排中'" [nzDescription]="produceDesc">
       <ng-template #produceDesc>
         <div class="desc">
+          <a (click)="msg.success('click')" *ngIf="orderInfo.status===50">催一下</a>
         </div>
       </ng-template>
     </nz-step>
     <nz-step [nzTitle]="'供应商发货中'" [nzDescription]="deliverDesc">
       <ng-template #deliverDesc>
         <div class="desc">
-          <a (click)="msg.success('click')" *ngIf="orderInfo.status===50">催一下</a>
+          <a (click)="msg.success('click')" *ngIf="orderInfo.status===60">催一下</a>
         </div>
       </ng-template>
     </nz-step>

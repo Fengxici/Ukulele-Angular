@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { SFSchema, SFUISchema } from '@delon/form';
+import {  SFUISchema } from '@delon/form';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { STComponent, STColumn } from '@delon/abc';
+import { STComponent, STColumn, STColumnBadge } from '@delon/abc';
 import { Api } from '@shared/api';
 import { ResponseCode } from '@shared/response.code';
 
@@ -20,18 +20,21 @@ export class DeliverEditComponent
     record: any = {};
     data: any = [];
     i: any;
-    schema: SFSchema = {
-      properties: {
-        deliverNo: { type: 'string', title: '发货单号', maxLength: 15 }
-      },
-      required: ['name'],
-    };
     ui: SFUISchema = {
       '*': {
         spanLabel: 10,
         spanControl: 14,
         grid: { span: 12 },
       },
+    };
+    DELIVER_STATUS: STColumnBadge = {
+      0: {text: '创建', color: 'default'},
+      5: {text: '待审批', color: 'processing'},
+      10: {text: '待发货', color: 'processing'},
+      15: {text: '发货中', color: 'processing'},
+      20: {text: '已签收', color: 'success'},
+      88: {text: '入库', color: 'success'},
+      99: {text: '售后', color: 'error'}
     };
     @ViewChild('st', { static: true }) cart: STComponent;
     columns: STColumn[] = [
@@ -44,6 +47,7 @@ export class DeliverEditComponent
       { title: '预计交货时间', index: 'estimateDeliverTime', type: 'date' },
       { title: '采购订单编号', index: 'purchaseNo' },
       { title: '销售订单编号', index: 'marketNo' },
+      { title: '状态', index: 'status' , type: 'badge', badge: this.DELIVER_STATUS},
     ];
   ngOnDestroy(): void {
   }

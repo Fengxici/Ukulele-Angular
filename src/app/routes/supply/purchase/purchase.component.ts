@@ -42,7 +42,7 @@ export class PurchaseComponent extends BaseAbilityComponent
     20: {text: '提交', color: 'processing'},
     40: {text: '供应商确认', color: 'processing'},
     50: {text: '订单确认', color: 'processing'},
-    60: {text: '生产中', color: 'processing'},
+    60: {text: '安排中', color: 'processing'},
     80: {text: '发货中', color: 'processing'},
     90: {text: '完成', color: 'success'},
   };
@@ -51,6 +51,11 @@ export class PurchaseComponent extends BaseAbilityComponent
     2: {text: '待开票', color: 'success'},
     3: {text: '已付款', color: 'success'},
     4: {text: '已开票', color: 'success'},
+  };
+  CHANGE_STATUS: STColumnBadge = {
+    0: {text: '未变更', color: 'default'},
+    1: {text: '处理中', color: 'processing'},
+    2: {text: '已处理', color: 'success'},
   };
   SETTLE_TYPE: STColumnBadge = {
     1: {text: '预付款', color: 'warning'},
@@ -121,6 +126,7 @@ export class PurchaseComponent extends BaseAbilityComponent
     { title: '下单时间', index: 'orderTime' },
     { title: '订单金额', index: 'orderSum', type: 'currency' },
     { title: '供应商', index: 'providerName' },
+    { title: '变更状态', index: 'changeStatus', type: 'badge', badge: this.CHANGE_STATUS },
     {
       title: '操作',
       buttons: [
@@ -144,6 +150,7 @@ export class PurchaseComponent extends BaseAbilityComponent
         {
           text: '删除',
           icon: 'delete',
+          iif: record => record.status === 0,
           click: (record: any) => {
             this.delete(record);
           },

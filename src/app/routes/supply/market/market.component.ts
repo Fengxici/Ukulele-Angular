@@ -49,7 +49,7 @@ export class MarketComponent extends BaseAbilityComponent
     20: {text: '提交', color: 'success'},
     40: {text: '供应商确认', color: 'success'},
     50: {text: '订单确认', color: 'success'},
-    60: {text: '生产中', color: 'success'},
+    60: {text: '安排中', color: 'success'},
     80: {text: '发货中', color: 'success'},
     90: {text: '完成', color: 'success'},
   };
@@ -58,6 +58,11 @@ export class MarketComponent extends BaseAbilityComponent
     2: {text: '待开票', color: 'success'},
     3: {text: '已付款', color: 'success'},
     4: {text: '已开票', color: 'success'},
+  };
+  CHANGE_STATUS: STColumnBadge = {
+    0: {text: '未变更', color: 'default'},
+    1: {text: '处理中', color: 'processing'},
+    2: {text: '已处理', color: 'success'},
   };
   SETTLE_TYPE: STColumnBadge = {
     1: {text: '预付款', color: 'warning'},
@@ -120,6 +125,8 @@ export class MarketComponent extends BaseAbilityComponent
     { title: '结算方式', index: 'settleType', type: 'badge', badge: this.SETTLE_TYPE },
     { title: '采购商', index: 'consumerName' },
     { title: '订单金额', index: 'orderSum', type: 'currency' },
+    { title: '下单日期', index: 'createTime', type: 'date' , dateFormat: 'YYYY-MM-DD' },
+    { title: '变更状态', index: 'changeStatus', type: 'badge', badge: this.CHANGE_STATUS },
     {
       title: '操作',
       buttons: [
@@ -133,6 +140,7 @@ export class MarketComponent extends BaseAbilityComponent
         {
           text: '删除',
           icon: 'delete',
+          iif: record => record.status === 0,
           click: (record: any) => {
             this.delete(record);
           },

@@ -8,7 +8,7 @@
     <nz-tab nzTitle="发货仓">
       <sf mode="search" [schema]="cartSearchSchema" (formSubmit)="cartQuery($event)" (formReset)="cart.reset($event)"></sf>
       <st #cart [data]="cartRecord" [columns]="cartColumns" (change)="cartChange($event)"></st>
-      <button nz-button nzType="primary" *ngIf='cartRecord'  [disabled]="deliverData.length==0" (click)="deliver()" style="margin-top: 10px;">申请发货</button>
+      <button nz-button nzType="primary" *ngIf='cartRecord'  [disabled]="deliverData.length==0" (click)="deliver()" style="margin-top: 10px;">发货</button>
     </nz-tab>
     <nz-tab nzTitle="发货单">
       <sf mode="search" [schema]="listSearchSchema" (formSubmit)="listQuery($event)" (formReset)="list.reset($event)"></sf>

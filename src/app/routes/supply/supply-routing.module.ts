@@ -15,6 +15,7 @@ import { PurchaseEditComponent } from './purchase/purchase-edit.component';
 import { MarketEditComponent } from './market/market-edit.component';
 import { ReceiveComponent } from './deliver/receive.component';
 import { CartComponent } from './deliver/cart.component';
+import { ChangeComponent } from './change/change.component';
 
 const routes: Routes = [
   { path: 'firms', component: FirmListComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'marketDetail', component: MarketEditComponent},
   { path: 'cart', component: CartComponent},
   { path: 'purchaseReceive', component: ReceiveComponent},
+  { path: 'change', component: ChangeComponent},
 ];
 
 @NgModule({

@@ -58,8 +58,9 @@
         </div>
       </ng-template>
     </nz-step>
-    <nz-step [nzTitle]="'生产中'" [nzDescription]="produceDesc">
+    <nz-step [nzTitle]="'安排中'" [nzDescription]="produceDesc">
       <ng-template #produceDesc>
+        <a (click)="markingOrder()" *ngIf="orderInfo.status===50">确认</a>
       </ng-template>
     </nz-step>
     <nz-step [nzTitle]="'发货中'" [nzDescription]="deliverDesc">
@@ -97,6 +98,9 @@
         </td>
         <td></td>
         <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </ng-template>
   </st>
@@ -107,16 +111,16 @@
 <!-- 物料编辑框 -->
 <nz-modal
     [(nzVisible)]="materialModalVisibility"
-    [nzTitle]="materialInfoTitle"
-    [nzContent]="materialInfoContent"
+    [nzTitle]="editMaterialInfoTitle"
+    [nzContent]="editMaterialInfoContent"
     [nzWidth]="750"
     [nzFooter]="null"
-    (nzOnCancel)="handleMaterialInfoModalClose(null,null)"
+    (nzOnCancel)="handleMaterialInfoModalClose(null)"
   >
-  <ng-template #materialInfoTitle>
+  <ng-template #editMaterialInfoTitle>
     <div class="modal-title">编辑物料信息</div>
   </ng-template>
-  <ng-template #materialInfoContent>
+  <ng-template #editMaterialInfoContent>
     <sf *ngIf="tmpMaterialRecord" #materialsf mode="edit" [schema]="materialSchema" [ui]="materialUi" [formData]="tmpMaterialRecord" button="none" >
       <div class="modal-footer">
         <button nz-button type="button" (click)="handleMaterialInfoModalClose(null)">关闭</button>
@@ -124,6 +128,28 @@
           [disabled]="!materialsf.valid" >添加</button>
         <button nz-button type="submit" nzType="primary" (click)="handleMaterialInfoModalClose(materialsf.value)" *ngIf="tmpMaterialRecord.id"
           [disabled]="!materialsf.valid" >修改</button>
+      </div>
+    </sf>
+  </ng-template>
+</nz-modal>
+
+<nz-modal
+    [(nzVisible)]="changeDeliverDateModalVisibility"
+    [nzTitle]="materialInfoTitle"
+    [nzContent]="materialInfoContent"
+    [nzWidth]="750"
+    [nzFooter]="null"
+    (nzOnCancel)="handleMaterialInfoModalClose(null)"
+  >
+  <ng-template #materialInfoTitle>
+    <div class="modal-title">变更交期申请</div>
+  </ng-template>
+  <ng-template #materialInfoContent>
+    <sf *ngIf="tmpMaterialRecord" #materialsf mode="edit" [schema]="materialSchema" [ui]="materialUi" [formData]="tmpMaterialRecord" button="none" >
+      <div class="modal-footer">
+        <button nz-button type="button" (click)="deliverDateChange(null)">关闭</button>
+        <button nz-button type="submit" nzType="primary" (click)="deliverDateChange(materialsf.value)" *ngIf="tmpMaterialRecord.id"
+          [disabled]="!materialsf.valid" >申请</button>
       </div>
     </sf>
   </ng-template>

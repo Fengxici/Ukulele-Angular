@@ -4,9 +4,8 @@ import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
-import { STComponent, STColumn, STChange } from '@delon/abc';
+import { STComponent, STColumn, STChange, STColumnBadge } from '@delon/abc';
 import { SFSchema } from '@delon/form';
-import { AdsEditComponent } from '../ads/ads-edit.component';
 import { Api } from '@shared/api';
 import { ResponseCode } from '@shared/response.code';
 import { DeliverEditComponent } from './deliver-edit.component';
@@ -48,10 +47,20 @@ export class CartComponent extends BaseAbilityComponent
       },
     },
   };
+  DELIVER_STATUS: STColumnBadge = {
+    0: {text: '创建', color: 'default'},
+    5: {text: '待审批', color: 'processing'},
+    10: {text: '待发货', color: 'processing'},
+    15: {text: '发货中', color: 'processing'},
+    20: {text: '已签收', color: 'success'},
+    88: {text: '入库', color: 'success'},
+    99: {text: '售后', color: 'error'}
+  };
   @ViewChild('cart', { static: true }) cart: STComponent;
   @ViewChild('list', { static: true }) list: STComponent;
   cartColumns: STColumn[] = [
     { title: '编号', index: 'id.value', type: 'checkbox' },
+    { title: '采购商', index: 'consumerName'},
     { title: '物料编号', index: 'materialNo'},
     { title: '物料名称', index: 'name' },
     { title: '规格', index: 'format' },
@@ -64,6 +73,9 @@ export class CartComponent extends BaseAbilityComponent
   ];
   listColumns: STColumn[] = [
     { title: '发货单号', index: 'deliverNo'},
+    { title: '发货时间', index: 'deliverTime', type: 'date' },
+    { title: '采购商', index: 'consumerName'},
+    { title: '状态', index: 'status' , type: 'badge', badge: this.DELIVER_STATUS},
     {
       title: '操作',
       buttons: [
@@ -78,13 +90,13 @@ export class CartComponent extends BaseAbilityComponent
             this.listQuery(null);
           },
         },
-        {
-          text: '审核',
-          icon: 'edit',
-          click: (record) => {
-            this.verifyDeliver(record);
-          },
-        }
+        // {
+        //   text: '审核',
+        //   icon: 'edit',
+        //   click: (record) => {
+        //     this.verifyDeliver(record);
+        //   },
+        // }
       ],
     },
   ];
@@ -108,6 +120,7 @@ export class CartComponent extends BaseAbilityComponent
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) this.cartRecord = res.data;
+          else this.cartRecord = [];
         }
       });
   }
@@ -125,6 +138,7 @@ export class CartComponent extends BaseAbilityComponent
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) this.listRecord = res.data.records;
+          else this.listRecord = [];
         }
       });
   }
@@ -158,11 +172,10 @@ export class CartComponent extends BaseAbilityComponent
       .post(Api.BaseSupplyDeliverUrl + 'deliver', data)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
-          if (res.data) {
             this.msg.success('发货成功');
             this.deliverData = [];
             this.cartQuery(null);
-          } else this.msg.error(res.message);
+            this.listQuery(null);
         } else {
           this.msg.error((res && res.message) ? res.messagem : '未知错误' );
         }
