@@ -145,11 +145,11 @@
     <div class="modal-title">变更交期申请</div>
   </ng-template>
   <ng-template #materialInfoContent>
-    <sf *ngIf="tmpMaterialRecord" #materialsf mode="edit" [schema]="materialSchema" [ui]="materialUi" [formData]="tmpMaterialRecord" button="none" >
+    <sf *ngIf="tmpMaterialRecord" #deliversf mode="edit" [schema]="materialSchema" [ui]="materialUi" [formData]="tmpMaterialRecord" button="none" >
       <div class="modal-footer">
         <button nz-button type="button" (click)="deliverDateChange(null)">关闭</button>
-        <button nz-button type="submit" nzType="primary" (click)="deliverDateChange(materialsf.value)" *ngIf="tmpMaterialRecord.id"
-          [disabled]="!materialsf.valid" >申请</button>
+        <button nz-button type="submit" nzType="primary" (click)="deliverDateChange(deliversf.value)" *ngIf="tmpMaterialRecord.id"
+          [disabled]="!deliversf.valid" >申请</button>
       </div>
     </sf>
   </ng-template>

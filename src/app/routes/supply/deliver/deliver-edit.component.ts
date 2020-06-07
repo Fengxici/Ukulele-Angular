@@ -34,7 +34,7 @@ export class DeliverEditComponent
       15: {text: '发货中', color: 'processing'},
       20: {text: '已签收', color: 'success'},
       88: {text: '入库', color: 'success'},
-      99: {text: '售后', color: 'error'}
+      99: {text: '退货', color: 'error'}
     };
     @ViewChild('st', { static: true }) cart: STComponent;
     columns: STColumn[] = [

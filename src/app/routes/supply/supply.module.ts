@@ -27,6 +27,8 @@ import { DeliverEditComponent } from './deliver/deliver-edit.component';
 import { CartComponent } from './deliver/cart.component';
 import { ReceiveEditComponent } from './deliver/receive-edit.component';
 import { ChangeComponent } from './change/change.component';
+import { AbnormalComponent } from './abnormal/abnormal.component';
+import { AbnormalHandleComponent } from './abnormal/abnormal.handle.component';
 
 const COMPONENTS = [
   FirmListComponent,
@@ -44,7 +46,9 @@ const COMPONENTS = [
   MarketEditComponent,
   CartComponent,
   ReceiveComponent,
-  ChangeComponent
+  ChangeComponent,
+  AbnormalComponent,
+  AbnormalHandleComponent
 ];
 const COMPONENTS_NOROUNT = [
   FirmEditComponent,

@@ -1,0 +1,10 @@
+<page-header [content]="content" >
+  <ng-template #content >
+    <app-firm-drawer #drawer (callback)="query($event)"></app-firm-drawer>
+  </ng-template>
+</page-header>
+<nz-card>
+  <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)" acl [acl-ability]="'query'"></sf>
+  <st #cart [data]="listRecord" [columns]="columns" (change)="stChange($event)"></st>
+  <button nz-button nzType="primary" *ngIf='listRecord'  [disabled]="deliverData.length==0" (click)="deliver()" style="margin-top: 10px;">发货</button>
+</nz-card>

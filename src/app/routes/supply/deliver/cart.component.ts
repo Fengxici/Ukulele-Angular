@@ -54,7 +54,7 @@ export class CartComponent extends BaseAbilityComponent
     15: {text: '发货中', color: 'processing'},
     20: {text: '已签收', color: 'success'},
     88: {text: '入库', color: 'success'},
-    99: {text: '售后', color: 'error'}
+    99: {text: '退货', color: 'error'}
   };
   @ViewChild('cart', { static: true }) cart: STComponent;
   @ViewChild('list', { static: true }) list: STComponent;
@@ -169,7 +169,7 @@ export class CartComponent extends BaseAbilityComponent
       data.push(element.id);
     });
     this.http
-      .post(Api.BaseSupplyDeliverUrl + 'deliver', data)
+      .post(Api.BaseSupplyDeliverUrl + 'deliver/0', data)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
             this.msg.success('发货成功');
@@ -177,7 +177,7 @@ export class CartComponent extends BaseAbilityComponent
             this.cartQuery(null);
             this.listQuery(null);
         } else {
-          this.msg.error((res && res.message) ? res.messagem : '未知错误' );
+          this.msg.error((res && res.message) ? res.message : '未知错误' );
         }
       });
   }

@@ -40,7 +40,7 @@ export class ReceiveEditComponent
       15: {text: '发货中', color: 'processing'},
       20: {text: '已签收', color: 'success'},
       88: {text: '入库', color: 'success'},
-      99: {text: '售后', color: 'error'}
+      99: {text: '退货', color: 'error'}
     };
     @ViewChild('st', { static: true }) cart: STComponent;
     columns: STColumn[] = [
@@ -71,11 +71,11 @@ export class ReceiveEditComponent
             },
           },
           {
-            text: '售后',
+            text: '退货',
             icon: 'edit',
             iif: record => record.status === 20,
             pop: {
-              title: '确定该物料需发起售后吗?',
+              title: '确定该物料需发起退货吗?',
               okType: 'default',
               icon: 'star',
             },

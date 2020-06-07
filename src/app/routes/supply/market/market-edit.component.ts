@@ -33,7 +33,7 @@ export class MarketEditComponent implements OnInit {
     50: {text: '发货中', color: 'processing'},
     60: {text: '签收', color: 'processing'},
     70: {text: '入库', color: 'processing'},
-    80: {text: '售后', color: 'error'},
+    80: {text: '退货', color: 'error'},
   };
   CHANGE_STATUS: STColumnBadge = {
     0: {text: '未变更', color: 'default'},
@@ -221,8 +221,10 @@ export class MarketEditComponent implements OnInit {
     this.tmpMaterialRecord = record;
   }
   handleMaterialInfoModalClose(value: any): void {
-    if (!value)
+    if (!value){
       this.materialModalVisibility = false;
+      return;
+    }
     if (value.id && value.estimateDeliverTime) {
       this.http
       .put(Api.BaseSupplyOrderFlowApi + '/material/delivery/set', value)

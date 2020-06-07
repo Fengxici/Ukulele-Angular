@@ -16,6 +16,8 @@ import { MarketEditComponent } from './market/market-edit.component';
 import { ReceiveComponent } from './deliver/receive.component';
 import { CartComponent } from './deliver/cart.component';
 import { ChangeComponent } from './change/change.component';
+import { AbnormalComponent } from './abnormal/abnormal.component';
+import { AbnormalHandleComponent } from './abnormal/abnormal.handle.component';
 
 const routes: Routes = [
   { path: 'firms', component: FirmListComponent },
@@ -34,6 +36,8 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent},
   { path: 'purchaseReceive', component: ReceiveComponent},
   { path: 'change', component: ChangeComponent},
+  { path: 'abnormal', component: AbnormalComponent}, // 异常物料
+  { path: 'abnormalHandle', component: AbnormalHandleComponent}, // 异常处理
 ];
 
 @NgModule({

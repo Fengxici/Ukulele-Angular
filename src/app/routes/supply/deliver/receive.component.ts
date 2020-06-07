@@ -44,7 +44,7 @@ export class ReceiveComponent extends BaseAbilityComponent
     15: {text: '发货中', color: 'processing'},
     20: {text: '已签收', color: 'success'},
     88: {text: '入库', color: 'success'},
-    99: {text: '售后', color: 'error'}
+    99: {text: '退货', color: 'error'}
   };
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
@@ -83,7 +83,7 @@ export class ReceiveComponent extends BaseAbilityComponent
           },
         },
         {
-          text: '一键售后',
+          text: '一键退货',
           icon: 'edit',
           iif: record => record.status === 20,
           click: (record) => {
