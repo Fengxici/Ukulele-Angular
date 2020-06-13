@@ -4,7 +4,7 @@ import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
-import { STComponent, STColumn, STChange, STColumnBadge } from '@delon/abc';
+import { STComponent, STColumn, STChange, STColumnBadge, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { Api } from '@shared/api';
 import { ResponseCode } from '@shared/response.code';
@@ -29,8 +29,20 @@ export class CartComponent extends BaseAbilityComponent
   cartParams: any = {};
   listParams: any = {};
   cartRecord: any;
-  listRecord: any;
   deliverData: any = [];
+  page: any = {
+    records: [],
+    current: 1,
+    total: 0,
+    size: 10,
+  };
+  pagination: STPage = {
+    front: false,
+    pageSizes: [10, 20, 30, 40, 50],
+    total: true,
+    showSize: true,
+    showQuickJumper: true,
+  };
   cartSearchSchema: SFSchema = {
     properties: {
       name: {
@@ -53,6 +65,7 @@ export class CartComponent extends BaseAbilityComponent
     10: {text: '待发货', color: 'processing'},
     15: {text: '发货中', color: 'processing'},
     20: {text: '已签收', color: 'success'},
+    30: {text: '完成', color: 'success'},
     88: {text: '入库', color: 'success'},
     99: {text: '退货', color: 'error'}
   };
@@ -85,6 +98,7 @@ export class CartComponent extends BaseAbilityComponent
           type: 'modal',
           modal: {
             component: DeliverEditComponent,
+            size: 'xl'
           },
           click: () => {
             this.listQuery(null);
@@ -137,8 +151,16 @@ export class CartComponent extends BaseAbilityComponent
       .get(Api.BaseSupplyDeliverUrl + 'page/' + current + '/' + size + '/0', this.listParams)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
-          if (res.data) this.listRecord = res.data.records;
-          else this.listRecord = [];
+          if (res.data) {
+            this.page = res.data;
+          } else {
+            this.page = {
+              records: [],
+              current: 1,
+              total: 0,
+              size: 10,
+            };
+          }
         }
       });
   }
