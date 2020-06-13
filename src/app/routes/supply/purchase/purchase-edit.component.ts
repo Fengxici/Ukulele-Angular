@@ -524,7 +524,7 @@ export class PurchaseEditComponent implements OnInit {
     orderModel.orderDetail  = this.orderDetail;
     console.log(orderModel);
     if (orderModel.orderInfo.id) {
-      this.http.put(Api.BaseSupplyPurchaseApi + '/update', orderModel).subscribe((res: any) => {
+      this.http.put(Api.BaseSupplyPurchaseApi + 'update', orderModel).subscribe((res: any) => {
         if (res) {
           if (res.code === ResponseCode.SUCCESS) {
             this.orderInfo = res.data.orderInfo;
@@ -544,10 +544,13 @@ export class PurchaseEditComponent implements OnInit {
       this.http.post(Api.BaseSupplyPurchaseApi + 'add', orderModel).subscribe((res: any) => {
         if (res) {
           if (res.code === ResponseCode.SUCCESS) {
-            this.orderInfo = res.data.orderInfo;
-            this.orderDetail = res.data.orderDetail;
-            this.calculatDetail();
-            this.stepTo();
+            // this.orderInfo = res.data.orderInfo;
+            // this.orderDetail = res.data.orderDetail;
+            // this.calculatDetail();
+            // this.stepTo();
+            this.orderId = res.data.orderInfo.id;
+            this.providerId = res.data.orderInfo.provider;
+            this.ngOnInit();
             this.addFlag.first = false;
             this.msg.success('创建成功');
           } else {
