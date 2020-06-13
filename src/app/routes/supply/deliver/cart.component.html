@@ -12,7 +12,7 @@
     </nz-tab>
     <nz-tab nzTitle="发货单">
       <sf mode="search" [schema]="listSearchSchema" (formSubmit)="listQuery($event)" (formReset)="list.reset($event)"></sf>
-      <st #list [data]="listRecord" [columns]="listColumns" (change)="listChange($event)"></st>
+      <st #list [data]="page.records" [columns]="listColumns" (change)="listChange($event)" [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination"></st>
     </nz-tab>
   </nz-tabset>
 </nz-card>
