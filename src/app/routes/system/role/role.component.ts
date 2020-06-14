@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
-import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
+import { STColumn, STComponent, STPage, STChange, STColumnBadge } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { ResponseCode } from '@shared/response.code';
@@ -23,6 +23,11 @@ export class SystemRoleComponent extends BaseAbilityComponent
     current: 1,
     total: 0,
     size: 10,
+  };
+  ROLE_LEVEL: STColumnBadge = {
+    SUPER: {text: '超级管理员', color: 'error'},
+    ADMIN: {text: '管理员', color: 'success'},
+    USER: {text: '用户', color: 'default'}
   };
   pagination: STPage = {
     front: false,
@@ -47,12 +52,20 @@ export class SystemRoleComponent extends BaseAbilityComponent
           acl: { ability: ['query'] },
         },
       },
+      roleLevel: {
+        type: 'string',
+        title: '角色级别',
+        ui: {
+          acl: { ability: ['query'] },
+        },
+      },
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '角色名称', index: 'roleName' },
     { title: '角色代码', index: 'roleCode' },
+    { title: '角色级别', index: 'roleLevel', type: 'badge', badge: this.ROLE_LEVEL},
     { title: '描述', index: 'roleDesc' },
     {
       title: '操作',

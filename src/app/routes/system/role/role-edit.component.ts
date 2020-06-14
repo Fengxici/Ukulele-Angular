@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { SFSchema, SFUISchema, SFSelectWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 
@@ -19,12 +19,21 @@ export class RoleEditComponent {
         title: '角色名称',
       },
       roleCode: { type: 'string', title: '角色代码', maxLength: 15 },
+      roleLevel: { type: 'string', title: '角色级别', enum: [
+        { label: '超级管理员', value: 'SUPER' },
+        { label: '管理员', value: 'ADMIN' },
+        { label: '用户', value: 'USER' },
+      ],
+      ui: {
+        widget: 'select',
+        mode: 'default',
+      } as SFSelectWidgetSchema, },
       roleDesc: {
         type: 'string',
         title: '角色描述',
       },
     },
-    required: ['roleName', 'roleCode', 'roleDesc'],
+    required: ['roleName', 'roleCode', 'roleLevel', 'roleDesc'],
   };
   ui: SFUISchema = {
     '*': {

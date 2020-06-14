@@ -45,9 +45,9 @@ export class SupplierEditComponent {
 
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
-    { title: '名称', index: 'name' },
+    { title: '名称', index: 'name'},
     { title: '社会统一信用代码', index: 'unicode' },
-    { title: '描述', width: '150px', index: 'description' },
+    { title: '描述', index: 'description' },
     {
       title: '操作',
       buttons: [

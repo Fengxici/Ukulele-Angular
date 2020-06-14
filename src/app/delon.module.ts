@@ -91,7 +91,7 @@ const GLOBAL_CONFIG_PROVIDES = [
 
 @NgModule({
   imports: [
-    AlainThemeModule.forRoot(),DelonACLModule.forRoot(),
+    AlainThemeModule.forRoot(), DelonACLModule.forRoot(),
     ...MOCK_MODULES,
   ],
 })

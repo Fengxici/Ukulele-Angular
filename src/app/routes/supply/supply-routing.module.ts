@@ -18,6 +18,8 @@ import { CartComponent } from './deliver/cart.component';
 import { ChangeComponent } from './change/change.component';
 import { AbnormalComponent } from './abnormal/abnormal.component';
 import { AbnormalHandleComponent } from './abnormal/abnormal.handle.component';
+import { MyConsumerComponent } from './consumer/my.component';
+import { MySupplyComponent } from './supplier/my.component';
 
 const routes: Routes = [
   { path: 'firms', component: FirmListComponent },
@@ -38,6 +40,8 @@ const routes: Routes = [
   { path: 'change', component: ChangeComponent},
   { path: 'abnormal', component: AbnormalComponent}, // 异常物料
   { path: 'abnormalHandle', component: AbnormalHandleComponent}, // 异常处理
+  { path: 'myConsumer', component: MyConsumerComponent}, // 我的客户
+  { path: 'mySupply', component: MySupplyComponent} // 我的供应商
 ];
 
 @NgModule({

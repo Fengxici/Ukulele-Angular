@@ -33,6 +33,7 @@ export class DeliverEditComponent
       10: {text: '待发货', color: 'processing'},
       15: {text: '发货中', color: 'processing'},
       20: {text: '已签收', color: 'success'},
+      30: {text: '完成', color: 'success'},
       88: {text: '入库', color: 'success'},
       99: {text: '退货', color: 'error'}
     };

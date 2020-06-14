@@ -1,0 +1,9 @@
+<page-header [content]="content">
+  <ng-template #content>
+    <app-firm-drawer #drawer (callback)="query($event)"></app-firm-drawer>
+  </ng-template>
+</page-header>
+<nz-card>
+  <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
+    [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination"></st>
+</nz-card>

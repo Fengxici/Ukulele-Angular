@@ -45,8 +45,8 @@ export class ConsumerEditComponent {
 
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
-    { title: '名称', index: 'name' },
-    { title: '社会统一信用代码', index: 'unicode' },
+    { title: '名称', index: 'name', width: '200px' },
+    { title: '社会统一信用代码', index: 'unicode', width: '150px' },
     { title: '描述', width: '150px', index: 'description' },
     {
       title: '操作',

@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { ConsumerEditComponent } from './consumer-edit.component';
 import { FirmDrawerComponent } from '../common/firm-drawer.component';
+import { FirmUserModalComponent } from '../common/user-modal.component';
 
 @Component({
   selector: 'app-supply-consumer',
@@ -54,13 +55,13 @@ export class ConsumerComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
-    { title: '名称', index: 'name' },
-    { title: '简称', index: 'shortName' },
-    { title: '社会统一信用代码', index: 'unicode' },
-    { title: '电话', index: 'phone' },
-    { title: '地址', index: 'address' },
-    { title: '联系人', index: 'contacts' },
-    { title: '描述', width: '150px', index: 'description' },
+    { title: '名称', index: 'name', width: 200 },
+    { title: '简称', index: 'shortName', width: 100 },
+    { title: '社会统一信用代码', index: 'unicode', width: 100 },
+    { title: '电话', index: 'phone', width: 100 },
+    { title: '地址', index: 'address', width: 250 },
+    { title: '联系人', index: 'contacts', width: 80 },
+    { title: '描述',  index: 'description', width: 200 },
     {
       title: '操作',
       buttons: [
@@ -71,6 +72,13 @@ export class ConsumerComponent extends BaseAbilityComponent
             this.delete(record);
           },
           acl: { ability: ['delete'] },
+        },
+        {
+          text: '分配',
+          icon: 'edit',
+          click: (record: any) => {
+            this.dispatch(record);
+          },
         },
       ],
     },
@@ -115,7 +123,44 @@ export class ConsumerComponent extends BaseAbilityComponent
       .createStatic(ConsumerEditComponent)
       .subscribe(() => this.st.reload());
   }
+  dispatch(record) {
+    const userModal = this.modalService.create({
+      nzTitle: '客户分配',
+      nzContent: FirmUserModalComponent,
+      nzGetContainer: () => document.body,
+      nzComponentParams: {
+        inputData: record,
+      },
+      nzWidth: 950,
+      nzFooter: null
+    });
+    userModal.afterClose.subscribe((result: any) => this.dispatchUser(result));
+  }
 
+  // 分配供应商
+  dispatchUser(record) {
+    if (record) {
+      const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+      const params = {
+        userId: record.user.userId,
+        firm: firmInfo.id,
+        consumer: record.ext.consumerId,
+        type: 0
+      };
+      this.http.post(Api.BaseSupplyMyConsumerUrl, params).subscribe((res: any) => {
+        if (res) {
+          if (res.code === ResponseCode.SUCCESS) {
+            this.msg.success('分配成功');
+          } else {
+            this.msg.warning(res.message);
+          }
+        } else {
+          this.msg.error('分配失败，未知错误');
+        }
+      });
+    }
+  }
+  
   delete(record: any) {
     console.log(record);
     const params = {consumerId: record.consumerId, firmId: record.firmId};

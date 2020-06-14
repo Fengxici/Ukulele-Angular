@@ -7,15 +7,13 @@ import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
-import { SupplierEditComponent } from './supplier-edit.component';
 import { FirmDrawerComponent } from '../common/firm-drawer.component';
-import { FirmUserModalComponent } from '../common/user-modal.component';
 
 @Component({
-  selector: 'app-supply-supplier',
-  templateUrl: './supplier.component.html',
+  selector: 'app-supply-myconsumer',
+  templateUrl: './my.component.html',
 })
-export class SupplierComponent extends BaseAbilityComponent
+export class MyConsumerComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
@@ -55,13 +53,7 @@ export class SupplierComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
-    { title: '名称', index: 'name', width: 200 },
-    { title: '简称', index: 'shortName', width: 100 },
-    { title: '社会统一信用代码', index: 'unicode', width: 100 },
-    { title: '电话', index: 'phone', width: 100 },
-    { title: '地址', index: 'address', width: 250 },
-    { title: '联系人', index: 'contacts', width: 80 },
-    { title: '描述',  index: 'description', width: 200 },
+    { title: '公司名称', index: 'consumerName' },
     {
       title: '操作',
       buttons: [
@@ -72,13 +64,6 @@ export class SupplierComponent extends BaseAbilityComponent
             this.delete(record);
           },
           acl: { ability: ['delete'] },
-        },
-        {
-          text: '分配',
-          icon: 'edit',
-          click: (record: any) => {
-            this.dispatch(record);
-          },
         },
       ],
     },
@@ -104,13 +89,13 @@ export class SupplierComponent extends BaseAbilityComponent
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
-    this.params = {firmId: firmInfo.id};
+    this.params = {firmId: firmInfo.id, type: 0};
     if (event) {
       if (event.name) this.params.name = event.name;
       if (event.description) this.params.description = event.description;
     }
     this.http
-      .get(Api.BaseSupplySupplierApi + '/page/' + current + '/' + size, this.params)
+      .get(Api.BaseSupplyMyConsumerUrl + '/page/' + current + '/' + size, this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) this.page = res.data;
@@ -118,62 +103,18 @@ export class SupplierComponent extends BaseAbilityComponent
       });
   }
 
-  add() {
-    this.modal
-      .createStatic(SupplierEditComponent)
-      .subscribe(() => this.st.reload());
-  }
-
-  dispatch(record) {
-      const userModal = this.modalService.create({
-        nzTitle: '供应商分配',
-        nzContent: FirmUserModalComponent,
-        nzGetContainer: () => document.body,
-        nzComponentParams: {
-          inputData: record,
-        },
-        nzWidth: 950,
-        nzFooter: null
-      });
-      userModal.afterClose.subscribe((result: any) => this.dispatchUser(result));
-  }
-
-  // 分配供应商
-  dispatchUser(record) {
-    if (record) {
-      const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
-      const params = {
-        userId: record.user.userId,
-        firm: firmInfo.id,
-        consumer: record.ext.supplierId,
-        type: 1
-      };
-      this.http.post(Api.BaseSupplyMyConsumerUrl, params).subscribe((res: any) => {
-        if (res) {
-          if (res.code === ResponseCode.SUCCESS) {
-            this.msg.success('分配成功');
-          } else {
-            this.msg.warning(res.message);
-          }
-        } else {
-          this.msg.error('分配失败，未知错误');
-        }
-      });
-    }
-  }
   delete(record: any) {
     console.log(record);
-    const params = {supplierId: record.supplierId, firmId: record.firmId};
+    const params = {consumerId: record.consumerId, firmId: record.firmId};
     this.modalService.confirm({
       nzTitle: '确定删除吗?',
       nzContent:
         '<b style="color: red;">如果您确定要删除请点击确定按钮，否则点取消</b>',
       nzOkText: '确定',
       nzOkType: 'danger',
-      nzWidth: 950,
       nzOnOk: () =>
         this.http
-          .delete(Api.BaseSupplySupplierApi, params)
+          .delete(Api.BaseSupplyConsumerApi, params)
           .subscribe((res: any) => {
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {
