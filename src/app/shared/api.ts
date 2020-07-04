@@ -1,5 +1,6 @@
 export enum Api {
   BaseAuthApi = 'auth/oauth/token?_allow_anonymous=true',
+  RegistApi = 'api/supply-service/user/register?_allow_anonymous=true',
   BaseAntIconApi = 'api/supply-service/ant-icon/',
   BaseUserApi = 'api/supply-service/user/',
   BaseRoleApi = 'api/supply-service/role/',

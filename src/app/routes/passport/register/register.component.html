@@ -2,14 +2,49 @@
 <form nz-form [formGroup]="form" (ngSubmit)="submit()" role="form">
   <nz-alert *ngIf="error" [nzType]="'error'" [nzMessage]="error" [nzShowIcon]="true" class="mb-lg"></nz-alert>
   <nz-form-item>
+    <nz-form-control [nzErrorTip]="usernameErrorTip">
+      <nz-input-group nzSize="large" nzAddonBeforeIcon="user">
+        <input nz-input formControlName="username" placeholder="username" />
+      </nz-input-group>
+      <ng-template #usernameErrorTip let-i>
+        <ng-container *ngIf="i.errors?.required">{{ 'validation.username.required' | translate }}</ng-container>
+        <ng-container *ngIf="i.errors?.username">{{ 'validation.username.wrong-format' | translate }}</ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
     <nz-form-control [nzErrorTip]="mailErrorTip">
       <nz-input-group nzSize="large" nzAddonBeforeIcon="user">
-        <input nz-input formControlName="mail" placeholder="Email" />
+        <input nz-input formControlName="email" placeholder="Email" />
       </nz-input-group>
       <ng-template #mailErrorTip let-i>
         <ng-container *ngIf="i.errors?.required">{{ 'validation.email.required' | translate }}</ng-container>
         <ng-container *ngIf="i.errors?.email">{{ 'validation.email.wrong-format' | translate }}</ng-container>
       </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzErrorTip]="'validation.verification-code.required' | translate">
+      <nz-row [nzGutter]="8">
+        <nz-col [nzSpan]="16">
+          <nz-input-group nzSize="large" nzAddonBeforeIcon="mail">
+            <input nz-input formControlName="kaptcha" placeholder="kaptcha" />
+          </nz-input-group>
+        </nz-col>
+        <nz-col [nzSpan]="8">
+          <button
+            type="button"
+            nz-button
+            nzSize="large"
+            (click)="getKaptcha()"
+            [disabled]="count"
+            nzBlock
+            [nzLoading]="http.loading"
+          >
+            {{ count ? count + 's' : ('app.register.get-verification-code' | translate) }}
+          </button>
+        </nz-col>
+      </nz-row>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
@@ -65,36 +100,12 @@
             <nz-option [nzLabel]="'+87'" [nzValue]="'+87'"></nz-option>
           </nz-select>
         </ng-template>
-        <input formControlName="mobile" nz-input placeholder="Phone number" />
+        <input formControlName="phone" nz-input placeholder="Phone number" />
       </nz-input-group>
       <ng-template #mobileErrorTip let-i>
         <ng-container *ngIf="i.errors?.required">{{ 'validation.phone-number.required' | translate }}</ng-container>
         <ng-container *ngIf="i.errors?.pattern">{{ 'validation.phone-number.wrong-format' | translate }}</ng-container>
       </ng-template>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-control [nzErrorTip]="'validation.verification-code.required' | translate">
-      <nz-row [nzGutter]="8">
-        <nz-col [nzSpan]="16">
-          <nz-input-group nzSize="large" nzAddonBeforeIcon="mail">
-            <input nz-input formControlName="captcha" placeholder="Captcha" />
-          </nz-input-group>
-        </nz-col>
-        <nz-col [nzSpan]="8">
-          <button
-            type="button"
-            nz-button
-            nzSize="large"
-            (click)="getCaptcha()"
-            [disabled]="count"
-            nzBlock
-            [nzLoading]="http.loading"
-          >
-            {{ count ? count + 's' : ('app.register.get-verification-code' | translate) }}
-          </button>
-        </nz-col>
-      </nz-row>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>

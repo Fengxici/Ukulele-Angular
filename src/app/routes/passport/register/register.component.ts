@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
+import { Api } from '@shared/api';
 
 @Component({
   selector: 'passport-register',
@@ -13,19 +14,22 @@ export class UserRegisterComponent implements OnDestroy {
 
   constructor(fb: FormBuilder, private router: Router, public http: _HttpClient, public msg: NzMessageService) {
     this.form = fb.group({
-      mail: [null, [Validators.required, Validators.email]],
+      username: [null, [Validators.required, UserRegisterComponent.checkUsername]],
+      email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required, Validators.minLength(6), UserRegisterComponent.checkPassword.bind(this)]],
       confirm: [null, [Validators.required, Validators.minLength(6), UserRegisterComponent.passwordEquar]],
       mobilePrefix: ['+86'],
-      mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
-      captcha: [null, [Validators.required]],
+      phone: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
+      kaptcha: [null, [Validators.required]],
     });
   }
 
   // #region fields
-
-  get mail() {
-    return this.form.controls.mail;
+  get username() {
+    return this.form.controls.username;
+  }
+  get email() {
+    return this.form.controls.email;
   }
   get password() {
     return this.form.controls.password;
@@ -33,11 +37,11 @@ export class UserRegisterComponent implements OnDestroy {
   get confirm() {
     return this.form.controls.confirm;
   }
-  get mobile() {
-    return this.form.controls.mobile;
+  get phone() {
+    return this.form.controls.phone;
   }
-  get captcha() {
-    return this.form.controls.captcha;
+  get kaptcha() {
+    return this.form.controls.kaptcha;
   }
   form: FormGroup;
   error = '';
@@ -57,6 +61,14 @@ export class UserRegisterComponent implements OnDestroy {
 
   count = 0;
   interval$: any;
+  static checkUsername(control: FormControl) {
+    if (!control) return null;
+    if (control.value && control.value.length > 4) {
+      return null;
+    } else {
+      return {username: true};
+    }
+  }
 
   static checkPassword(control: FormControl) {
     if (!control) return null;
@@ -79,16 +91,17 @@ export class UserRegisterComponent implements OnDestroy {
     if (!control || !control.parent) {
       return null;
     }
+    // tslint:disable-next-line: no-non-null-assertion
     if (control.value !== control.parent.get('password')!.value) {
       return { equar: true };
     }
     return null;
   }
 
-  getCaptcha() {
-    if (this.mobile.invalid) {
-      this.mobile.markAsDirty({ onlySelf: true });
-      this.mobile.updateValueAndValidity({ onlySelf: true });
+  getKaptcha() {
+    if (this.phone.invalid) {
+      this.phone.markAsDirty({ onlySelf: true });
+      this.phone.updateValueAndValidity({ onlySelf: true });
       return;
     }
     this.count = 59;
@@ -97,7 +110,6 @@ export class UserRegisterComponent implements OnDestroy {
       if (this.count <= 0) clearInterval(this.interval$);
     }, 1000);
   }
-
   // #endregion
 
   submit() {
@@ -111,7 +123,7 @@ export class UserRegisterComponent implements OnDestroy {
     }
 
     const data = this.form.value;
-    this.http.post('/register', data).subscribe(() => {
+    this.http.post(Api.RegistApi, data).subscribe(() => {
       this.router.navigateByUrl('/passport/register-result', {
         queryParams: { email: data.mail },
       });
