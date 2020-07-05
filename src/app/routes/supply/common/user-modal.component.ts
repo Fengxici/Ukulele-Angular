@@ -9,7 +9,7 @@ import { SFSchema } from '@delon/form';
 @Component({
   selector: 'app-firm-user-modal',
   template: `<nz-card>
-              <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" 
+              <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)"
                 (formReset)="st.reset($event)" acl [acl-ability]="'query'"></sf>
               <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
                 [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination">
@@ -113,7 +113,7 @@ export class FirmUserModalComponent implements OnInit {
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settingsService.user.id));
     this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, SettingsService } from '@delon/theme';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
@@ -12,6 +12,7 @@ import { STPage, STComponent, STColumn, STChange } from '@delon/abc';
 export class ConsumerEditComponent {
   constructor(
     private modal: NzModalRef,
+    public settings: SettingsService,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
   ) {}
@@ -92,7 +93,7 @@ export class ConsumerEditComponent {
 
   join(record: any) {
     console.log(record);
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     if (record.id === firmInfo.id) {
       this.msgSrv.warning('不能选择自己作为客户');
       return;

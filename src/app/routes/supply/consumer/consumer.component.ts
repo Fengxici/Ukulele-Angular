@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -19,6 +19,7 @@ export class ConsumerComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
+    public settings: SettingsService,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
@@ -103,7 +104,7 @@ export class ConsumerComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;
@@ -140,7 +141,7 @@ export class ConsumerComponent extends BaseAbilityComponent
   // 分配供应商
   dispatchUser(record) {
     if (record) {
-      const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+      const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
       const params = {
         userId: record.user.userId,
         firm: firmInfo.id,
@@ -160,7 +161,7 @@ export class ConsumerComponent extends BaseAbilityComponent
       });
     }
   }
-  
+
   delete(record: any) {
     console.log(record);
     const params = {consumerId: record.consumerId, firmId: record.firmId};

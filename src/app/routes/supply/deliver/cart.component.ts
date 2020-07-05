@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ModalHelper, _HttpClient } from '@delon/theme';
+import { ModalHelper, _HttpClient, SettingsService } from '@delon/theme';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
@@ -18,6 +18,7 @@ export class CartComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
+    public settings: SettingsService,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
@@ -127,7 +128,7 @@ export class CartComponent extends BaseAbilityComponent
     if (event) {
       if (event.name) this.cartParams.name = event.name;
     }
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     this.cartParams.firmId = firmInfo.id;
     this.http
       .get(Api.BaseSupplyDeliverUrl + 'cart', this.cartParams)
@@ -145,7 +146,7 @@ export class CartComponent extends BaseAbilityComponent
     if (event) {
       if (event.name) this.listParams.name = event.name;
     }
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     this.listParams.firmId = firmInfo.id;
     this.http
       .get(Api.BaseSupplyDeliverUrl + 'page/' + current + '/' + size + '/0', this.listParams)

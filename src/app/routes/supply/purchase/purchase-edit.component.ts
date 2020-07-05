@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, SettingsService } from '@delon/theme';
 import { STColumn, STPage, STComponent, STChange, STColumnBadge } from '@delon/abc';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Api } from '@shared/api';
@@ -217,7 +217,7 @@ export class PurchaseEditComponent implements OnInit {
       grid: { span: 12 },
     },
   };
-  constructor(public msg: NzMessageService, private http: _HttpClient,
+  constructor(public msg: NzMessageService, private http: _HttpClient, public settings: SettingsService,
               private route: Router, private router: ActivatedRoute, private cdr: ChangeDetectorRef) {
     const that = this;
     this.router.queryParams.subscribe((res) => {
@@ -338,7 +338,7 @@ export class PurchaseEditComponent implements OnInit {
       if (!value.id) {
         value.id = value.supplierId;
       }
-      const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+      const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
       if (firmInfo) {
         if (firmInfo.id === value.id) {
           this.msg.error('不能选择自己的企业作为供应商!');
@@ -353,7 +353,7 @@ export class PurchaseEditComponent implements OnInit {
   queryMaterial(event: any) {
     const current: number = this.materialSearchParams.current || 1;
     const size: number = this.materialSearchParams.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     this.materialSearchParams.firmId = firmInfo.id;
     if (event) {
       if (event.name) this.materialSearchParams.name = event.name;
@@ -452,7 +452,7 @@ export class PurchaseEditComponent implements OnInit {
   queryProvider(event: any) {
     const current: number = this.providerParams.current || 1;
     const size: number = this.providerParams.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     this.providerParams = {firmId: firmInfo.id};
     if (event) {
       // 搜索时取所有公司列表
@@ -503,7 +503,7 @@ export class PurchaseEditComponent implements OnInit {
     this.amountNum = 0;
   }
   saveOrder() {
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     if (!firmInfo) {
       this.msg.error('您还没有选择当前登陆的企业');
       return;

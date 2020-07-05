@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, SettingsService } from '@delon/theme';
 import { SFSchema, SFUISchema, SFNumberWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
@@ -31,6 +31,7 @@ export class MaterialEditComponent {
 
   constructor(
     private modal: NzModalRef,
+    public settings: SettingsService,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
   ) {}
@@ -51,7 +52,7 @@ export class MaterialEditComponent {
         }
       });
     } else {
-      const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+      const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
       value.firmId = firmInfo.id;
       this.http.post(Api.BaseSupplyMaterialApi, value).subscribe((res: any) => {
         if (res) {

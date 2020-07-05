@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import {NzMessageService } from 'ng-zorro-antd';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, SettingsService } from '@delon/theme';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { STColumnBadge, STComponent, STColumn, STChange } from '@delon/abc';
 import { FirmDrawerComponent } from '../common/firm-drawer.component';
@@ -17,7 +17,9 @@ export class AbnormalHandleComponent extends BaseAbilityComponent
 implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
+    public settings: SettingsService,
     private msg: NzMessageService,
+    private router: Router,
     protected route: ActivatedRoute,
     protected ability: AbilityService
   ) {
@@ -90,9 +92,10 @@ implements OnInit, OnDestroy {
   }
 
   query(event: any) {
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
-    if (!firmInfo){
-      this.msg.warning('');
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      this.router.navigate(['/supply/firm']);
+      return;
     }
     this.http
       .get(Api.BaseSupplyMarketApi + 'detail/abnormal/' + firmInfo.id)

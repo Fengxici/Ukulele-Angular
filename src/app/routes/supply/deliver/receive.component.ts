@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ModalHelper, _HttpClient } from '@delon/theme';
+import { ModalHelper, _HttpClient, SettingsService } from '@delon/theme';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
@@ -19,6 +19,7 @@ export class ReceiveComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
+    public settings: SettingsService,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
@@ -123,7 +124,7 @@ export class ReceiveComponent extends BaseAbilityComponent
     if (event) {
       if (event.name) this.params.name = event.name;
     }
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     this.params.firmId = firmInfo.id;
     this.http
     .get(Api.BaseSupplyDeliverUrl + 'page/' + current + '/' + size + '/1', this.params)

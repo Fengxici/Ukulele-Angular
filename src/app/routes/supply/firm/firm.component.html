@@ -1,14 +1,44 @@
 <page-header [action]="phActionTpl">
   <ng-template #phActionTpl>
-    <button *ngIf="editable===false" (click)="editable=!editable" nz-button acl [acl-ability]="'edit'" nzType="primary">编辑</button>
+    <button nz-button acl [acl-ability]="'add'" nzType="primary" (click)="add()">创建</button>
+    <button nz-button acl [acl-ability]="'edit'" nzType="primary"  (click)="join()">加入</button>
   </ng-template>
 </page-header>
 <nz-card>
-  <sf *ngIf="record" #sf mode="edit" [schema]="schema" [ui]="ui" [formData]="record" button="none" >
-    <div *ngIf="editable" class="modal-footer">
-      <button nz-button type="button" (click)="editable=false">取消</button>
-      <button nz-button type="submit" nzType="primary" (click)="save(sf.value)" 
-        [disabled]="!sf.valid" [nzLoading]="http.loading">保存</button>
+  <nz-list nzGrid nzTitle="我的企业">
+    <div nz-row >
+      <div nz-col [nzSpan]="24" *ngFor="let item of list">
+        <nz-list-item>
+          <nz-card [nzTitle]="item.name" [nzExtra]="extraTemplate">
+            <sf *ngIf="item" #sf mode="edit" [schema]="schema" [ui]="ui" [formData]="item" button="none" >
+            </sf>
+            <ng-template #extraTemplate>
+              <button *ngIf="firmInfo.id!=item.id" nz-button nzType="primary" (click)="change(item)">切换</button>
+              <button *ngIf="item.admin" nz-button nzType="default" (click)="edit(item)">编辑</button>
+              <!-- <button *ngIf="item.owner" nz-button nzType="primary" (click)="transfer(item)">转让</button> -->
+              <button nz-button nzType="default">退出</button>
+            </ng-template>
+          </nz-card>
+        </nz-list-item>
+      </div>
     </div>
-  </sf>
+  </nz-list>
 </nz-card>
+<!-- 公司选择 -->
+<nz-modal
+    [(nzVisible)]="firmModalVisible"
+    [nzTitle]="firmInfoTitle"
+    [nzContent]="firmInfoContent"
+    [nzWidth]="750"
+    [nzFooter]="null"
+    (nzOnCancel)="handleFirmModalClose(null)"
+  >
+  <ng-template #firmInfoTitle>
+    <div class="modal-title">选择公司</div>
+  </ng-template>
+  <ng-template #firmInfoContent>
+    <sf mode="search" [schema]="firmSearchSchema" (formSubmit)="queryFirm($event)"  (formReset)="queryFirm($event)"></sf>
+    <st #firmst [data]="firmPage.records" [columns]="firmColumns" (change)="firmPageChange($event)"
+    [pi]="firmPage.current" [ps]="firmPage.size" [total]="firmPage.total" [page]="firmPagination"></st>
+  </ng-template>
+</nz-modal>

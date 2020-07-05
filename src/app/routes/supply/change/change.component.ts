@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange, STColumnBadge } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
@@ -18,6 +18,7 @@ export class ChangeComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
+    public settings: SettingsService,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
@@ -106,7 +107,7 @@ export class ChangeComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     this.params.firmId = firmInfo.id;
     if (event) {
       if (event.orderNo) this.params.orderNo = event.orderNo;

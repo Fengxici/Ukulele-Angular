@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { Api } from '@shared/api';
+import { ResponseCode } from '@shared/response.code';
 
 @Component({
   selector: 'passport-register',
@@ -14,19 +15,22 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
   kaptcha: any = null;
   constructor(fb: FormBuilder, private router: Router, public http: _HttpClient, public msg: NzMessageService) {
     this.form = fb.group({
-      mail: [null, [Validators.required, Validators.email]],
+      username: [null, [Validators.required, UserRegisterComponent.checkUsername]],
+      email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required, Validators.minLength(6), UserRegisterComponent.checkPassword.bind(this)]],
       confirm: [null, [Validators.required, Validators.minLength(6), UserRegisterComponent.passwordEquar]],
       mobilePrefix: ['+86'],
-      mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
+      phone: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
       captcha: [null, [Validators.required]],
     });
   }
 
   // #region fields
-
-  get mail() {
-    return this.form.controls.mail;
+  get username() {
+    return this.form.controls.username;
+  }
+  get email() {
+    return this.form.controls.email;
   }
   get password() {
     return this.form.controls.password;
@@ -87,13 +91,19 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     }
     return null;
   }
-
-  ngOnInit(): void {
-    this.query();
+  static checkUsername(control: FormControl) {
+    if (control.value && control.value.length > 4) {
+      return null;
+    }
+    return {username: false };
   }
 
-  query() {
-    this.kaptcha = Api.KaptchaApi + '&time=' + new Date();
+  ngOnInit(): void {
+    this.getKaptch();
+  }
+
+  getKaptch() {
+    this.kaptcha = Api.KaptchaApi + '&time=' + (new Date().getMilliseconds());
   }
 
   getCaptcha() {
@@ -122,10 +132,22 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     }
 
     const data = this.form.value;
-    this.http.post('/register', data).subscribe(() => {
-      this.router.navigateByUrl('/passport/register-result', {
-        queryParams: { email: data.mail },
-      });
+    this.http.post(Api.RegistApi, data).subscribe((res) => {
+      if (res) {
+        if (res.code === ResponseCode.SUCCESS) {
+          this.router.navigateByUrl('/passport/register-result', {
+            queryParams: { email: data.email },
+          });
+        } else {
+          // this.msg.error(res.data);
+          this.getKaptch();
+          this.error = res.data;
+        }
+      } else {
+        // this.msg.error('注册失败，未知原因！');
+        this.getKaptch();
+        this.error = '注册失败，未知原因！';
+      }
     });
   }
 

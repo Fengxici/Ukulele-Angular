@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, SettingsService } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange, STColumnBadge } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
@@ -21,6 +21,7 @@ export class MarketComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     private http: _HttpClient,
+    public settings: SettingsService,
     private modalService: NzModalService,
     private msg: NzMessageService,
     private pubService: PublicService,
@@ -185,7 +186,7 @@ export class MarketComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;
@@ -205,7 +206,7 @@ export class MarketComponent extends BaseAbilityComponent
     {queryParams: {orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0'}});
   }
   queryConsumerList() {
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     const params = {firmId: firmInfo.id};
     const providerObservalbe =  this.http
     .get(Api.BaseSupplyConsumerApi + '/list', params).pipe(

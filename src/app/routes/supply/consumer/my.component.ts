@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
 import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { FirmDrawerComponent } from '../common/firm-drawer.component';
 
@@ -17,6 +17,8 @@ export class MyConsumerComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
+    private router: Router,
+    public settings: SettingsService,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
@@ -88,7 +90,11 @@ export class MyConsumerComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      this.router.navigate(['/supply/firm']);
+      return;
+    }
     this.params = {firmId: firmInfo.id, type: 0};
     if (event) {
       if (event.name) this.params.name = event.name;

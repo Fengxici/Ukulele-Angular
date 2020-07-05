@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, SettingsService } from '@delon/theme';
 import { SFSchema, SFUISchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
@@ -10,6 +10,7 @@ import { Api } from '@shared/api';
 })
 export class FirmEditComponent {
   record: any = {};
+  mode: string;
   i: any;
   schema: SFSchema = {
     properties: {
@@ -36,6 +37,7 @@ export class FirmEditComponent {
   constructor(
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
+    public settings: SettingsService,
     public http: _HttpClient,
   ) {}
 
@@ -55,18 +57,33 @@ export class FirmEditComponent {
         }
       });
     } else {
-      this.http.post(Api.BaseSupplyFirmApi, value).subscribe((res: any) => {
-        if (res) {
-          if (res.code === ResponseCode.SUCCESS) {
-            this.msgSrv.success('保存成功');
-            this.modal.close(true);
+      if (this.mode) {
+        this.http.post(Api.BaseSupplyFirmApi + 'owner/create/' + this.settings.user.id, value).subscribe((res: any) => {
+          if (res) {
+            if (res.code === ResponseCode.SUCCESS) {
+              this.msgSrv.success('保存成功');
+              this.modal.close(true);
+            } else {
+              this.msgSrv.warning(res.message);
+            }
           } else {
-            this.msgSrv.warning(res.message);
+            this.msgSrv.error('保存失败，未知错误');
           }
-        } else {
-          this.msgSrv.error('保存失败，未知错误');
-        }
-      });
+        });
+      } else {
+        this.http.post(Api.BaseSupplyFirmApi, value).subscribe((res: any) => {
+          if (res) {
+            if (res.code === ResponseCode.SUCCESS) {
+              this.msgSrv.success('保存成功');
+              this.modal.close(true);
+            } else {
+              this.msgSrv.warning(res.message);
+            }
+          } else {
+            this.msgSrv.error('保存失败，未知错误');
+          }
+        });
+      }
     }
   }
 

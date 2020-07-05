@@ -2,6 +2,7 @@ import { _HttpClient, SettingsService } from '@delon/theme';
 import { Api } from '@shared/api';
 import { ResponseCode } from '@shared/response.code';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-firm-drawer',
@@ -27,6 +28,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class FirmDrawerComponent implements OnInit {
   constructor(
     protected http: _HttpClient,
+    private router: Router,
     protected settingsService: SettingsService,
   ) {}
 
@@ -44,13 +46,18 @@ export class FirmDrawerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.firmInfo = JSON.parse(localStorage.getItem('firmInfo'));
+    this.firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settingsService.user.id));
+    if (!this.firmInfo) {
+      this.firmInfo = {};
+      this.router.navigate(['/supply/firm']);
+      return;
+    }
     this.getJoinedFirmList();
   }
 
   change(item) {
     this.firmInfo = item;
-    localStorage.setItem('firmInfo', JSON.stringify(item));
+    localStorage.setItem('firmInfo' + this.settingsService.user.id, JSON.stringify(item));
     if (this.callback)this.callback.emit();
     this.visible = false;
   }
@@ -73,11 +80,11 @@ export class FirmDrawerComponent implements OnInit {
               }
               if (!contained) {
                 this.firmInfo = this.firmList[0];
-                localStorage.setItem('firmInfo', JSON.stringify(this.firmInfo));
+                localStorage.setItem('firmInfo' + this.settingsService.user.id, JSON.stringify(this.firmInfo));
               }
             } else {
               this.firmInfo = this.firmList[0];
-              localStorage.setItem('firmInfo', JSON.stringify(this.firmInfo));
+              localStorage.setItem('firmInfo' + this.settingsService.user.id, JSON.stringify(this.firmInfo));
             }
           } else {
             this.firmInfo = null;
