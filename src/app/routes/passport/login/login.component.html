@@ -3,16 +3,16 @@
     <nz-tab [nzTitle]="'app.login.tab-login-credentials' | translate" (nzClick)="showLoginButton=true">
       <nz-alert *ngIf="error" [nzType]="'error'" [nzMessage]="error" [nzShowIcon]="true" class="mb-lg"></nz-alert>
       <nz-form-item>
-        <nz-form-control [nzErrorTip]="'Please enter mobile number!' | translate">
+        <nz-form-control [nzErrorTip]="'validation.username.required' | translate">
           <nz-input-group nzSize="large" nzPrefixIcon="user">
-            <input nz-input formControlName="userName" placeholder="username: admin or user" />
+            <input nz-input formControlName="userName" placeholder="用户名" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzErrorTip="'Please enter password!' | translate">
+        <nz-form-control [nzErrorTip]="'validation.password.required' | translate">
           <nz-input-group nzSize="large" nzPrefixIcon="lock">
-            <input nz-input type="password" formControlName="password" placeholder="password: ng-alain.com" />
+            <input nz-input type="password" formControlName="password" placeholder="密码" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -21,11 +21,11 @@
           <label nz-checkbox formControlName="remember">{{ 'app.login.remember-me' | translate }}</label>
         </nz-col>
         <nz-col [nzSpan]="12" class="text-right">
-          <a class="forgot" (click)="msg.error('请找欧阳锋')">{{ 'app.login.forgot-password' | translate }}</a>
+          <a class="forgot" (click)="msg.error('错误')">{{ 'app.login.forgot-password' | translate }}</a>
         </nz-col>
       </nz-form-item>
     </nz-tab>
-    <nz-tab [nzTitle]="'app.login.tab-login-mobile' | translate" (nzClick)="showLoginButton=true">
+    <!-- <nz-tab [nzTitle]="'app.login.tab-login-mobile' | translate" (nzClick)="showLoginButton=true">
       <nz-form-item>
         <nz-form-control [nzErrorTip]="mobileErrorTip">
           <nz-input-group nzSize="large" nzPrefixIcon="user">
@@ -77,8 +77,8 @@
             </nz-row>
         </nz-form-control>
       </nz-form-item>
-    </nz-tab>
-  </nz-tabset>
+    </nz-tab>-->
+  </nz-tabset> 
   <nz-form-item *ngIf="showLoginButton">
     <button nz-button type="submit" nzType="primary" nzSize="large" [nzLoading]="http.loading" nzBlock>
       {{ 'app.login.login' | translate }}
@@ -86,7 +86,7 @@
   </nz-form-item>
 </form>
 <div class="other">
-  {{ 'app.login.sign-in-with' | translate }}
+  <!-- {{ 'app.login.sign-in-with' | translate }}
   <i
     nz-tooltip="in fact Auth0 via window"
     (click)="open('auth0', 'window')"
@@ -95,6 +95,6 @@
     class="icon"
   ></i>
   <i nz-tooltip="in fact Github via redirect" (click)="open('github')" nz-icon nzType="taobao-circle" class="icon"></i>
-  <i (click)="open('weibo', 'window')" nz-icon nzType="weibo-circle" class="icon"></i>
+  <i (click)="open('weibo', 'window')" nz-icon nzType="weibo-circle" class="icon"></i> -->
   <a class="register" routerLink="/passport/register">{{ 'app.login.signup' | translate }}</a>
 </div>

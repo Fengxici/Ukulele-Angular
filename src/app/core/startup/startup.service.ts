@@ -55,8 +55,8 @@ export class StartupService {
           // 初始化菜单
           this.menuService.add( res.data || []  );
           const app: any = {
-            name: `Ukulele`,
-            description: `Ukulele是一个多语言跨平台的中台框架，旨在打造企业级的微服务快速开发框架`,
+            name: `易供云`,
+            description: `重塑供应链`,
           };
           // 应用信息：包括站点名、描述、年份
           this.settingService.setApp(app);
@@ -91,8 +91,8 @@ export class StartupService {
           this.translate.setDefaultLang(this.i18n.defaultLang);
           // application data
           const app: any = {
-            name: `Ukulele`,
-            description: `Ukulele是一个多语言跨平台的中台框架，旨在打造企业级的微服务快速开发框架`,
+            name: `易供云`,
+            description: `重塑供应链`,
           };
           // 应用信息：包括站点名、描述、年份
           this.settingService.setApp(app);

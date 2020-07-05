@@ -17,7 +17,7 @@ import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
     </div>
     <nz-dropdown-menu #userMenu="nzDropdownMenu">
       <div nz-menu class="width-sm">
-        <div nz-menu-item routerLink="/pro/account/center">
+        <!-- <div nz-menu-item routerLink="/pro/account/center">
           <i nz-icon nzType="user" class="mr-sm"></i>
           {{ 'menu.account.center' | translate }}
         </div>
@@ -29,7 +29,7 @@ import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
           <i nz-icon nzType="close-circle" class="mr-sm"></i>
           {{ 'menu.account.trigger' | translate }}
         </div>
-        <li nz-menu-divider></li>
+        <li nz-menu-divider></li> -->
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
           {{ 'menu.account.logout' | translate }}
@@ -48,6 +48,7 @@ export class HeaderUserComponent {
 
   logout() {
     this.tokenService.clear();
+    // tslint:disable-next-line: no-non-null-assertion
     this.router.navigateByUrl(this.tokenService.login_url!);
   }
 }

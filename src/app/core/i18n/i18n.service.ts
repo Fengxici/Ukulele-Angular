@@ -41,30 +41,30 @@ const LANGS: { [key: string]: LangData } = {
     delon: delonZhCn,
     abbr: '🇨🇳',
   },
-  'zh-TW': {
-    text: '繁体中文',
-    ng: ngZhTw,
-    zorro: zh_TW,
-    dateFns: df_zh_tw,
-    delon: delonZhTw,
-    abbr: '🇭🇰',
-  },
-  'en-US': {
-    text: 'English',
-    ng: ngEn,
-    zorro: en_US,
-    dateFns: df_en,
-    delon: delonEnUS,
-    abbr: '🇬🇧',
-  },
+  // 'zh-TW': {
+  //   text: '繁体中文',
+  //   ng: ngZhTw,
+  //   zorro: zh_TW,
+  //   dateFns: df_zh_tw,
+  //   delon: delonZhTw,
+  //   abbr: '🇭🇰',
+  // },
+  // 'en-US': {
+  //   text: 'English',
+  //   ng: ngEn,
+  //   zorro: en_US,
+  //   dateFns: df_en,
+  //   delon: delonEnUS,
+  //   abbr: '🇬🇧',
+  // },
 };
 
 @Injectable({ providedIn: 'root' })
 export class I18NService implements AlainI18NService {
-  private _default = DEFAULT;
+  private default = DEFAULT;
   private change$ = new BehaviorSubject<string>(null);
 
-  private _langs = Object.keys(LANGS).map(code => {
+  private langs = Object.keys(LANGS).map(code => {
     const item = LANGS[code];
     return { code, text: item.text, abbr: item.abbr };
   });
@@ -77,11 +77,11 @@ export class I18NService implements AlainI18NService {
   ) {
     const defaultLan = settings.layout.lang || translate.getBrowserLang();
     // `@ngx-translate/core` 预先知道支持哪些语言
-    const lans = this._langs.map(item => item.code);
+    const lans = this.langs.map(item => item.code);
     translate.addLangs(lans);
 
-    this._default = lans.includes(defaultLan) ? defaultLan : lans[0];
-    this.updateLangData(this._default);
+    this.default = lans.includes(defaultLan) ? defaultLan : lans[0];
+    this.updateLangData(this.default);
   }
 
   private updateLangData(lang: string) {
@@ -104,22 +104,22 @@ export class I18NService implements AlainI18NService {
   }
   /** 获取语言列表 */
   getLangs() {
-    return this._langs;
+    return this.langs;
   }
   /** 翻译 */
-  fanyi(key: string, interpolateParams?: Object) {
+  fanyi(key: string, interpolateParams?: object) {
     return this.translate.instant(key, interpolateParams);
   }
   /** 默认语言 */
   get defaultLang() {
-    return this._default;
+    return this.default;
   }
   /** 当前语言 */
   get currentLang() {
     return (
       this.translate.currentLang ||
       this.translate.getDefaultLang() ||
-      this._default
+      this.default
     );
   }
 }

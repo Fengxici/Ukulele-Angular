@@ -1,16 +1,17 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
+import { Api } from '@shared/api';
 
 @Component({
   selector: 'passport-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.less'],
 })
-export class UserRegisterComponent implements OnDestroy {
-
+export class UserRegisterComponent implements OnInit, OnDestroy {
+  kaptcha: any = null;
   constructor(fb: FormBuilder, private router: Router, public http: _HttpClient, public msg: NzMessageService) {
     this.form = fb.group({
       mail: [null, [Validators.required, Validators.email]],
@@ -39,6 +40,7 @@ export class UserRegisterComponent implements OnDestroy {
   get captcha() {
     return this.form.controls.captcha;
   }
+
   form: FormGroup;
   error = '';
   type = 0;
@@ -79,10 +81,19 @@ export class UserRegisterComponent implements OnDestroy {
     if (!control || !control.parent) {
       return null;
     }
+    // tslint:disable-next-line: no-non-null-assertion
     if (control.value !== control.parent.get('password')!.value) {
       return { equar: true };
     }
     return null;
+  }
+
+  ngOnInit(): void {
+    this.query();
+  }
+
+  query() {
+    this.kaptcha = Api.KaptchaApi + '&time=' + new Date();
   }
 
   getCaptcha() {

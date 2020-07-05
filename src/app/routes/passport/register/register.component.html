@@ -76,13 +76,14 @@
   <nz-form-item>
     <nz-form-control [nzErrorTip]="'validation.verification-code.required' | translate">
       <nz-row [nzGutter]="8">
-        <nz-col [nzSpan]="16">
+        <nz-col [nzSpan]="8">
           <nz-input-group nzSize="large" nzAddonBeforeIcon="mail">
             <input nz-input formControlName="captcha" placeholder="Captcha" />
           </nz-input-group>
         </nz-col>
-        <nz-col [nzSpan]="8">
-          <button
+        <nz-col [nzSpan]="16">
+          <img [_src]='kaptcha' style="min-width: 200px;"/>
+          <!-- <button
             type="button"
             nz-button
             nzSize="large"
@@ -92,7 +93,7 @@
             [nzLoading]="http.loading"
           >
             {{ count ? count + 's' : ('app.register.get-verification-code' | translate) }}
-          </button>
+          </button> -->
         </nz-col>
       </nz-row>
     </nz-form-control>
