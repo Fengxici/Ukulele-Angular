@@ -50,5 +50,10 @@ export class HeaderUserComponent {
     this.tokenService.clear();
     // tslint:disable-next-line: no-non-null-assertion
     this.router.navigateByUrl(this.tokenService.login_url!);
+    const firmInfo = localStorage.getItem('firmInfo' + this.settings.user.id);
+    localStorage.clear();
+    if (firmInfo) {
+      localStorage.setItem('firmInfo' + this.settings.user.id, firmInfo);
+    }
   }
 }

@@ -108,6 +108,9 @@ export class ChangeComponent extends BaseAbilityComponent
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
     this.params.firmId = firmInfo.id;
     if (event) {
       if (event.orderNo) this.params.orderNo = event.orderNo;

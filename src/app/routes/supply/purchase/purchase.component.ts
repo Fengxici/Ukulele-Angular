@@ -198,6 +198,9 @@ export class PurchaseComponent extends BaseAbilityComponent
 
   queryProviderList() {
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
     const params = {firmId: firmInfo.id};
     const providerObservalbe =  this.http
     .get(Api.BaseSupplySupplierApi + '/list', params).pipe(
@@ -225,6 +228,9 @@ export class PurchaseComponent extends BaseAbilityComponent
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
     this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;

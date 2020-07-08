@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd';
 import { STColumnBadge, STPage, STComponent, STColumn, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-firm-user-modal',
@@ -22,6 +23,7 @@ import { SFSchema } from '@delon/form';
 export class FirmUserModalComponent implements OnInit {
   constructor(
     protected http: _HttpClient,
+    private router: Router,
     protected settingsService: SettingsService,
     private modal: NzModalRef
   ) {}
@@ -114,6 +116,10 @@ export class FirmUserModalComponent implements OnInit {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settingsService.user.id));
+    if (!firmInfo) {
+      this.router.navigate(['/supply/firm']);
+      return;
+    }
     this.params = {firmId: firmInfo.id};
     if (event) {
       if (event.name) this.params.name = event.name;

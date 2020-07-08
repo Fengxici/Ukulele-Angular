@@ -125,6 +125,9 @@ export class ReceiveComponent extends BaseAbilityComponent
       if (event.name) this.params.name = event.name;
     }
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
     this.params.firmId = firmInfo.id;
     this.http
     .get(Api.BaseSupplyDeliverUrl + 'page/' + current + '/' + size + '/1', this.params)

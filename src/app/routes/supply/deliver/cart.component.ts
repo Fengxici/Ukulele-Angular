@@ -129,6 +129,9 @@ export class CartComponent extends BaseAbilityComponent
       if (event.name) this.cartParams.name = event.name;
     }
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
     this.cartParams.firmId = firmInfo.id;
     this.http
       .get(Api.BaseSupplyDeliverUrl + 'cart', this.cartParams)
@@ -147,6 +150,9 @@ export class CartComponent extends BaseAbilityComponent
       if (event.name) this.listParams.name = event.name;
     }
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
     this.listParams.firmId = firmInfo.id;
     this.http
       .get(Api.BaseSupplyDeliverUrl + 'page/' + current + '/' + size + '/0', this.listParams)

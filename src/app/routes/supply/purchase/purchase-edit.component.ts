@@ -234,6 +234,11 @@ export class PurchaseEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      this.route.navigate(['/supply/firm']);
+      return;
+    }
     if (this.orderId && this.orderId !== '0') {
       this.queryOrderInfo();
       this.queryOrderDetail();
