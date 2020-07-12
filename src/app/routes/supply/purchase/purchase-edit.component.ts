@@ -164,16 +164,10 @@ export class PurchaseEditComponent implements OnInit {
       materialNo: {
         type: 'string',
         title: '物料编号',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
       name: {
         type: 'string',
         title: '名称',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
     },
   };

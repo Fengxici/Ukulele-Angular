@@ -48,16 +48,10 @@ export class MaterialComponent extends BaseAbilityComponent
       materialNo: {
         type: 'string',
         title: '物料编号',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
       name: {
         type: 'string',
         title: '名称',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
     },
   };
@@ -82,7 +76,6 @@ export class MaterialComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['edit'] },
         },
         {
           text: '删除',
@@ -90,7 +83,6 @@ export class MaterialComponent extends BaseAbilityComponent
           click: (record: any) => {
             this.delete(record);
           },
-          acl: { ability: ['delete'] },
         },
       ],
     },

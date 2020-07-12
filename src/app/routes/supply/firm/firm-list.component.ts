@@ -45,16 +45,10 @@ export class FirmListComponent extends BaseAbilityComponent
       name: {
         type: 'string',
         title: '名称',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
       unicode: {
         type: 'string',
         title: '社会统一信用代码',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
     },
   };
@@ -82,7 +76,6 @@ export class FirmListComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['edit'] },
         },
         {
           text: '删除',
@@ -90,7 +83,6 @@ export class FirmListComponent extends BaseAbilityComponent
           click: (record: any) => {
             this.delete(record);
           },
-          acl: { ability: ['delete'] },
         },
       ],
     },

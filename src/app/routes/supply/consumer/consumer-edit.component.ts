@@ -37,9 +37,6 @@ export class ConsumerEditComponent {
       name: {
         type: 'string',
         title: '名称',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       }
     },
   };

@@ -72,7 +72,6 @@ export class ChangeComponent extends BaseAbilityComponent
           click: (record) => {
             this.handle(record, 1);
           },
-          acl: { ability: ['edit'] },
         },
         {
           text: '不同意',
@@ -81,7 +80,6 @@ export class ChangeComponent extends BaseAbilityComponent
           click: (record) => {
             this.handle(record, 2);
           },
-          acl: { ability: ['edit'] },
         },
       ],
     },

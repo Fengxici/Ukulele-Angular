@@ -1,7 +1,7 @@
 <div class="modal-header">
   <div class="modal-title">新增客户</div>
 </div>
-<sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)" acl [acl-ability]="'query'"></sf>
+<sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)"></sf>
 <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
   [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination"></st>
 <div class="modal-footer">

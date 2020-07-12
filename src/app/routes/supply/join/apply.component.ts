@@ -51,16 +51,10 @@ export class EmployeeApplyComponent extends BaseAbilityComponent
       username: {
         type: 'string',
         title: '用户名',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
       phone: {
         type: 'string',
         title: '电话号码',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       }
     },
   };
@@ -80,10 +74,10 @@ export class EmployeeApplyComponent extends BaseAbilityComponent
           modal: {
             component: EmployeeApplyHandleComponent,
           },
+          iif: record => !record.disabled,
           click: () => {
             this.query(null);
-          },
-          acl: { ability: ['edit'] },
+          }
         }
       ],
     },

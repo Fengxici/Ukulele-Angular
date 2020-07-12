@@ -3,6 +3,7 @@ import { Api } from '@shared/api';
 import { ResponseCode } from '@shared/response.code';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { StartupService } from '@core/startup/startup.service';
 
 @Component({
   selector: 'app-firm-drawer',
@@ -30,6 +31,7 @@ export class FirmDrawerComponent implements OnInit {
     protected http: _HttpClient,
     private router: Router,
     protected settingsService: SettingsService,
+    public startupSvr: StartupService
   ) {}
 
   visible = false;
@@ -58,6 +60,7 @@ export class FirmDrawerComponent implements OnInit {
   change(item) {
     this.firmInfo = item;
     localStorage.setItem('firmInfo' + this.settingsService.user.id, JSON.stringify(item));
+    this.startupSvr.reload();
     if (this.callback)this.callback.emit();
     this.visible = false;
   }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, SettingsService } from '@delon/theme';
 import { SFSchema, SFUISchema, SFSelectWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-supply-employee-edit',
   templateUrl: './employee-edit.component.html',
@@ -13,6 +14,8 @@ export class EmployeeEditComponent implements OnInit {
     private modal: NzModalRef,
     private msgSrv: NzMessageService,
     public http: _HttpClient,
+    private router: Router,
+    protected settingsService: SettingsService,
   ) {}
   record: any = {};
   params: any = {};
@@ -28,10 +31,10 @@ export class EmployeeEditComponent implements OnInit {
         enum: [
           { label: '采购', value: 'PURCHASE' },
           { label: '销售', value: 'MARKET' },
-          { label: '计划', value: 'PLAN' },
+          // { label: '计划', value: 'PLAN' },
           { label: '仓库', value: 'DEPOSITORY' },
-          { label: '质检', value: 'QUALITY' },
-          { label: '财务', value: 'FINANCE' }
+          // { label: '质检', value: 'QUALITY' },
+          // { label: '财务', value: 'FINANCE' }
         ],
         ui: {
           widget: 'select',
@@ -95,9 +98,14 @@ export class EmployeeEditComponent implements OnInit {
       this.msgSrv.warning('必须选择至少一个角色');
       return;
     }
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settingsService.user.id));
+    if (!firmInfo) {
+      this.router.navigate(['/supply/firm']);
+      return;
+    }
     const params = {
       userId: record.id || record.userId,
-      firmId: 1,
+      firmId: firmInfo.id,
       owner: record.owner,
       admin: record.admin,
       userTag: record.userTag

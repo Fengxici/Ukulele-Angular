@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   selector: 'app-firm-user-modal',
   template: `<nz-card>
               <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)"
-                (formReset)="st.reset($event)" acl [acl-ability]="'query'"></sf>
+                (formReset)="st.reset($event)" ></sf>
               <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
                 [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination">
               <ng-template st-row="taglist" let-item let-index="index">
@@ -51,16 +51,10 @@ export class FirmUserModalComponent implements OnInit {
       userId: {
         type: 'string',
         title: '编号',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
       userTag: {
         type: 'string',
         title: '标签',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       }
     },
   };

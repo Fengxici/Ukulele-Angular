@@ -137,7 +137,6 @@ export class PurchaseComponent extends BaseAbilityComponent
           click: (record: any) => {
             this.toDetail(record);
           },
-          acl: { ability: ['edit'] },
         },
         {
           text: '提交',
@@ -146,7 +145,6 @@ export class PurchaseComponent extends BaseAbilityComponent
             this.commitPurchaseOrder(record);
           },
           iif: record => record.status === 0,
-          acl: { ability: ['edit'] },
         },
         {
           text: '删除',
@@ -155,7 +153,6 @@ export class PurchaseComponent extends BaseAbilityComponent
           click: (record: any) => {
             this.delete(record);
           },
-          acl: { ability: ['delete'] },
         },
       ],
     },

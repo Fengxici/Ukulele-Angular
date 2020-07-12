@@ -135,9 +135,11 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     this.http.post(Api.RegistApi, data).subscribe((res) => {
       if (res) {
         if (res.code === ResponseCode.SUCCESS) {
-          this.router.navigateByUrl('/passport/register-result', {
-            queryParams: { email: data.email },
-          });
+          // this.router.navigateByUrl('/passport/register-result', {
+          //   queryParams: { email: data.email },
+          // });
+          this.router.navigate(['/passport/register-result'],
+            {queryParams: {email: data.email }});
         } else {
           // this.msg.error(res.data);
           this.getKaptch();

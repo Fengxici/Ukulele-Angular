@@ -41,17 +41,6 @@ export class MySupplyComponent extends BaseAbilityComponent
     showSize: true,
     showQuickJumper: true,
   };
-  // searchSchema: SFSchema = {
-  //   properties: {
-      // userId: {
-      //   type: 'string',
-      //   title: '编号',
-      //   ui: {
-      //     acl: { ability: ['query'] },
-      //   },
-      // }
-  //   },
-  // };
   @ViewChild('st', { static: true }) st: STComponent;
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
@@ -65,7 +54,6 @@ export class MySupplyComponent extends BaseAbilityComponent
           click: (record: any) => {
             this.delete(record);
           },
-          acl: { ability: ['delete'] },
         },
       ],
     },

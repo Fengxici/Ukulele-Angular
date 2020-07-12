@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { FirmEditComponent } from './firm-edit.component';
 import { STPage, STComponent, STColumn, STChange } from '@delon/abc';
+import { StartupService } from '@core/startup/startup.service';
 
 @Component({
   selector: 'app-supply-firm',
@@ -22,7 +23,8 @@ export class FirmComponent extends BaseAbilityComponent
     public settings: SettingsService,
     private msgSrv: NzMessageService,
     protected route: ActivatedRoute,
-    protected ability: AbilityService
+    protected ability: AbilityService,
+    public startupSvr: StartupService
   ) {
     super(route, ability);
   }
@@ -52,7 +54,7 @@ export class FirmComponent extends BaseAbilityComponent
       title: '操作',
       buttons: [
         {
-          text: '加入',
+          text: '申请加入',
           icon: 'check',
           click: (record: any) => {
             this.handleFirmModalClose(record);
@@ -93,7 +95,12 @@ export class FirmComponent extends BaseAbilityComponent
       .get(Api.BaseSupplyFirmApi + 'user/firm/list', {userId: this.settings.user.id})
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
-          if (res.data) this.list = res.data;
+          if (res.data) {
+            this.list = res.data;
+            if (!this.firmInfo.id) {
+              this.change(this.list[0]);
+            }
+          }
         }
       });
   }
@@ -113,6 +120,7 @@ export class FirmComponent extends BaseAbilityComponent
   change(item: any) {
     this.firmInfo = item;
     localStorage.setItem('firmInfo' + this.settings.user.id, JSON.stringify(item));
+    this.startupSvr.reload();
   }
 
   edit(item: any) {
@@ -136,8 +144,12 @@ export class FirmComponent extends BaseAbilityComponent
     this.queryFirm(null);
   }
   handleFirmModalClose(value: any): void {
+    if (!value) {
+      this.firmModalVisible  = false;
+      return;
+    }
     this.http
-    .post(Api.BaseSupplyFirmApi + 'user/apply' , null, {userId: this.settings.user.id, firmId: this.firmInfo.id})
+    .post(Api.BaseSupplyFirmApi + 'user/apply' , null, {userId: this.settings.user.id, firmId: value.id})
     .subscribe((res: any) => {
       if (res && res.code === ResponseCode.SUCCESS) {
         this.firmModalVisible  = false;

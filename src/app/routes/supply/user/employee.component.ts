@@ -51,16 +51,10 @@ export class EmployeeComponent extends BaseAbilityComponent
       userId: {
         type: 'string',
         title: '编号',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       },
       userTag: {
         type: 'string',
         title: '标签',
-        ui: {
-          acl: { ability: ['query'] },
-        },
       }
     },
   };
@@ -86,7 +80,6 @@ export class EmployeeComponent extends BaseAbilityComponent
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['edit'] },
         },
         {
           text: '删除',
@@ -94,7 +87,6 @@ export class EmployeeComponent extends BaseAbilityComponent
           click: (record: any) => {
             this.delete(record);
           },
-          acl: { ability: ['delete'] },
         },
       ],
     },

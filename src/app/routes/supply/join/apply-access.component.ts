@@ -27,10 +27,10 @@ export class EmployeeApplyHandleComponent implements OnInit {
         enum: [
           { label: '采购', value: 'PURCHASE' },
           { label: '销售', value: 'MARKET' },
-          { label: '计划', value: 'PLAN' },
+          // { label: '计划', value: 'PLAN' },
           { label: '仓库', value: 'DEPOSITORY' },
-          { label: '质检', value: 'QUALITY' },
-          { label: '财务', value: 'FINANCE' }
+          // { label: '质检', value: 'QUALITY' },
+          // { label: '财务', value: 'FINANCE' }
         ],
         ui: {
           widget: 'select',
@@ -74,7 +74,7 @@ export class EmployeeApplyHandleComponent implements OnInit {
     const params = {
       userId: record.id || record.userId,
       firmId: record.firmId,
-      admin: record.admin,
+      admin: record.admin || false,
       userTag: record.userTag
     };
     this.http.post(Api.BaseSupplyUserAccessApi, null, params).subscribe((res: any) => {

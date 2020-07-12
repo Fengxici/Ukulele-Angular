@@ -37,8 +37,13 @@ export class StartupService {
   }
 
   private refredhMenu(resolve: any, reject: any) {
+    let url = Api.BaseAntMenuApi + 'user';
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settingService.user.id));
+    if (firmInfo) {
+      url += '?firmId=' + firmInfo.id;
+    }
     zip(
-      this.httpClient.get(Api.BaseAntMenuApi + 'user'),
+      this.httpClient.get(url),
     )
       .pipe(
         // 接收其他拦截器后产生的异常消息
