@@ -61,7 +61,7 @@ export class StartupService {
           this.menuService.add( res.data || []  );
           const app: any = {
             name: `易供云`,
-            description: `重塑供应链`,
+            description: `重塑供应链，做供应链的操作系统`,
           };
           // 应用信息：包括站点名、描述、年份
           this.settingService.setApp(app);
@@ -97,7 +97,7 @@ export class StartupService {
           // application data
           const app: any = {
             name: `易供云`,
-            description: `重塑供应链`,
+            description: `重塑供应链，做供应链的操作系统`,
           };
           // 应用信息：包括站点名、描述、年份
           this.settingService.setApp(app);
