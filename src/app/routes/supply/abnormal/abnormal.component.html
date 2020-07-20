@@ -5,5 +5,9 @@
 </page-header>
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)" acl [acl-ability]="'query'"></sf>
-  <st #cart [data]="listRecord" [columns]="columns"></st>
+  <st #cart [data]="listRecord" [columns]="columns">
+    <ng-template st-row="id" let-item>
+      <app-firm-order-popover [orderId]="item.orderId" [supply]="true"></app-firm-order-popover>
+    </ng-template>
+  </st>
 </nz-card>

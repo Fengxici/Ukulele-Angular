@@ -8,99 +8,104 @@ import { ResponseCode } from '@shared/response.code';
 @Component({
   selector: 'app-firm-order-popover',
   template: `
-            <nz-card [nzBordered]="false" nzTitle="流程进度">
-              <nz-steps [nzCurrent]="currentStep" nzProgressDot >
-                <nz-step [nzTitle]="'创建订单'" [nzDescription]="createDesc">
-                  <ng-template #createDesc>
-                    <div class="desc">
-                      <div class="my-sm">
-                        {{orderInfo.createBy}}
+            <i nz-icon nzType="info-circle" nz-popover nzPopoverTitle="订单详情" [nzPopoverContent]="contentTemplate"
+            nzPopoverPlacement="right" (nzVisibleChange)="visibleChanged($event)"></i>
+            <ng-template #contentTemplate>
+              <nz-card [nzHoverable]="true" [nzBordered]="false"  nzTitle="流程进度">
+                <nz-steps [nzCurrent]="currentStep" nzProgressDot >
+                  <nz-step [nzTitle]="'创建订单'" [nzDescription]="createDesc">
+                    <ng-template #createDesc>
+                      <div class="desc">
+                        <div class="my-sm">
+                          {{orderInfo.createBy}}
+                        </div>
+                        <div>{{orderInfo.orderTime}}</div>
                       </div>
-                      <div>{{orderInfo.orderTime}}</div>
-                    </div>
-                  </ng-template>
-                </nz-step>
-                <nz-step [nzTitle]="'提交订单'" [nzDescription]="commitDesc">
-                  <ng-template #commitDesc>
-                    <div class="desc">
-                      <div class="my-sm">
-                        {{orderInfo.commitBy}}
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'提交订单'" [nzDescription]="commitDesc">
+                    <ng-template #commitDesc>
+                      <div class="desc">
+                        <div class="my-sm">
+                          {{orderInfo.commitBy}}
+                        </div>
+                        <div>{{orderInfo.commitTime}}</div>
                       </div>
-                      <div>{{orderInfo.commitTime}}</div>
-                    </div>
-                  </ng-template>
-                </nz-step>
-                <nz-step [nzTitle]="'供应商确认'" [nzDescription]="verifyDesc">
-                  <ng-template #verifyDesc>
-                    <div class="desc">
-                    </div>
-                  </ng-template>
-                </nz-step>
-                <nz-step [nzTitle]="'订单确认'" [nzDescription]="consumerVerifyDesc">
-                  <ng-template #consumerVerifyDesc>
-                    <div class="desc">
-                      <div class="my-sm">
-                        {{orderInfo.verifyBy}}
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'供应商确认'" [nzDescription]="verifyDesc">
+                    <ng-template #verifyDesc>
+                      <div class="desc">
                       </div>
-                      {{orderInfo.verifyTime}}
-                    </div>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'订单确认'" [nzDescription]="consumerVerifyDesc">
+                    <ng-template #consumerVerifyDesc>
+                      <div class="desc">
+                        <div class="my-sm">
+                          {{orderInfo.verifyBy}}
+                        </div>
+                        {{orderInfo.verifyTime}}
+                      </div>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'安排中'" [nzDescription]="produceDesc">
+                    <ng-template #produceDesc>
+                      <div class="desc">
+                      </div>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'供应商发货中'" [nzDescription]="deliverDesc">
+                    <ng-template #deliverDesc>
+                      <div class="desc">
+                      </div>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'完成'"></nz-step>
+                </nz-steps>
+                <div class="steps-content"></div>
+              </nz-card>
+              <nz-card nzTitle="订单明细" [nzHoverable]="true" [nzBordered]="false" >
+                <sv-container size="large" title="{{title}}">
+                  <sv label="名称">{{providerInfo.name}}</sv>
+                  <sv label="联系人">{{providerInfo.contacts}}</sv>
+                  <sv label="联系电话">{{providerInfo.phone}}</sv>
+                  <sv label="社会统一信用代码">{{providerInfo.unicode}}</sv>
+                  <sv label="地址">{{providerInfo.address}}</sv>
+                </sv-container>
+                <nz-divider></nz-divider>
+                <div class="text-lg mb-md">物料清单</div>
+                <st #orderDetailSt [data]="orderDetail" [columns]="detailColumns" [body]="detailBody" [page]="{ show: false }">
+                  <ng-template #detailBody>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="text-right">合计</td>
+                      <td class="text-right">
+                        <strong>{{ basicNum }}</strong>
+                      </td>
+                      <td class="text-right">
+                        <strong>{{ amountNum | _currency }}</strong>
+                      </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
                   </ng-template>
-                </nz-step>
-                <nz-step [nzTitle]="'安排中'" [nzDescription]="produceDesc">
-                  <ng-template #produceDesc>
-                    <div class="desc">
-                    </div>
-                  </ng-template>
-                </nz-step>
-                <nz-step [nzTitle]="'供应商发货中'" [nzDescription]="deliverDesc">
-                  <ng-template #deliverDesc>
-                    <div class="desc">
-                    </div>
-                  </ng-template>
-                </nz-step>
-                <nz-step [nzTitle]="'完成'"></nz-step>
-              </nz-steps>
-              <div class="steps-content"></div>
-            </nz-card>
-            <nz-card nzTitle="订单明细" [nzHoverable]="true" [nzBordered]="false" >
-              <sv-container size="large" title="供应商信息">
-                <sv label="名称">{{providerInfo.name}}</sv>
-                <sv label="联系人">{{providerInfo.contacts}}</sv>
-                <sv label="联系电话">{{providerInfo.phone}}</sv>
-                <sv label="社会统一信用代码">{{providerInfo.unicode}}</sv>
-                <sv label="地址">{{providerInfo.address}}</sv>
-              </sv-container>
-              <nz-divider></nz-divider>
-              <div class="text-lg mb-md">物料清单</div>
-              <st #orderDetailSt [data]="orderDetail" [columns]="detailColumns" [body]="detailBody" [page]="{ show: false }">
-                <ng-template #detailBody>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="text-right">合计</td>
-                    <td class="text-right">
-                      <strong>{{ basicNum }}</strong>
-                    </td>
-                    <td class="text-right">
-                      <strong>{{ amountNum | _currency }}</strong>
-                    </td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </ng-template>
-              </st>
-            </nz-card>
+                </st>
+              </nz-card>
+            </ng-template>
             `
 })
-export class  OrderPopoverComponent implements OnInit {
+export class  OrderPopoverComponent {
   constructor(
     protected http: _HttpClient,
   ) {}
   @Input() orderId: number;
-  @Input() providerId: number;
+  @Input() supply: boolean;
+  title = '供应商信息';
   orderInfo: any = {};
   providerInfo: any = {};
   currentStep = 1;
@@ -139,16 +144,48 @@ export class  OrderPopoverComponent implements OnInit {
     { title: '状态', index: 'status' , type: 'badge', badge: this.ORDER_DETAIL_STATUS},
     { title: '变更状态', index: 'changeStatus', type: 'badge', badge: this.CHANGE_STATUS },
   ];
-  ngOnInit(): void {
+
+  visibleChanged( value: boolean ): void {
+    if (value) {
+      if (this.supply)
+        this.queryPurchaseOrderInfo();
+      else
+        this.queryMarketOrderInfo();
+      this.queryOrderDetail();
+    } else {
+      this.orderInfo = {};
+      this.providerInfo = {};
+      this.currentStep = 0;
+      this.orderDetail = [];
+      this.basicNum = 0;
+      this.amountNum = 0;
+    }
   }
 
-  queryOrderInfo() {
+  queryPurchaseOrderInfo() {
+    this.title = '供应商信息';
     this.http
     .get(Api.BaseSupplyPurchaseApi + this.orderId)
     .subscribe((res: any) => {
       if (res && res.code === ResponseCode.SUCCESS) {
         if (res.data) {
           this.orderInfo = res.data;
+          this.querySupplyFirmInfo(this.orderInfo.provider);
+          this.stepTo();
+        }
+      }
+    });
+  }
+
+  queryMarketOrderInfo() {
+    this.title = '采购商信息';
+    this.http
+    .get(Api.BaseSupplyMarketApi + this.orderId)
+    .subscribe((res: any) => {
+      if (res && res.code === ResponseCode.SUCCESS) {
+        if (res.data) {
+          this.orderInfo = res.data;
+          this.querySupplyFirmInfo(this.orderInfo.consumer);
           this.stepTo();
         }
       }
@@ -199,9 +236,9 @@ export class  OrderPopoverComponent implements OnInit {
     }
   }
 
-  querySupplyFirmInfo() {
+  querySupplyFirmInfo(providerId) {
     this.http
-    .get(Api.BaseSupplyFirmApi + this.providerId)
+    .get(Api.BaseSupplyFirmApi + providerId)
     .subscribe((res: any) => {
       if (res && res.code === ResponseCode.SUCCESS) {
         if (res.data) this.providerInfo = res.data;

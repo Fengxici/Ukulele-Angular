@@ -6,6 +6,9 @@
 <nz-card>
   <!-- <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)"></sf> -->
   <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
-  [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination"></st>
-
+  [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination">
+    <ng-template st-row="id" let-item>
+      <app-firm-order-popover [orderId]="item.orderId" [supply]="false"></app-firm-order-popover>
+    </ng-template>
+  </st>
 </nz-card>
