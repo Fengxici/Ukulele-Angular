@@ -6,5 +6,13 @@
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="query($event)" (formReset)="st.reset($event)" ></sf>
   <st #st [data]="page.records" [columns]="columns" (change)="change($event)"
-    [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination"></st>
+    [pi]="page.current" [ps]="page.size" [total]="page.total" [page]="pagination">
+    <ng-template st-row="id">
+      <i nz-icon nzType="info-circle" nz-popover nzPopoverTitle="订单详情" [nzPopoverContent]="contentTemplate"
+      nzPopoverPlacement="right" nzPopoverTrigger="hover"></i>
+    </ng-template>
+    <ng-template #contentTemplate>
+      <app-firm-order-popover></app-firm-order-popover>
+    </ng-template>
+  </st>
 </nz-card>

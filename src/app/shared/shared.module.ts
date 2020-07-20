@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CountdownModule } from 'ngx-countdown';
 import { FirmDrawerComponent } from 'app/routes/supply/common/firm-drawer.component';
+import { OrderPopoverComponent } from 'app/routes/supply/common/order-popover.component';
 const THIRDMODULES = [
   NgZorroAntdModule,
   CountdownModule
@@ -21,7 +22,7 @@ const THIRDMODULES = [
 // #endregion
 
 // #region your componets & directives
-const COMPONENTS = [FirmDrawerComponent];
+const COMPONENTS = [FirmDrawerComponent, OrderPopoverComponent];
 const DIRECTIVES = [];
 // #endregion
 

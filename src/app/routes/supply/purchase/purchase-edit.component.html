@@ -75,6 +75,7 @@
             {{orderInfo.verifyBy}}
           </div>
           {{orderInfo.verifyTime}}
+          
           <a (click)="verifyPurchaseOrder()" *ngIf="orderInfo.status===40">确认</a>
         </div>
       </ng-template>
