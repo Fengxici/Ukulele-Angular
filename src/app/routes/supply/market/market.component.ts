@@ -54,20 +54,10 @@ export class MarketComponent extends BaseAbilityComponent
     80: {text: '发货中', color: 'success'},
     90: {text: '完成', color: 'success'},
   };
-  FINANCE_STATUS: STColumnBadge = {
-    1: {text: '待付款', color: 'warning'},
-    2: {text: '待开票', color: 'success'},
-    3: {text: '已付款', color: 'success'},
-    4: {text: '已开票', color: 'success'},
-  };
   CHANGE_STATUS: STColumnBadge = {
     0: {text: '未变更', color: 'default'},
     1: {text: '处理中', color: 'processing'},
     2: {text: '已处理', color: 'success'},
-  };
-  SETTLE_TYPE: STColumnBadge = {
-    1: {text: '预付款', color: 'warning'},
-    2: {text: '月结', color: 'success'},
   };
   searchSchema: SFSchema = {
     properties: {
@@ -85,26 +75,6 @@ export class MarketComponent extends BaseAbilityComponent
           width: 150,
         } ,
       },
-      financeStatus: {
-        type: 'string',
-        title: '财务状态',
-        default: '-1',
-        ui: {
-          widget: 'select',
-          asyncData: () => this.queryDicItem('FINANCE_STATUS') ,
-          width: 180,
-        } ,
-      },
-      settleType: {
-        type: 'string',
-        title: '结算方式',
-        default: '-1',
-        ui: {
-          widget: 'select',
-          asyncData: () => this.queryDicItem('SETTLE_TYPE') ,
-          width: 160,
-        } ,
-      },
       provider: {
         type: 'string',
         title: '采购商',
@@ -120,10 +90,9 @@ export class MarketComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
-    { title: '订单编号', index: 'orderNo' },
+    { title: '', width: '50', render: 'id'},
+    { title: '订单编号', index: 'orderNo', },
     { title: '状态', index: 'status' , type: 'badge', badge: this.PURCHASE_ORDER_STATUS},
-    { title: '财务状态', index: 'financeStatus', type: 'badge', badge: this.FINANCE_STATUS },
-    { title: '结算方式', index: 'settleType', type: 'badge', badge: this.SETTLE_TYPE },
     { title: '采购商', index: 'consumerName' },
     { title: '订单金额', index: 'orderSum', type: 'currency' },
     { title: '下单日期', index: 'createTime', type: 'date' , dateFormat: 'YYYY-MM-DD' },
