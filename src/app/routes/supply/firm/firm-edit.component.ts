@@ -14,14 +14,14 @@ export class FirmEditComponent {
   i: any;
   schema: SFSchema = {
     properties: {
-      name: { type: 'string', title: '名称', maxLength: 15 },
-      shortName: { type: 'string', title: '简称', maxLength: 15 },
-      unicode: { type: 'string', title: '社会统一信用代码', maxLength: 15 },
+      name: { type: 'string', title: '名称', maxLength: 50 },
+      shortName: { type: 'string', title: '简称', maxLength: 22 },
+      unicode: { type: 'string', title: '社会统一信用代码', maxLength: 18 },
       phone: { type: 'string', title: '电话', maxLength: 15 },
-      address: { type: 'string', title: '地址', maxLength: 15 },
-      bankAccount: { type: 'string', title: '银行账号', maxLength: 15 },
-      bankName: { type: 'string', title: '开户行', maxLength: 15 },
-      contacts: { type: 'string', title: '联系人', maxLength: 15 },
+      address: { type: 'string', title: '地址', maxLength: 50 },
+      bankAccount: { type: 'string', title: '银行账号', maxLength: 22 },
+      bankName: { type: 'string', title: '开户行', maxLength: 22 },
+      contacts: { type: 'string', title: '联系人', maxLength: 22 },
       description: { type: 'string', title: '描述' },
     },
     required: ['name', 'unicode'],
