@@ -74,6 +74,7 @@ export class CartComponent extends BaseAbilityComponent
   @ViewChild('list', { static: true }) list: STComponent;
   cartColumns: STColumn[] = [
     { title: '编号', index: 'id.value', type: 'checkbox' },
+    { title: '', width: '50', render: 'id'},
     { title: '采购商', index: 'consumerName'},
     { title: '物料编号', index: 'materialNo'},
     { title: '物料名称', index: 'name' },

@@ -92,9 +92,10 @@ export class PurchaseComponent extends BaseAbilityComponent
   columns: STColumn[] = [
     { title: '', width: '50', render: 'id'},
     { title: '订单编号', index: 'orderNo' },
-    { title: '状态', index: 'status' , type: 'badge', badge: this.PURCHASE_ORDER_STATUS},
-    { title: '下单时间', index: 'orderTime' },
+    { title: '概要', index: 'outline' },
+    { title: '下单时间', index: 'orderTime' , type: 'date' , dateFormat: 'YYYY-MM-DD HH:mm'},
     { title: '订单金额', index: 'orderSum', type: 'currency' },
+    { title: '状态', index: 'status' , type: 'badge', badge: this.PURCHASE_ORDER_STATUS},
     { title: '供应商', index: 'providerName' },
     { title: '变更状态', index: 'changeStatus', type: 'badge', badge: this.CHANGE_STATUS },
     {

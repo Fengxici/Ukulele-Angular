@@ -12,7 +12,47 @@ import { ResponseCode } from '@shared/response.code';
             nzPopoverPlacement="right" (nzVisibleChange)="visibleChanged($event)"></i>
             <ng-template #contentTemplate>
               <nz-card [nzHoverable]="true" [nzBordered]="false"  nzTitle="流程进度">
-                <nz-steps [nzCurrent]="currentStep" nzProgressDot >
+                <nz-steps [nzCurrent]="currentStep" nzProgressDot *ngIf="supply==false">
+                  <nz-step [nzTitle]="'提交订单'" [nzDescription]="createDesc">
+                    <ng-template #createDesc>
+                      <div class="desc">
+                        <div class="my-sm">
+                          {{orderInfo.createBy}}
+                        </div>
+                        <div>{{orderInfo.createTime}}</div>
+                      </div>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'确认'" [nzDescription]="verifyDesc">
+                    <ng-template #verifyDesc>
+                      <div class="desc">
+                        <div class="my-sm">
+                          {{orderInfo.verifyBy}}
+                        </div>
+                        {{orderInfo.verifyTime}}
+                        <a (click)="verifyOrder()" *ngIf="orderInfo.status===20">确认</a>
+                      </div>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'采购商确认'" [nzDescription]="consumerVerifyDesc">
+                    <ng-template #consumerVerifyDesc>
+                      <div class="desc">
+                        <a *ngIf="orderInfo.status===40">催一下</a>
+                      </div>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'安排中'" [nzDescription]="produceDesc">
+                    <ng-template #produceDesc>
+                      <a (click)="markingOrder()" *ngIf="orderInfo.status===50">确认</a>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'发货中'" [nzDescription]="deliverDesc">
+                    <ng-template #deliverDesc>
+                    </ng-template>
+                  </nz-step>
+                  <nz-step [nzTitle]="'完成'"></nz-step>
+                </nz-steps>
+                <nz-steps [nzCurrent]="currentStep" nzProgressDot *ngIf="supply==true">
                   <nz-step [nzTitle]="'创建订单'" [nzDescription]="createDesc">
                     <ng-template #createDesc>
                       <div class="desc">
@@ -171,7 +211,7 @@ export class  OrderPopoverComponent {
         if (res.data) {
           this.orderInfo = res.data;
           this.querySupplyFirmInfo(this.orderInfo.provider);
-          this.stepTo();
+          this.purchaseStepTo();
         }
       }
     });
@@ -186,13 +226,13 @@ export class  OrderPopoverComponent {
         if (res.data) {
           this.orderInfo = res.data;
           this.querySupplyFirmInfo(this.orderInfo.consumer);
-          this.stepTo();
+          this.marketStepTo();
         }
       }
     });
   }
 
-  stepTo() {
+  purchaseStepTo() {
     if (this.orderInfo.status === 0) {
       this.currentStep = 0;
     } else if (this.orderInfo.status === 20) {
@@ -212,6 +252,23 @@ export class  OrderPopoverComponent {
     }
   }
 
+  marketStepTo() {
+    if (this.orderInfo.status === 20) {
+      this.currentStep = 0;
+    } else if (this.orderInfo.status === 40) {
+      this.currentStep = 1;
+    } else if (this.orderInfo.status === 50) {
+      this.currentStep = 2;
+    } else if (this.orderInfo.status === 60) {
+      this.currentStep = 3;
+    } else if (this.orderInfo.status === 80) {
+      this.currentStep = 4;
+    } else if (this.orderInfo.status === 90) {
+      this.currentStep = 5;
+    }  else {
+      this.currentStep = 0;
+    }
+  }
   queryOrderDetail() {
     this.http
     .get(Api.BaseSupplyPurchaseApi + 'detail/' + this.orderId)

@@ -109,7 +109,7 @@ export class MarketEditComponent implements OnInit {
       format: { type: 'string', title: '规格', readOnly: true },
       unit: { type: 'string', title: '单位', readOnly: true },
       number: { type: 'number', title: '数量', readOnly: true },
-      expectDeliverTime: { type: 'string', ui: { widget: 'date', format: 'YYYY-MM-DD' } as SFDateWidgetSchema,
+      expectDeliverTime: { type: 'string', ui: { widget: 'date', format: 'YYYY-MM-DD 00:00:0' } as SFDateWidgetSchema,
                           title: '期望交货时间',  readOnly: true},
       price: { type: 'number', title: '单价', ui: { prefix: '￥' } as SFNumberWidgetSchema, readOnly: true },
       estimateDeliverTime: { type: 'string', ui: { widget: 'date', format: 'YYYY-MM-DD 00:00:00' } as SFDateWidgetSchema,
@@ -221,7 +221,7 @@ export class MarketEditComponent implements OnInit {
     this.tmpMaterialRecord = record;
   }
   handleMaterialInfoModalClose(value: any): void {
-    if (!value){
+    if (!value) {
       this.materialModalVisibility = false;
       return;
     }

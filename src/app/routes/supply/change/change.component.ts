@@ -57,6 +57,7 @@ export class ChangeComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
+    { title: '', width: '50', render: 'id'},
     { title: '物料编号', index: 'materialNo' },
     {title: '变更内容', index: 'changeFieldText'},
     {title: '变更前', index: 'originValue'},

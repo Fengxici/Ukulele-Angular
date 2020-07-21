@@ -61,7 +61,8 @@ export class AbnormalComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
-    {title: '编号', type: 'no'},
+    { title: '', width: '50', render: 'id'},
+    { title: '编号', type: 'no'},
     { title: '物料编号', index: 'materialNo'},
     { title: '物料名称', index: 'name' },
     { title: '规格', index: 'format' },
