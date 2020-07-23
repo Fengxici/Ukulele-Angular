@@ -195,12 +195,12 @@ export class ReceiveComponent extends BaseAbilityComponent
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {
                 this.st.reload();
-                this.msg.success('签收成功');
+                this.msg.success(result === 1 ? '退货成功' : '入库成功');
               } else {
                 this.msg.warning(res.message);
               }
             } else {
-              this.msg.error('签收失败，未知错误');
+              this.msg.error(result === 1 ? '退货失败，未知错误' : '入库失败，未知错误');
             }
           }),
       nzCancelText: '取消',

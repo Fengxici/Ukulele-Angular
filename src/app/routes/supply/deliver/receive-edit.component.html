@@ -5,3 +5,15 @@
 <sf *ngIf="record" #sf mode="edit" [schema]="schema" [ui]="ui" [formData]="record" button="none" >
 </sf>
 <st #st [data]="data" [columns]="columns" ></st>
+<div class="modal-footer" *ngIf="record.status === 20">
+  <button nz-button nzType="primary"  nz-popconfirm nzPopconfirmTitle="确定将所有物料入库吗?" 
+  [nzIcon]="inTpl" (nzOnConfirm)="allCheck(0)">一键入库</button>
+  <ng-template #inTpl>
+    <i nz-icon nzType="question-circle-o" style="color: yellow;"></i>
+  </ng-template>
+  <button nz-button nzType="danger"  nz-popconfirm nzPopconfirmTitle="确定将所有物料退货吗?" 
+  [nzIcon]="backTpl" (nzOnConfirm)="allCheck(1)">一键退货</button>
+  <ng-template #backTpl>
+    <i nz-icon nzType="question-circle-o" style="color: yellow;"></i>
+  </ng-template>
+</div>

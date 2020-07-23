@@ -19,6 +19,8 @@ export class ReceiveEditComponent
     ) {}
     record: any = {};
     data: any = [];
+    checkInVisible = false;
+    checkBackVisible = false;
     i: any;
     schema: SFSchema = {
       properties: {
@@ -124,5 +126,26 @@ export class ReceiveEditComponent
               this.msg.error('签收失败，未知错误');
             }
           });
+  }
+
+  // 验收 0 签收 1 退货
+  allCheck(result: number) {
+    const params: any =  {};
+    params.deliverId = this.record.id;
+    params.result = result;
+    this.http
+      .put(Api.BaseSupplyDeliverUrl + 'check', null, params)
+      .subscribe((res: any) => {
+        if (res) {
+          if (res.code === ResponseCode.SUCCESS) {
+            this.query();
+            this.msg.success(result === 1 ? '退货成功' : '入库成功');
+          } else {
+            this.msg.warning(res.message);
+          }
+        } else {
+          this.msg.error(result === 1 ? '退货失败，未知错误' : '入库失败，未知错误');
+        }
+      });
   }
 }
