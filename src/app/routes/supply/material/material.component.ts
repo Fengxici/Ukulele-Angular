@@ -10,6 +10,8 @@ import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
 import { FirmDrawerComponent } from '../common/firm-drawer.component';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-supply-material',
@@ -53,6 +55,16 @@ export class MaterialComponent extends BaseAbilityComponent
         type: 'string',
         title: '名称',
       },
+      provider: {
+        type: 'string',
+        title: '供应商',
+        default: '-1',
+        ui: {
+          widget: 'select',
+          asyncData: () => this.queryProviderList() ,
+          width: 300,
+        } ,
+      },
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
@@ -63,6 +75,7 @@ export class MaterialComponent extends BaseAbilityComponent
     { title: '规格', index: 'format' },
     { title: '单位', index: 'unit' },
     { title: '含税单价', index: 'price', type: 'currency' },
+    { title: '供应商', index: 'providerName' },
     {
       title: '操作',
       buttons: [
@@ -90,7 +103,6 @@ export class MaterialComponent extends BaseAbilityComponent
 
   ngOnInit() {
     super.initAbilities();
-    // this.query(null);
   }
 
   ngOnDestroy(): void {
@@ -116,7 +128,15 @@ export class MaterialComponent extends BaseAbilityComponent
     this.params.firmId = firmInfo.id;
     if (event) {
       if (event.name) this.params.name = event.name;
+      else delete this.params.name;
       if (event.materialNo) this.params.materialNo = event.materialNo;
+      else delete this.params.materialNo;
+      if (event.provider && event.provider !== '-1' ) this.params.provider = event.provider;
+      else delete this.params.provider;
+    } else {
+      delete this.params.name;
+      delete this.params.materialNo;
+      delete this.params.provider;
     }
     this.http
       .get(Api.BaseSupplyMaterialApi + 'page/' + current + '/' + size, this.params)
@@ -159,5 +179,33 @@ export class MaterialComponent extends BaseAbilityComponent
       nzCancelText: '取消',
       nzOnCancel: () => console.log('Cancel'),
     });
+  }
+
+  queryProviderList() {
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
+    const params = {firmId: firmInfo.id};
+    const providerObservalbe =  this.http
+    .get(Api.BaseSupplySupplierApi + '/list', params).pipe(
+      catchError(() => {
+        return [{ label: '所有', value: '-1' }, { label: '无', value: '0' }];
+      }),
+      map(res => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            const data = [{ label: '所有', value: '-1' }, { label: '无', value: '0' }];
+            res.data.forEach(element => {
+              const item = {value: element.supplierId, label: element.name};
+              data.push(item);
+            });
+            return data;
+          }
+        }
+        return [{ label: '所有', value: '-1' }, { label: '无', value: '0' }];
+      })
+    );
+    return providerObservalbe;
   }
 }

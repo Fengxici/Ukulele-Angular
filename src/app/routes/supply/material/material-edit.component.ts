@@ -4,12 +4,15 @@ import { _HttpClient, SettingsService } from '@delon/theme';
 import { SFSchema, SFUISchema, SFNumberWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-supply-material-edit',
   templateUrl: './material-edit.component.html',
 })
 export class MaterialEditComponent {
   record: any = {};
+  supplyList: any = [];
   i: any;
   schema: SFSchema = {
     properties: {
@@ -17,7 +20,16 @@ export class MaterialEditComponent {
       name: { type: 'string', title: '物料名称' },
       format: { type: 'string', title: '规格' },
       unit: { type: 'string', title: '单位' },
-      price: {  type: 'number', title: '单价', ui: { prefix: '￥' } as SFNumberWidgetSchema }
+      price: {  type: 'number', title: '单价', ui: { prefix: '￥' } as SFNumberWidgetSchema },
+      provider: {
+        type: 'string',
+        title: '供应商',
+        default: '-1',
+        ui: {
+          widget: 'select',
+          asyncData: () => this.queryProviderList() ,
+        } ,
+      },
     },
     required: ['name'],
   };
@@ -67,6 +79,34 @@ export class MaterialEditComponent {
         }
       });
     }
+  }
+
+  queryProviderList() {
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
+    const params = {firmId: firmInfo.id};
+    const providerObservalbe =  this.http
+    .get(Api.BaseSupplySupplierApi + '/list', params).pipe(
+      catchError(() => {
+        return [{ label: '无', value: '0' }];
+      }),
+      map(res => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            const data = [{ label: '无', value: '0' }];
+            res.data.forEach(element => {
+              const item = {value: element.supplierId, label: element.name};
+              data.push(item);
+            });
+            return data;
+          }
+        }
+        return [{ label: '无', value: '0' }];
+      })
+    );
+    return providerObservalbe;
   }
 
   close() {

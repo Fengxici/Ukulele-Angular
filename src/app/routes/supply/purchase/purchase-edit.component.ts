@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Api } from '@shared/api';
 import { ResponseCode } from '@shared/response.code';
 import { SFSchema, SFStringWidgetSchema, SFUISchema, SFDateWidgetSchema, SFTextareaWidgetSchema, SFNumberWidgetSchema } from '@delon/form';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-supply-purchase-edit',
@@ -169,6 +171,15 @@ export class PurchaseEditComponent implements OnInit {
         type: 'string',
         title: '名称',
       },
+      provider: {
+        type: 'string',
+        title: '供应商',
+        ui: {
+          widget: 'select',
+          asyncData: () => this.queryProviderList() ,
+          width: 300,
+        } ,
+      },
     },
   };
   @ViewChild('materialSearchSt', { static: true }) materialSearchSt: STComponent;
@@ -178,6 +189,7 @@ export class PurchaseEditComponent implements OnInit {
     { title: '规格', index: 'format'  },
     { title: '单位', index: 'unit'  },
     { title: '含税单价', index: 'price', type: 'currency' },
+    { title: '供应商', index: 'providerName' },
     {
       title: '操作',
       buttons: [
@@ -356,7 +368,15 @@ export class PurchaseEditComponent implements OnInit {
     this.materialSearchParams.firmId = firmInfo.id;
     if (event) {
       if (event.name) this.materialSearchParams.name = event.name;
+      else delete this.materialSearchParams.name;
       if (event.materialNo) this.materialSearchParams.materialNo = event.materialNo;
+      else delete this.materialSearchParams.materialNo;
+      if (event.provider && event.provider !== '-1' ) this.materialSearchParams.provider = event.provider;
+      else delete this.materialSearchParams.provider;
+    } else {
+      delete this.materialSearchParams.name;
+      delete this.materialSearchParams.materialNo;
+      delete this.materialSearchParams.provider;
     }
     this.http
       .get(Api.BaseSupplyMaterialApi + 'page/' + current + '/' + size, this.materialSearchParams)
@@ -370,7 +390,7 @@ export class PurchaseEditComponent implements OnInit {
     if (e.type === 'pi' || e.type === 'ps') {
       this.materialSearchParams.size = e.ps;
       this.materialSearchParams.current = e.pi;
-      this.queryMaterial(null);
+      this.queryMaterial(this.providerInfo ? {provider: this.providerInfo.id} : null);
     }
   }
   setTmpMaterialRecord(record) {
@@ -382,7 +402,7 @@ export class PurchaseEditComponent implements OnInit {
     this.materialModalVisibility = true;
     this.tmpMaterialRecord = record;
     if (!this.tmpMaterialRecord)
-      this.queryMaterial(null);
+      this.queryMaterial(this.providerInfo ? {provider: this.providerInfo.id} : null);
   }
   handleMaterialInfoModalClose(value: any, modify: boolean): void {
     if (value) {
@@ -590,5 +610,33 @@ export class PurchaseEditComponent implements OnInit {
         this.msg.error(res ? res.message : '未知错误');
       }
     });
+  }
+
+  queryProviderList() {
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
+    const params = {firmId: firmInfo.id};
+    const providerObservalbe =  this.http
+    .get(Api.BaseSupplySupplierApi + '/list', params).pipe(
+      catchError(() => {
+        return [{ label: '所有', value: '-1' }, { label: '无', value: '0' }];
+      }),
+      map(res => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            const data = [{ label: '所有', value: '-1' }, { label: '无', value: '0' }];
+            res.data.forEach(element => {
+              const item = {value: element.supplierId, label: element.name};
+              data.push(item);
+            });
+            return data;
+          }
+        }
+        return [{ label: '所有', value: '-1' }, { label: '无', value: '0' }];
+      })
+    );
+    return providerObservalbe;
   }
 }

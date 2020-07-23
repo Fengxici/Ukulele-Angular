@@ -185,7 +185,7 @@
     [(nzVisible)]="materialModalVisibility"
     [nzTitle]="materialInfoTitle"
     [nzContent]="materialInfoContent"
-    [nzWidth]="750"
+    [nzWidth]="1020"
     [nzFooter]="null"
     (nzOnCancel)="handleMaterialInfoModalClose(null,null)"
   >
@@ -193,7 +193,7 @@
     <div class="modal-title">编辑物料信息</div>
   </ng-template>
   <ng-template #materialInfoContent>
-    <sf mode="search" [schema]="materialSearchSchema" (formSubmit)="queryMaterial($event)" (formReset)="materialSearchSt.reset($event)" *ngIf="!tmpMaterialRecord"></sf>
+    <sf mode="search" #materialSearchSt [schema]="materialSearchSchema" (formSubmit)="queryMaterial($event)" (formReset)="queryMaterial($event)" *ngIf="!tmpMaterialRecord"></sf>
     <st #materialSearchSt [data]="materialSearchPage.records" [columns]="materialSearchColumns" (change)="materialStChange($event)"
     [pi]="materialSearchPage.current" [ps]="materialSearchPage.size" [total]="materialSearchPage.total" [page]="materialSearchPagination" *ngIf="!tmpMaterialRecord"></st>
     <sf *ngIf="tmpMaterialRecord" #materialsf mode="edit" [schema]="materialSchema" [ui]="materialUi" [formData]="tmpMaterialRecord" button="none" style="margin-top:10px" >
