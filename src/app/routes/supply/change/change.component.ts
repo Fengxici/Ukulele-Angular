@@ -58,6 +58,8 @@ export class ChangeComponent extends BaseAbilityComponent
   @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
     { title: '', width: '50', render: 'id'},
+    { title: '订单编号', index: 'purchaseNo' },
+    { title: '物料名称', index: 'materialName' },
     { title: '物料编号', index: 'materialNo' },
     {title: '变更内容', index: 'changeFieldText'},
     {title: '变更前', index: 'originValue'},
@@ -110,9 +112,9 @@ export class ChangeComponent extends BaseAbilityComponent
     if (!firmInfo) {
       return;
     }
-    this.params.firmId = firmInfo.id;
+    this.params.acceptFirm = firmInfo.id;
     if (event) {
-      if (event.orderNo) this.params.orderNo = event.orderNo;
+      if (event.orderNo) this.params.purchaseNo = event.orderNo;
     }
     this.http
       .get(Api.BaseSupplyOrderFlowApi + '/purchase/change/page/' + current + '/' + size, this.params)

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
-import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
+import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
+import { STColumn, STComponent, STPage, STChange, STColumnTag } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -8,13 +8,17 @@ import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
-import { AnnouncementEditComponent } from './announcement-edit.component';
+import { AddressEditComponent } from './address-edit.component';
 
+const TAG: STColumnTag = {
+  true: { text: '默认', color: 'green' },
+  false: { text: '非默认', color: '' },
+};
 @Component({
-  selector: 'app-supply-announcement',
-  templateUrl: './announcement.component.html',
+  selector: 'app-supply-address',
+  templateUrl: './address.component.html',
 })
-export class AnnouncementComponent extends BaseAbilityComponent
+export class AddressComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
@@ -22,7 +26,8 @@ export class AnnouncementComponent extends BaseAbilityComponent
     private modalService: NzModalService,
     private msg: NzMessageService,
     protected route: ActivatedRoute,
-    protected ability: AbilityService
+    protected ability: AbilityService,
+    public settings: SettingsService,
   ) {
     super(route, ability);
   }
@@ -53,10 +58,8 @@ export class AnnouncementComponent extends BaseAbilityComponent
   };
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
-    { title: '标题', index: 'title' },
-    { title: '内容',  index: 'content' },
-    { title: '开始时间', index: 'startDate' },
-    { title: '结束时间', index: 'endDate' },
+    { title: '地址',  index: 'name' },
+    { title: '默认', index: 'isDefault', type: 'tag', tag: TAG  },
     {
       title: '操作',
       buttons: [
@@ -65,12 +68,11 @@ export class AnnouncementComponent extends BaseAbilityComponent
           icon: 'edit',
           type: 'modal',
           modal: {
-            component: AnnouncementEditComponent,
+            component: AddressEditComponent,
           },
           click: () => {
             this.query(null);
           },
-          acl: { ability: ['edit'] },
         },
         {
           text: '删除',
@@ -78,7 +80,6 @@ export class AnnouncementComponent extends BaseAbilityComponent
           click: (record: any) => {
             this.delete(record);
           },
-          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -107,8 +108,10 @@ export class AnnouncementComponent extends BaseAbilityComponent
     if (event) {
       if (event.name) this.params.name = event.name;
     }
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    this.params.firmId = firmInfo.id;
     this.http
-      .get(Api.BaseSupplyAnnouncementApi + 'page/' + current + '/' + size, this.params)
+      .get(Api.BaseSupplyAddressUrl + 'page/' + current + '/' + size, this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) this.page = res.data;
@@ -118,7 +121,7 @@ export class AnnouncementComponent extends BaseAbilityComponent
 
   add() {
     this.modal
-      .createStatic(AnnouncementEditComponent)
+      .createStatic(AddressEditComponent)
       .subscribe(() => this.st.reload());
   }
 
@@ -132,7 +135,7 @@ export class AnnouncementComponent extends BaseAbilityComponent
       nzOkType: 'danger',
       nzOnOk: () =>
         this.http
-          .delete(Api.BaseSupplyAnnouncementApi + record.id)
+          .delete(Api.BaseSupplyAddressUrl + record.id)
           .subscribe((res: any) => {
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {

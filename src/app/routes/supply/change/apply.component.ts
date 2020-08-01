@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { _HttpClient, ModalHelper } from '@delon/theme';
-import { STColumn, STComponent, STPage, STChange } from '@delon/abc';
+import { _HttpClient, ModalHelper, SettingsService } from '@delon/theme';
+import { STColumn, STComponent, STPage, STChange, STColumnBadge } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
@@ -8,16 +8,17 @@ import { Api } from '@shared/api';
 import { BaseAbilityComponent } from '@shared/base.ability.component';
 import { ActivatedRoute } from '@angular/router';
 import { AbilityService } from '@shared/service/ability.service';
-import { AnnouncementEditComponent } from './announcement-edit.component';
+import { FirmDrawerComponent } from '../common/firm-drawer.component';
 
 @Component({
-  selector: 'app-supply-announcement',
-  templateUrl: './announcement.component.html',
+  selector: 'app-supply-change-apply',
+  templateUrl: './apply.component.html',
 })
-export class AnnouncementComponent extends BaseAbilityComponent
+export class ChangeApplyComponent extends BaseAbilityComponent
   implements OnInit, OnDestroy {
   constructor(
     protected http: _HttpClient,
+    public settings: SettingsService,
     private modal: ModalHelper,
     private modalService: NzModalService,
     private msg: NzMessageService,
@@ -26,6 +27,11 @@ export class AnnouncementComponent extends BaseAbilityComponent
   ) {
     super(route, ability);
   }
+  _STATUS: STColumnBadge = {
+    0: {text: '申请', color: 'default'},
+    1: {text: '同意', color: 'success'},
+    2: {text: '拒绝', color: 'warning'},
+  };
   params: any = {};
   page: any = {
     records: [],
@@ -42,43 +48,41 @@ export class AnnouncementComponent extends BaseAbilityComponent
   };
   searchSchema: SFSchema = {
     properties: {
-      title: {
+      orderNo: {
         type: 'string',
-        title: '标题',
-        ui: {
-          acl: { ability: ['query'] },
-        },
+        title: '订单编号'
       },
     },
   };
   @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('drawer', {static: true }) firmDraw: FirmDrawerComponent;
   columns: STColumn[] = [
-    { title: '标题', index: 'title' },
-    { title: '内容',  index: 'content' },
-    { title: '开始时间', index: 'startDate' },
-    { title: '结束时间', index: 'endDate' },
+    { title: '', width: '50', render: 'id'},
+    { title: '订单编号', index: 'marketNo' },
+    { title: '物料名称', index: 'materialName' },
+    { title: '物料编号', index: 'materialNo' },
+    {title: '变更内容', index: 'changeFieldText'},
+    {title: '变更前', index: 'originValue'},
+    {title: '变更后', index: 'changeValue'},
+    { title: '状态', index: 'status', type: 'badge', badge: this._STATUS },
     {
       title: '操作',
       buttons: [
         {
-          text: '编辑',
+          text: '同意',
           icon: 'edit',
-          type: 'modal',
-          modal: {
-            component: AnnouncementEditComponent,
+          iif: record => record.status === 0,
+          click: (record) => {
+            this.handle(record, 1);
           },
-          click: () => {
-            this.query(null);
-          },
-          acl: { ability: ['edit'] },
         },
         {
-          text: '删除',
-          icon: 'delete',
-          click: (record: any) => {
-            this.delete(record);
+          text: '不同意',
+          icon: 'edit',
+          iif: record => record.status === 0,
+          click: (record) => {
+            this.handle(record, 2);
           },
-          acl: { ability: ['delete'] },
         },
       ],
     },
@@ -104,11 +108,16 @@ export class AnnouncementComponent extends BaseAbilityComponent
   query(event: any) {
     const current: number = this.params.current || 1;
     const size: number = this.params.size || 10;
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
+    this.params.applyFirm = firmInfo.id;
     if (event) {
-      if (event.name) this.params.name = event.name;
+      if (event.orderNo) this.params.marketNo = event.orderNo;
     }
     this.http
-      .get(Api.BaseSupplyAnnouncementApi + 'page/' + current + '/' + size, this.params)
+      .get(Api.BaseSupplyOrderFlowApi + '/purchase/change/page/' + current + '/' + size, this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) this.page = res.data;
@@ -116,33 +125,33 @@ export class AnnouncementComponent extends BaseAbilityComponent
       });
   }
 
-  add() {
-    this.modal
-      .createStatic(AnnouncementEditComponent)
-      .subscribe(() => this.st.reload());
-  }
 
-  delete(record: any) {
-    console.log(record);
+  handle(record: any, type: number) {
+    let title = '确定同意该变更申请吗?';
+    let content = '如果您确定<b>同意</b>申请请点击确定按钮，否则点取消';
+    if (type === 2) {
+      title = '确定拒绝该变更申请吗';
+      content = '如果您确定<b style="color: red;">拒绝</b>申请请点击确定按钮，否则点取消';
+    }
+    const params = {applyId: record.id, result: type};
     this.modalService.confirm({
-      nzTitle: '确定删除吗?',
-      nzContent:
-        '<b style="color: red;">如果您确定要删除请点击确定按钮，否则点取消</b>',
+      nzTitle: title,
+      nzContent: content,
       nzOkText: '确定',
       nzOkType: 'danger',
       nzOnOk: () =>
         this.http
-          .delete(Api.BaseSupplyAnnouncementApi + record.id)
+          .put(Api.BaseSupplyOrderFlowApi + '/purchase/change/handle' , null, params)
           .subscribe((res: any) => {
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {
                 this.st.reload();
-                this.msg.success('删除成功');
+                this.msg.success('成功');
               } else {
                 this.msg.warning(res.message);
               }
             } else {
-              this.msg.error('删除失败，未知错误');
+              this.msg.error('失败，未知错误');
             }
           }),
       nzCancelText: '取消',

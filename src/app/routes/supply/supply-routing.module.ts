@@ -20,6 +20,8 @@ import { AbnormalComponent } from './abnormal/abnormal.component';
 import { AbnormalHandleComponent } from './abnormal/abnormal.handle.component';
 import { MyConsumerComponent } from './consumer/my.component';
 import { MySupplyComponent } from './supplier/my.component';
+import { AddressComponent } from './address/address.component';
+import { ChangeApplyComponent } from './change/apply.component';
 
 const routes: Routes = [
   { path: 'firms', component: FirmListComponent },
@@ -41,7 +43,9 @@ const routes: Routes = [
   { path: 'abnormal', component: AbnormalComponent}, // 异常物料
   { path: 'abnormalHandle', component: AbnormalHandleComponent}, // 异常处理
   { path: 'myConsumer', component: MyConsumerComponent}, // 我的客户
-  { path: 'mySupply', component: MySupplyComponent} // 我的供应商
+  { path: 'mySupply', component: MySupplyComponent}, // 我的供应商
+  { path: 'address', component: AddressComponent}, // 收货地址
+  { path: 'changeApply', component: ChangeApplyComponent} // 变更申请
 ];
 
 @NgModule({

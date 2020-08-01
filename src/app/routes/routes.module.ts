@@ -11,6 +11,7 @@ import { UserRegisterResultComponent } from './passport/register-result/register
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
+import { ChangePasswordComponent } from 'app/layout/default/header/change/change.component';
 
 const COMPONENTS = [
   DashboardComponent,
@@ -22,7 +23,7 @@ const COMPONENTS = [
   CallbackComponent,
   UserLockComponent,
 ];
-const COMPONENTS_NOROUNT = [];
+const COMPONENTS_NOROUNT = [ChangePasswordComponent];
 
 @NgModule({
   imports: [ SharedModule, RouteRoutingModule ],

@@ -88,6 +88,7 @@ export class CartComponent extends BaseAbilityComponent
   ];
   listColumns: STColumn[] = [
     { title: '发货单号', index: 'deliverNo'},
+    { title: '摘要', index: 'outline'},
     { title: '发货时间', index: 'deliverTime', type: 'date' },
     { title: '采购商', index: 'consumerName'},
     { title: '状态', index: 'status' , type: 'badge', badge: this.DELIVER_STATUS},

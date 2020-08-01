@@ -32,6 +32,9 @@ import { AbnormalHandleComponent } from './abnormal/abnormal.handle.component';
 import { MyConsumerComponent } from './consumer/my.component';
 import { MySupplyComponent } from './supplier/my.component';
 import { FirmUserModalComponent } from './common/user-modal.component';
+import { AddressComponent } from './address/address.component';
+import { AddressEditComponent } from './address/address-edit.component';
+import { ChangeApplyComponent } from './change/apply.component';
 
 const COMPONENTS = [
   FirmListComponent,
@@ -53,7 +56,9 @@ const COMPONENTS = [
   AbnormalComponent,
   AbnormalHandleComponent,
   MyConsumerComponent,
-  MySupplyComponent
+  MySupplyComponent,
+  AddressComponent,
+  ChangeApplyComponent
 ];
 const COMPONENTS_NOROUNT = [
   FirmEditComponent,
@@ -66,7 +71,8 @@ const COMPONENTS_NOROUNT = [
   EmployeeApplyHandleComponent,
   DeliverEditComponent,
   ReceiveEditComponent,
-  FirmUserModalComponent
+  FirmUserModalComponent,
+  AddressEditComponent
 ];
 
 @NgModule({

@@ -99,7 +99,6 @@ export class MySupplyComponent extends BaseAbilityComponent
 
   delete(record: any) {
     console.log(record);
-    const params = {consumerId: record.consumerId, firmId: record.firmId};
     this.modalService.confirm({
       nzTitle: '确定删除吗?',
       nzContent:

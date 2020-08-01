@@ -35,7 +35,7 @@ const HEADERCOMPONENTS = [
   HeaderFullScreenComponent,
   HeaderI18nComponent,
   HeaderStorageComponent,
-  HeaderUserComponent
+  HeaderUserComponent,
 ];
 
 // passport

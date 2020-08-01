@@ -99,7 +99,6 @@ export class MyConsumerComponent extends BaseAbilityComponent
 
   delete(record: any) {
     console.log(record);
-    const params = {consumerId: record.consumerId, firmId: record.firmId};
     this.modalService.confirm({
       nzTitle: '确定删除吗?',
       nzContent:
@@ -108,7 +107,7 @@ export class MyConsumerComponent extends BaseAbilityComponent
       nzOkType: 'danger',
       nzOnOk: () =>
         this.http
-          .delete(Api.BaseSupplyConsumerApi, params)
+          .delete(Api.BaseSupplyMyConsumerUrl + '/' + record.id)
           .subscribe((res: any) => {
             if (res) {
               if (res.code === ResponseCode.SUCCESS) {

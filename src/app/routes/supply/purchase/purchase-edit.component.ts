@@ -15,6 +15,7 @@ import { map, catchError } from 'rxjs/operators';
   styleUrls: ['./purchase-edit.component.less']
 })
 export class PurchaseEditComponent implements OnInit {
+  firmInfo: any;
   orderId: string;
   providerId: string;
   orderInfo: any = {};
@@ -118,9 +119,12 @@ export class PurchaseEditComponent implements OnInit {
   ];
   orderInfoSchema: SFSchema = {
     properties: {
-      orderNo: {type: 'string', title: '订单编号', maxLength: 15, ui: {placeholder: '自动生成'} as SFStringWidgetSchema, readOnly: true},
+      orderNo: {type: 'string', title: '订单编号', ui: {placeholder: '自动生成'} as SFStringWidgetSchema, readOnly: true},
       needInvoice: { type: 'boolean', title: '是否开票' },
-      receiveInfo: { type: 'string', title: '收货信息' },
+      receiveInfo: { type: 'string', title: '收货信息' , ui: {
+        widget: 'select',
+        asyncData: () => this.queryAddressList() ,
+      } },
       remark: { type: 'string', title: '备注', ui: {
         widget: 'textarea',
         autosize: { minRows: 2, maxRows: 6 },
@@ -240,8 +244,8 @@ export class PurchaseEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
-    if (!firmInfo) {
+    this.firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!this.firmInfo) {
       this.route.navigate(['/supply/firm']);
       return;
     }
@@ -349,9 +353,8 @@ export class PurchaseEditComponent implements OnInit {
       if (!value.id) {
         value.id = value.supplierId;
       }
-      const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
-      if (firmInfo) {
-        if (firmInfo.id === value.id) {
+      if (this.firmInfo) {
+        if (this.firmInfo.id === value.id) {
           this.msg.error('不能选择自己的企业作为供应商!');
           return;
         }
@@ -364,8 +367,7 @@ export class PurchaseEditComponent implements OnInit {
   queryMaterial(event: any) {
     const current: number = this.materialSearchParams.current || 1;
     const size: number = this.materialSearchParams.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
-    this.materialSearchParams.firmId = firmInfo.id;
+    this.materialSearchParams.firmId = this.firmInfo.id;
     if (event) {
       if (event.name) this.materialSearchParams.name = event.name;
       else delete this.materialSearchParams.name;
@@ -471,8 +473,7 @@ export class PurchaseEditComponent implements OnInit {
   queryProvider(event: any) {
     const current: number = this.providerParams.current || 1;
     const size: number = this.providerParams.size || 10;
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
-    this.providerParams = {firmId: firmInfo.id};
+    this.providerParams = {firmId: this.firmInfo.id};
     if (event) {
       // 搜索时取所有公司列表
       if (event.name) this.providerParams.name = event.name;
@@ -522,8 +523,7 @@ export class PurchaseEditComponent implements OnInit {
     this.amountNum = 0;
   }
   saveOrder() {
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
-    if (!firmInfo) {
+    if (!this.firmInfo) {
       this.msg.error('您还没有选择当前登陆的企业');
       return;
     }
@@ -538,7 +538,7 @@ export class PurchaseEditComponent implements OnInit {
     const orderModel: any = {};
     orderModel.orderInfo = this.orderInfo;
     orderModel.orderInfo.provider = this.providerInfo.id;
-    orderModel.orderInfo.consumer = firmInfo.id;
+    orderModel.orderInfo.consumer = this.firmInfo.id;
     orderModel.orderInfo.orderSum = this.amountNum;
     orderModel.orderDetail  = this.orderDetail;
     console.log(orderModel);
@@ -613,11 +613,10 @@ export class PurchaseEditComponent implements OnInit {
   }
 
   queryProviderList() {
-    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
-    if (!firmInfo) {
+    if (!this.firmInfo) {
       return;
     }
-    const params = {firmId: firmInfo.id};
+    const params = {firmId: this.firmInfo.id};
     const providerObservalbe =  this.http
     .get(Api.BaseSupplySupplierApi + '/list', params).pipe(
       catchError(() => {
@@ -638,5 +637,32 @@ export class PurchaseEditComponent implements OnInit {
       })
     );
     return providerObservalbe;
+  }
+
+  queryAddressList() {
+    if (!this.firmInfo) {
+      return;
+    }
+    const params = {firmId: this.firmInfo.id};
+    const addressrObservalbe =  this.http
+    .get(Api.BaseSupplyAddressUrl + 'getByParam', params).pipe(
+      catchError(() => {
+        return [];
+      }),
+      map(res => {
+        if (res && res.code === ResponseCode.SUCCESS) {
+          if (res.data) {
+            const data = [];
+            res.data.forEach(element => {
+              const item = {value: element.name, label: element.name};
+              data.push(item);
+            });
+            return data;
+          }
+        }
+        return [];
+      })
+    );
+    return addressrObservalbe;
   }
 }

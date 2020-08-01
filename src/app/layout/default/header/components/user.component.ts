@@ -1,7 +1,8 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { SettingsService } from '@delon/theme';
+import { SettingsService, ModalHelper } from '@delon/theme';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
+import { ChangePasswordComponent } from '../change/change.component';
 
 @Component({
   selector: 'header-user',
@@ -29,7 +30,15 @@ import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
           <i nz-icon nzType="close-circle" class="mr-sm"></i>
           {{ 'menu.account.trigger' | translate }}
         </div>
+        <div nz-menu-item routerLink="/exception/trigger">
+          <i nz-icon nzType="close-circle" class="mr-sm"></i>
+          {{ 'menu.account.trigger' | translate }}
+        </div>
         <li nz-menu-divider></li> -->
+        <div nz-menu-item (click)="changePassword()">
+          <i nz-icon nzType="close-circle" class="mr-sm"></i>
+          {{ 'menu.account.change.password' | translate }}
+        </div>
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
           {{ 'menu.account.logout' | translate }}
@@ -43,6 +52,7 @@ export class HeaderUserComponent {
   constructor(
     public settings: SettingsService,
     private router: Router,
+    private modal: ModalHelper,
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
   ) {}
 
@@ -55,5 +65,11 @@ export class HeaderUserComponent {
     if (firmInfo) {
       localStorage.setItem('firmInfo' + this.settings.user.id, firmInfo);
     }
+  }
+
+  changePassword() {
+    console.log('change password');
+    this.modal
+      .createStatic(ChangePasswordComponent).subscribe();
   }
 }

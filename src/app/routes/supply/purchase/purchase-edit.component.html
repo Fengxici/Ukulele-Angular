@@ -5,16 +5,6 @@
       <button nz-button *ngIf='addFlag.first' (click)="editOrderInfo()">填写订单信息</button>
       <button nz-button *ngIf='!addFlag.first'>完结订单</button>
     </nz-button-group>
-    <!-- <button nz-button nz-dropdown [nzDropdownMenu]="opMenu" class="mx-sm">
-      <i nz-icon nzType="ellipsis"></i>
-    </button> -->
-    <!-- <nz-dropdown-menu #opMenu="nzDropdownMenu">
-      <ul nz-menu>
-        <li nz-menu-item>选项一</li>
-        <li nz-menu-item>选项二</li>
-        <li nz-menu-item>选项三</li>
-      </ul>
-    </nz-dropdown-menu> -->
     <button nz-button [nzType]="'primary'" (click)="createNew()">再来一单</button>
   </ng-template>
   <ng-template #extra>
@@ -154,7 +144,7 @@
     <div class="modal-title">编辑订单信息</div>
   </ng-template>
   <ng-template #orderInfoContent>
-    <sf #odersf mode="edit" [schema]="orderInfoSchema" [ui]="orderInfoUi" [formData]="orderInfo" button="none" >
+    <sf #odersf mode="edit" [schema]="orderInfoSchema" [formData]="orderInfo" button="none" >
       <div class="modal-footer">
         <button nz-button type="submit" nzType="primary" (click)="handleOrderInfoModalClose(odersf.value)" 
           [disabled]="!odersf.valid" >确定</button>

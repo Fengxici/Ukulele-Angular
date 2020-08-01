@@ -24,5 +24,6 @@ export enum Api {
   FirmUserJoinedUrl= 'api/supply-service/firm/user/firm/list',
   BaseSupplyDeliverUrl = 'api/supply-service/deliver/',
   BaseSupplyOrderChangeUrl = 'api/supply-service/change/',
-  BaseSupplyMyConsumerUrl = 'api/supply-service/myConsumer'
+  BaseSupplyMyConsumerUrl = 'api/supply-service/myConsumer',
+  BaseSupplyAddressUrl = 'api/supply-service/address/'
 }

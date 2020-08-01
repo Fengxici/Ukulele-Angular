@@ -64,6 +64,7 @@ export class ReceiveComponent extends BaseAbilityComponent
   @ViewChild('st', { static: true }) st: STComponent;
   columns: STColumn[] = [
     { title: '发货单号', index: 'deliverNo'},
+    { title: '摘要', index: 'outline'},
     { title: '发货时间', index: 'deliverTime', type: 'date' },
     { title: '采购商', index: 'providerName'},
     { title: '状态', index: 'status' , type: 'badge', badge: this.DELIVER_STATUS},
@@ -90,22 +91,22 @@ export class ReceiveComponent extends BaseAbilityComponent
             this.receive(record);
           },
         },
-        {
-          text: '一键入库',
-          icon: 'edit',
-          iif: record => record.status === 20,
-          click: (record) => {
-            this.check(record, 0);
-          },
-        },
-        {
-          text: '一键退货',
-          icon: 'edit',
-          iif: record => record.status === 20,
-          click: (record) => {
-            this.check(record, 1);
-          },
-        }
+        // {
+        //   text: '一键入库',
+        //   icon: 'edit',
+        //   iif: record => record.status === 20,
+        //   click: (record) => {
+        //     this.check(record, 0);
+        //   },
+        // },
+        // {
+        //   text: '一键退货',
+        //   icon: 'edit',
+        //   iif: record => record.status === 20,
+        //   click: (record) => {
+        //     this.check(record, 1);
+        //   },
+        // }
       ],
     },
   ];
