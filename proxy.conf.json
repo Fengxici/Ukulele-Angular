@@ -1,10 +1,10 @@
 {
   "/auth": {    
-    "target": "http://192.168.31.219:9090",
+    "target": "http://www.yigongyun.cloud",
     "secure": false
   },
   "/api/**":{
-    "target": "http://192.168.31.219:10000",
+    "target": "http://www.yigongyun.cloud",
     "secure": false
   }
 }

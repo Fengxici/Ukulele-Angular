@@ -12,6 +12,8 @@ import { UserRegisterResultComponent } from './passport/register-result/register
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
 import { ChangePasswordComponent } from 'app/layout/default/header/change/change.component';
+import { ForgotComponent } from './passport/forgot/forgot.component';
+import { ResetPasswordComponent } from './passport/reset/reset.component';
 
 const COMPONENTS = [
   DashboardComponent,
@@ -19,6 +21,8 @@ const COMPONENTS = [
   UserLoginComponent,
   UserRegisterComponent,
   UserRegisterResultComponent,
+  ForgotComponent,
+  ResetPasswordComponent,
   // single pages
   CallbackComponent,
   UserLockComponent,

@@ -15,6 +15,8 @@ import { UserRegisterResultComponent } from './passport/register-result/register
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
+import { ForgotComponent } from './passport/forgot/forgot.component';
+import { ResetPasswordComponent } from './passport/reset/reset.component';
 
 const routes: Routes = [
   {
@@ -49,6 +51,8 @@ const routes: Routes = [
     children: [
       { path: 'login', component: UserLoginComponent, data: { title: '登录' } },
       { path: 'register', component: UserRegisterComponent, data: { title: '注册' } },
+      { path: 'forgot', component: ForgotComponent, data: { title: '密码找回' } },
+      { path: 'reset', component: ResetPasswordComponent, data: { title: '重置找回' } },
       { path: 'register-result', component: UserRegisterResultComponent, data: { title: '注册结果' } },
       { path: 'lock', component: UserLockComponent, data: { title: '锁屏' } },
     ]

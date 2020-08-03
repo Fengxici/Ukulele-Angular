@@ -65,27 +65,6 @@ export class ChangeComponent extends BaseAbilityComponent
     {title: '变更前', index: 'originValue'},
     {title: '变更后', index: 'changeValue'},
     { title: '状态', index: 'status', type: 'badge', badge: this._STATUS },
-    {
-      title: '操作',
-      buttons: [
-        {
-          text: '同意',
-          icon: 'edit',
-          iif: record => record.status === 0,
-          click: (record) => {
-            this.handle(record, 1);
-          },
-        },
-        {
-          text: '不同意',
-          icon: 'edit',
-          iif: record => record.status === 0,
-          click: (record) => {
-            this.handle(record, 2);
-          },
-        },
-      ],
-    },
   ];
 
   ngOnInit() {
