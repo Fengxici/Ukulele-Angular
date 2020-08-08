@@ -99,8 +99,10 @@ export class EmployeeComponent extends BaseAbilityComponent
       return '销售';
     else if ( value === 'PLAN')
       return '计划';
-    else if (value === 'DEPOSITORY')
-      return '仓库';
+    else if (value === 'DEPOSITORY_PURCHASE')
+      return '仓库(原料)';
+    else if (value === 'DEPOSITORY_MARKET')
+      return '仓库(成品)';
     else if (value === 'QUALITY')
       return '质检';
     else if (value === 'FINANCE')

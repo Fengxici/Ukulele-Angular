@@ -22,6 +22,8 @@ import { MyConsumerComponent } from './consumer/my.component';
 import { MySupplyComponent } from './supplier/my.component';
 import { AddressComponent } from './address/address.component';
 import { ChangeApplyComponent } from './change/apply.component';
+import { MyMarketComponent } from './market/mymarket.component';
+import { MyPurchaseComponent } from './purchase/mypurchase.component';
 
 const routes: Routes = [
   { path: 'firms', component: FirmListComponent },
@@ -45,7 +47,9 @@ const routes: Routes = [
   { path: 'myConsumer', component: MyConsumerComponent}, // 我的客户
   { path: 'mySupply', component: MySupplyComponent}, // 我的供应商
   { path: 'address', component: AddressComponent}, // 收货地址
-  { path: 'changeApply', component: ChangeApplyComponent} // 变更申请
+  { path: 'changeApply', component: ChangeApplyComponent}, // 变更申请
+  { path: 'myMarket', component: MyMarketComponent}, // 我的订单
+  { path: 'myPurchase', component: MyPurchaseComponent} // 我的采购
 ];
 
 @NgModule({

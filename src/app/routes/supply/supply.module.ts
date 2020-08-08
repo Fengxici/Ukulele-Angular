@@ -35,6 +35,8 @@ import { FirmUserModalComponent } from './common/user-modal.component';
 import { AddressComponent } from './address/address.component';
 import { AddressEditComponent } from './address/address-edit.component';
 import { ChangeApplyComponent } from './change/apply.component';
+import { MyPurchaseComponent } from './purchase/mypurchase.component';
+import { MyMarketComponent } from './market/mymarket.component';
 
 const COMPONENTS = [
   FirmListComponent,
@@ -58,7 +60,9 @@ const COMPONENTS = [
   MyConsumerComponent,
   MySupplyComponent,
   AddressComponent,
-  ChangeApplyComponent
+  ChangeApplyComponent,
+  MyPurchaseComponent,
+  MyMarketComponent
 ];
 const COMPONENTS_NOROUNT = [
   FirmEditComponent,

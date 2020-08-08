@@ -18,7 +18,7 @@ export class RoleEditComponent {
         type: 'string',
         title: '角色名称',
       },
-      roleCode: { type: 'string', title: '角色代码', maxLength: 15 },
+      roleCode: { type: 'string', title: '角色代码', maxLength: 45 },
       roleLevel: { type: 'string', title: '角色级别', enum: [
         { label: '超级管理员', value: 'SUPER' },
         { label: '管理员', value: 'ADMIN' },
