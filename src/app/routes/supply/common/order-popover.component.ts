@@ -11,6 +11,7 @@ import { ResponseCode } from '@shared/response.code';
             <i nz-icon nzType="info-circle" nz-popover nzPopoverTitle="订单详情" [nzPopoverContent]="contentTemplate"
             nzPopoverPlacement="right" (nzVisibleChange)="visibleChanged($event)"></i>
             <ng-template #contentTemplate>
+              <div style='height:500px;OVERFLOW-Y: auto; OVERFLOW-X:hidden;'>
               <nz-card [nzHoverable]="true" [nzBordered]="false"  nzTitle="流程进度">
                 <nz-steps [nzCurrent]="currentStep" nzProgressDot *ngIf="supply==false">
                   <nz-step [nzTitle]="'提交订单'" [nzDescription]="createDesc">
@@ -136,8 +137,10 @@ import { ResponseCode } from '@shared/response.code';
                   </ng-template>
                 </st>
               </nz-card>
+              </div>
             </ng-template>
-            `
+            `,
+  styleUrls: [],
 })
 export class  OrderPopoverComponent {
   constructor(
