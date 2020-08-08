@@ -32,6 +32,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   form: FormGroup;
   error = '';
   type = 0;
+  visible = false;
   status = 'pool';
   progress = 0;
   passwordProgressMap = {
