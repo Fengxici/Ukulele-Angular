@@ -166,7 +166,7 @@ export class MyMarketComponent extends BaseAbilityComponent
       if (event.description) this.params.description = event.description;
     }
     this.http
-      .get(Api.BaseSupplyMarketApi + 'page/my/' + current + '/' + size, this.params)
+      .get(Api.BaseSupplyMarketApi + 'page/' + current + '/' + size, this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) this.page = res.data;

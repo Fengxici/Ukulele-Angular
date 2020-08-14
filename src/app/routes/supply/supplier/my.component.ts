@@ -83,7 +83,7 @@ export class MySupplyComponent extends BaseAbilityComponent
       this.router.navigate(['/supply/firm']);
       return;
     }
-    this.params = {firmId: firmInfo.id, type: 1};
+    this.params = {firmId: firmInfo.id, type: 1, userId: this.settings.user.id};
     if (event) {
       if (event.name) this.params.name = event.name;
       if (event.description) this.params.description = event.description;

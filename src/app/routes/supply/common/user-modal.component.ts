@@ -84,17 +84,23 @@ export class FirmUserModalComponent implements OnInit {
   }
   getTag(value): string {
     if (value === 'PURCHASE')
-      return '采购';
+      return '采购(经理)';
+    else if (value === 'PURCHASE_STAFF')
+      return '采购(专员)';
     else if ( value === 'MARKET')
-      return '销售';
-    else if ( value === 'PLAN')
-      return '计划';
-    else if (value === 'DEPOSITORY')
-      return '仓库';
-    else if (value === 'QUALITY')
-      return '质检';
-    else if (value === 'FINANCE')
-      return '财务';
+      return '销售(经理)';
+    else if ( value === 'MARKET_STAFF')
+      return '销售(专员)';
+    // else if ( value === 'PLAN')
+    //   return '计划';
+    else if (value === 'DEPOSITORY_PURCHASE')
+      return '仓库(原料)';
+    else if (value === 'DEPOSITORY_MARKET')
+      return '仓库(成品)';
+    // else if (value === 'QUALITY')
+    //   return '质检';
+    // else if (value === 'FINANCE')
+    //   return '财务';
     else
       return '未知';
   }

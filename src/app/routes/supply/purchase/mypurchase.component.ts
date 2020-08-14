@@ -204,7 +204,7 @@ export class MyPurchaseComponent extends BaseAbilityComponent
       if (event.description) this.params.description = event.description;
     }
     this.http
-      .get(Api.BaseSupplyPurchaseApi + 'page/my/' + current + '/' + size, this.params)
+      .get(Api.BaseSupplyPurchaseApi + 'page/' + current + '/' + size, this.params)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) this.page = res.data;

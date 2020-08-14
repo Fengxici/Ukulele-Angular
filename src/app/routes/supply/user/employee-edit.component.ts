@@ -29,8 +29,10 @@ export class EmployeeEditComponent implements OnInit {
         type: 'string',
         title: '角色',
         enum: [
-          { label: '采购', value: 'PURCHASE' },
-          { label: '销售', value: 'MARKET' },
+          { label: '采购(经理)', value: 'PURCHASE' },
+          { label: '采购(专员)', value: 'PURCHASE_STAFF' },
+          { label: '销售(经理)', value: 'MARKET' },
+          { label: '销售(专员)', value: 'MARKET_STAFF' },
           // { label: '计划', value: 'PLAN' },
           { label: '仓库(成品)', value: 'DEPOSITORY_MARKET' },
           { label: '仓库(原料)', value: 'DEPOSITORY_PURCHASE' },

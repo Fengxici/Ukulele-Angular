@@ -478,7 +478,7 @@ export class PurchaseEditComponent implements OnInit {
       // 搜索时取所有公司列表
       if (event.name) this.providerParams.name = event.name;
       this.http
-      .get(Api.BaseSupplyFirmApi + 'page/' + current + '/' + size, this.providerParams)
+      .get(Api.BaseSupplySupplierApi + '/all/page/' + current + '/' + size, this.providerParams)
       .subscribe((res: any) => {
         if (res && res.code === ResponseCode.SUCCESS) {
           if (res.data) this.providerPage = res.data;
