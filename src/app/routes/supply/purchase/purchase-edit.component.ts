@@ -16,6 +16,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class PurchaseEditComponent implements OnInit {
   firmInfo: any;
+  from: string;
   orderId: string;
   providerId: string;
   orderInfo: any = {};
@@ -142,7 +143,10 @@ export class PurchaseEditComponent implements OnInit {
     properties: {
       name: {
         type: 'string',
-        title: '供应商名称'
+        title: '供应商名称',
+        ui: {
+          placeholder: '全称',
+        } as SFStringWidgetSchema,
       }
     },
   };
@@ -235,6 +239,7 @@ export class PurchaseEditComponent implements OnInit {
         this.msg.error('参数有误');
         return;
       }
+      this.from = res.from;
       that.orderId = res.orderId;
       that.providerId = res.providerId;
       if (that.orderId && that.providerId && that.orderId !== '0' && that.providerId !== '0') {
@@ -326,7 +331,10 @@ export class PurchaseEditComponent implements OnInit {
   }
 
   backList(event: any) {
-    this.route.navigate(['/supply/purchase']);
+    if (this.from === 'list')
+      this.route.navigate(['/supply/purchase']);
+    else
+      this.route.navigate(['/supply/myPurchase']);
   }
 
   editOrderInfo() {
@@ -475,8 +483,12 @@ export class PurchaseEditComponent implements OnInit {
     const size: number = this.providerParams.size || 10;
     this.providerParams = {firmId: this.firmInfo.id};
     if (event) {
-      // 搜索时取所有公司列表
+      // 搜索时必须要输入公司全称，只有采购经理角色能够查询
       if (event.name) this.providerParams.name = event.name;
+      else {
+        this.msg.warning('请输入公司全称');
+        return;
+      }
       this.http
       .get(Api.BaseSupplySupplierApi + '/all/page/' + current + '/' + size, this.providerParams)
       .subscribe((res: any) => {

@@ -165,7 +165,7 @@
     <div class="modal-title">选择供应商</div>
   </ng-template>
   <ng-template #providerInfoContent>
-    <sf mode="search" [schema]="providerSearchSchema" (formSubmit)="queryProvider($event)"  (formReset)="queryProvider($event)"></sf>
+    <sf mode="search" [schema]="providerSearchSchema" (formSubmit)="queryProvider($event)" ></sf>
     <st #providerst [data]="providerPage.records" [columns]="providerColumns" (change)="providerPageChange($event)"
     [pi]="providerPage.current" [ps]="providerPage.size" [total]="providerPage.total" [page]="providerPagination"></st>
   </ng-template>
