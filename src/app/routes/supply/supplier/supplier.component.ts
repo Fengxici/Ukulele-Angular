@@ -137,7 +137,8 @@ export class SupplierComponent extends BaseAbilityComponent
       const params = {
         userId: record.user.userId,
         firm: firmInfo.id,
-        consumer: record.ext.supplierId,
+        consumer: record.ext.id,
+        username: record.user.username,
         type: 1
       };
       this.http.post(Api.BaseSupplyMyConsumerUrl, params).subscribe((res: any) => {
