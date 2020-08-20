@@ -176,7 +176,7 @@ export class MyMarketComponent extends BaseAbilityComponent
 
   toDetail(record: any) {
     this.router.navigate(['/supply/marketDetail'],
-    {queryParams: {orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0'}});
+    {queryParams: {orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0', from: 'my'}});
   }
   queryConsumerList() {
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));

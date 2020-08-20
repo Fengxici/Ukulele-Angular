@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { PublicService } from '@shared/service/public.service';
 import { catchError, map } from 'rxjs/operators';
 import { FirmDrawerComponent } from '../common/firm-drawer.component';
+import { FirmMarketUserModalComponent } from '../common/market-user-modal.component';
 
 @Component({
   selector: 'app-supply-market',
@@ -98,6 +99,7 @@ export class MarketComponent extends BaseAbilityComponent
     { title: '状态', index: 'status' , type: 'badge', badge: this.PURCHASE_ORDER_STATUS},
     { title: '采购商', index: 'consumerName' },
     { title: '变更状态', index: 'changeStatus', type: 'badge', badge: this.CHANGE_STATUS },
+    { title: '跟单员', index: 'operatorName', },
     {
       title: '操作',
       buttons: [
@@ -106,6 +108,13 @@ export class MarketComponent extends BaseAbilityComponent
           icon: 'edit',
           click: (record: any) => {
             this.toDetail(record);
+          },
+        },
+        {
+          text: '派工',
+          icon: 'edit',
+          click: (record: any) => {
+            this.dispatch(record);
           },
         },
         {
@@ -176,8 +185,43 @@ export class MarketComponent extends BaseAbilityComponent
 
   toDetail(record: any) {
     this.router.navigate(['/supply/marketDetail'],
-    {queryParams: {orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0'}});
+    {queryParams: {orderId: record ? record.id : '0', consumerId: record ? record.consumer : '0', from: 'list'}});
   }
+
+  dispatch(record) {
+    const userModal = this.modalService.create({
+      nzTitle: '派工',
+      nzContent: FirmMarketUserModalComponent,
+      nzGetContainer: () => document.body,
+      nzComponentParams: {
+        inputData: record,
+      },
+      nzWidth: 950,
+      nzFooter: null
+    });
+    userModal.afterClose.subscribe((result: any) => this.dispatchUser(result));
+  }
+
+  dispatchUser(result) {
+    if (!result)
+      return;
+    this.http
+          .post(Api.BaseSupplyMarketApi + 'dispatch/'  + result.ext.id +
+          '/' + result.user.username )
+          .subscribe((res: any) => {
+            if (res) {
+              if (res.code === ResponseCode.SUCCESS) {
+                this.st.reload();
+                this.msg.success('成功');
+              } else {
+                this.msg.warning(res.message);
+              }
+            } else {
+              this.msg.error('失败，未知错误');
+            }
+          });
+  }
+
   queryConsumerList() {
     const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
     const params = {firmId: firmInfo.id};

@@ -13,6 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class MarketEditComponent implements OnInit {
   orderId: string;
+  from: string;
   consumerId: string;
   orderInfo: any = {};
   orderDetail: any[] = [];
@@ -132,6 +133,7 @@ export class MarketEditComponent implements OnInit {
         this.msg.error('参数有误');
         return;
       }
+      this.from = res.from;
       that.orderId = res.orderId;
       that.consumerId = res.consumerId;
     });
@@ -213,7 +215,10 @@ export class MarketEditComponent implements OnInit {
   }
 
   backList(event: any) {
-    this.route.navigate(['/supply/market']);
+    if (this.from === 'list')
+      this.route.navigate(['/supply/market']);
+    else
+      this.route.navigate(['/supply/myMarket']);
   }
 
   editMaterialInfo(record: any) {
