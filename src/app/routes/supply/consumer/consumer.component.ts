@@ -137,6 +137,7 @@ export class ConsumerComponent extends BaseAbilityComponent
         userId: record.user.userId,
         firm: firmInfo.id,
         consumer: record.ext.consumerId,
+        username: record.user.username,
         type: 0
       };
       this.http.post(Api.BaseSupplyMyConsumerUrl, params).subscribe((res: any) => {
