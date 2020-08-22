@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient, SettingsService } from '@delon/theme';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { SFSchema, SFUISchema, SFTextareaWidgetSchema } from '@delon/form';
 import { ResponseCode } from '@shared/response.code';
 import { Api } from '@shared/api';
 @Component({
@@ -16,13 +16,18 @@ export class FirmEditComponent {
     properties: {
       name: { type: 'string', title: '名称', maxLength: 50 },
       shortName: { type: 'string', title: '简称', maxLength: 22 },
-      unicode: { type: 'string', title: '社会统一信用代码', maxLength: 18 },
-      phone: { type: 'string', title: '电话', maxLength: 15 },
+      unicode: { type: 'string', title: '社会统一信用代码', format: 'regex',
+                  pattern: '(([0-9A-Za-z]{15})|([0-9A-Za-z]{18})|([0-9A-Za-z]{20}))' },
+      phone: { type: 'string', title: '电话', format: 'regex',
+                pattern: '((?:(?:\\+|00)86)?1[3-9]\\d{9}|(\\d{3}-\\d{8})|(\\d{4}-\\d{7,8}))' },
       address: { type: 'string', title: '地址', maxLength: 50 },
-      bankAccount: { type: 'string', title: '银行账号', maxLength: 22 },
+      bankAccount: { type: 'string', title: '银行账号', format: 'regex', pattern: '[1-9]\\d{9,29}' },
       bankName: { type: 'string', title: '开户行', maxLength: 22 },
       contacts: { type: 'string', title: '联系人', maxLength: 22 },
-      description: { type: 'string', title: '描述' },
+      description: { type: 'string', title: '描述', ui: {
+                    widget: 'textarea',
+                    autosize: { minRows: 2, maxRows: 6 },
+                  } as SFTextareaWidgetSchema, },
     },
     required: ['name', 'unicode'],
   };

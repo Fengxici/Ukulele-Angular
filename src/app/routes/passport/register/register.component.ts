@@ -15,12 +15,16 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
   kaptcha: any = null;
   constructor(fb: FormBuilder, private router: Router, public http: _HttpClient, public msg: NzMessageService) {
     this.form = fb.group({
-      username: [null, [Validators.required, UserRegisterComponent.checkUsername]],
+      username: [null, [Validators.required, Validators.pattern(/^[a-zA-Z]\w{5,15}$/)]],
       email: [null, [Validators.required, Validators.email]],
-      password: [null, [Validators.required, Validators.minLength(6), UserRegisterComponent.checkPassword.bind(this)]],
-      confirm: [null, [Validators.required, Validators.minLength(6), UserRegisterComponent.passwordEquar]],
+      password: [null, [Validators.required, Validators.minLength(6),
+                UserRegisterComponent.checkPassword.bind(this)]],
+      confirm: [null, [Validators.required, Validators.minLength(6),
+                UserRegisterComponent.passwordEquar]],
       mobilePrefix: ['+86'],
-      phone: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
+      phone: [null, [Validators.required,
+        // tslint:disable-next-line: max-line-length
+        Validators.pattern(/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-7|9])|(?:5[0-3|5-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1|8|9]))\d{8}$/)]],
       captcha: [null, [Validators.required]],
     });
   }
@@ -55,8 +59,8 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     ok: 'success',
     pass: 'normal',
     pool: 'exception',
+    long: 'long',
   };
-
   // #endregion
 
   // #region get captcha
@@ -65,14 +69,18 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
   interval$: any;
 
   static checkPassword(control: FormControl) {
-    if (!control) return null;
+    if (!control || !control.value) return null;
     const self: any = this;
     self.visible = !!control.value;
-    // TODO： 密码强度提示
-    if (control.value && control.value.length > 9) {
+    // 最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符"
+    const strongPaswordRegx = /^\S*(?=\S{10,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/g;
+    const passPaswordRegx = /^[a-zA-Z0-9]{6,16}$/;
+    if (control.value && strongPaswordRegx.test(control.value)) {
       self.status = 'ok';
-    } else if (control.value && control.value.length > 5) {
+    } else if (control.value && (control.value.length > 10 || passPaswordRegx.test(control.value))) {
       self.status = 'pass';
+    } else if (control.value && control.value.length > 16) {
+      self.status = 'long';
     } else {
       self.status = 'pool';
     }
@@ -91,13 +99,6 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
       return { equar: true };
     }
     return null;
-  }
-  static checkUsername(control: FormControl) {
-    // TODO:
-    if (control.value && control.value.length > 4) {
-      return null;
-    }
-    return {username: false };
   }
 
   ngOnInit(): void {

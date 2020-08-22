@@ -600,6 +600,7 @@ export class PurchaseEditComponent implements OnInit {
         if (res.code === ResponseCode.SUCCESS) {
           this.orderId = this.orderInfo.id;
           this.queryOrderInfo();
+          this.queryOrderDetail();
           this.msg.success('提交成功');
         } else {
           this.msg.warning(res.message);

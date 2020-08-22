@@ -2,13 +2,13 @@
 <form nz-form [formGroup]="form" (ngSubmit)="submit()" role="form">
   <nz-alert *ngIf="error" [nzType]="'error'" [nzMessage]="error" [nzShowIcon]="true" class="mb-lg"></nz-alert>
   <nz-form-item>
-    <nz-form-control [nzErrorTip]="mailErrorTip">
+    <nz-form-control [nzErrorTip]="usernameErrorTip">
       <nz-input-group nzSize="large" nzAddonBeforeIcon="user">
         <input nz-input formControlName="username" placeholder="用户名" />
       </nz-input-group>
-      <ng-template #mailErrorTip let-i>
+      <ng-template #usernameErrorTip let-i>
         <ng-container *ngIf="i.errors?.required">{{ 'validation.username.required' | translate }}</ng-container>
-        <ng-container *ngIf="i.errors?.username">{{ 'validation.username.wrong-format' | translate }}</ng-container>
+        <ng-container *ngIf="i.errors?.pattern">{{ 'validation.username.wrong-format' | translate }}</ng-container>
       </ng-template>
     </nz-form-control>
   </nz-form-item>
@@ -40,6 +40,7 @@
             <ng-container [ngSwitch]="status">
               <div *ngSwitchCase="'ok'" class="success">{{ 'validation.password.strength.strong' | translate }}</div>
               <div *ngSwitchCase="'pass'" class="warning">{{ 'validation.password.strength.medium' | translate }}</div>
+              <div *ngSwitchCase="'long'" class="warning">{{ 'validation.password.strength.long' | translate }}</div>
               <div *ngSwitchDefault class="error">{{ 'validation.password.strength.short' | translate }}</div>
             </ng-container>
             <div class="progress-{{ status }}">
