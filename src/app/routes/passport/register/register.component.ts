@@ -68,6 +68,7 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     if (!control) return null;
     const self: any = this;
     self.visible = !!control.value;
+    // TODO： 密码强度提示
     if (control.value && control.value.length > 9) {
       self.status = 'ok';
     } else if (control.value && control.value.length > 5) {
@@ -92,6 +93,7 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     return null;
   }
   static checkUsername(control: FormControl) {
+    // TODO:
     if (control.value && control.value.length > 4) {
       return null;
     }
