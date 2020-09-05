@@ -91,7 +91,7 @@ export class ChangeComponent extends BaseAbilityComponent
     if (!firmInfo) {
       return;
     }
-    this.params.acceptFirm = firmInfo.id;
+    this.params.applyFirm = firmInfo.id;
     if (event) {
       if (event.orderNo) this.params.purchaseNo = event.orderNo;
     }
@@ -102,39 +102,5 @@ export class ChangeComponent extends BaseAbilityComponent
           if (res.data) this.page = res.data;
         }
       });
-  }
-
-
-  handle(record: any, type: number) {
-    let title = '确定同意该变更申请吗?';
-    let content = '如果您确定<b>同意</b>申请请点击确定按钮，否则点取消';
-    if (type === 2) {
-      title = '确定拒绝该变更申请吗';
-      content = '如果您确定<b style="color: red;">拒绝</b>申请请点击确定按钮，否则点取消';
-    }
-    const params = {applyId: record.id, result: type};
-    this.modalService.confirm({
-      nzTitle: title,
-      nzContent: content,
-      nzOkText: '确定',
-      nzOkType: 'danger',
-      nzOnOk: () =>
-        this.http
-          .put(Api.BaseSupplyOrderFlowApi + '/purchase/change/handle' , null, params)
-          .subscribe((res: any) => {
-            if (res) {
-              if (res.code === ResponseCode.SUCCESS) {
-                this.st.reload();
-                this.msg.success('成功');
-              } else {
-                this.msg.warning(res.message);
-              }
-            } else {
-              this.msg.error('失败，未知错误');
-            }
-          }),
-      nzCancelText: '取消',
-      nzOnCancel: () => console.log('Cancel'),
-    });
   }
 }

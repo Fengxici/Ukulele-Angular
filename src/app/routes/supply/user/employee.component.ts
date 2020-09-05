@@ -160,7 +160,11 @@ export class EmployeeComponent extends BaseAbilityComponent
 
   delete(record: any) {
     console.log(record);
-    const params = {userId: record.userId, firmId: 1};
+    const firmInfo = JSON.parse(localStorage.getItem('firmInfo' + this.settings.user.id));
+    if (!firmInfo) {
+      return;
+    }
+    const params = {userId: record.userId, firmId: firmInfo.id};
     this.modalService.confirm({
       nzTitle: '确定删除吗?',
       nzContent:

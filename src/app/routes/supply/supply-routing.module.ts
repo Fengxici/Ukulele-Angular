@@ -41,13 +41,13 @@ const routes: Routes = [
   { path: 'marketDetail', component: MarketEditComponent},
   { path: 'cart', component: CartComponent},
   { path: 'purchaseReceive', component: ReceiveComponent},
-  { path: 'change', component: ChangeComponent},
+  { path: 'change', component: ChangeComponent}, // 变更申请
   { path: 'abnormal', component: AbnormalComponent}, // 异常物料
   { path: 'abnormalHandle', component: AbnormalHandleComponent}, // 异常处理
   { path: 'myConsumer', component: MyConsumerComponent}, // 我的客户
   { path: 'mySupply', component: MySupplyComponent}, // 我的供应商
   { path: 'address', component: AddressComponent}, // 收货地址
-  { path: 'changeApply', component: ChangeApplyComponent}, // 变更申请
+  { path: 'changeApply', component: ChangeApplyComponent}, // 变更审核
   { path: 'myMarket', component: MyMarketComponent}, // 我的订单
   { path: 'myPurchase', component: MyPurchaseComponent} // 我的采购
 ];

@@ -112,7 +112,7 @@ export class ChangeApplyComponent extends BaseAbilityComponent
     if (!firmInfo) {
       return;
     }
-    this.params.applyFirm = firmInfo.id;
+    this.params.acceptFirm = firmInfo.id;
     if (event) {
       if (event.orderNo) this.params.marketNo = event.orderNo;
     }

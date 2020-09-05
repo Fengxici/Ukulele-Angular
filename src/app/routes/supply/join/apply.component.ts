@@ -63,6 +63,7 @@ export class EmployeeApplyComponent extends BaseAbilityComponent
   columns: STColumn[] = [
     { title: '用户名', index: 'username' },
     { title: '手机', index: 'phone' },
+    { title: '申请时间', index: 'date'},
     { title: '状态', index: 'disabled', type: 'badge', badge: this.HANDLED_BADGE },
     {
       title: '操作',

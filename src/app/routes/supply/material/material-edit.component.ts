@@ -31,7 +31,7 @@ export class MaterialEditComponent {
         } ,
       },
     },
-    required: ['name'],
+    required: ['materialNo', 'name', 'format', 'unit', 'price'],
   };
   ui: SFUISchema = {
     '*': {

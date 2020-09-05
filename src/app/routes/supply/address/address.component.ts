@@ -87,7 +87,7 @@ export class AddressComponent extends BaseAbilityComponent
 
   ngOnInit() {
     super.initAbilities();
-    this.query(null);
+    // this.query(null);
   }
 
   ngOnDestroy(): void {
